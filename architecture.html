@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture - ArthemizLabs</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">ArthemizLabs</a>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html" class="active">Architecture</a>
+        <a href="roadmap.html">Roadmap</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>System Architecture</h1>
+      <p class="hero-sub">The evolution of ArthemizLabs from a single deployment unit to a distributed, microservices-oriented platform.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Architecture Evolution</h2>
+      <p class="section-intro">The ArthemizLabs platform has been designed to evolve through three distinct architectural phases. Each phase builds on the stability of the previous and introduces the complexity required to support the next stage of growth.</p>
+
+      <div class="arch-phases">
+        <div class="arch-phase">
+          <div class="phase-indicator">
+            <span class="phase-number">01</span>
+            <span class="phase-label">Monolith</span>
+          </div>
+          <div class="phase-content">
+            <h3>Monolithic Foundation</h3>
+            <p>The initial platform is built as a single deployable application. This approach enables rapid development, shared in-process state, and simplified deployment pipelines while the domain model is still being validated.</p>
+            <ul class="detail-list">
+              <li>Single database, single process</li>
+              <li>In-process authentication with JWT validation middleware</li>
+              <li>Flat RBAC model enforced at the controller layer</li>
+              <li>Docker Compose for local development and initial production deployment</li>
+              <li>Nginx as a reverse proxy for TLS termination and routing</li>
+              <li>GitHub Actions CI pipeline for automated test and build</li>
+            </ul>
+            <div class="arch-diagram">
+              <div class="diagram-box client-box">Client</div>
+              <div class="diagram-arrow">--&gt;</div>
+              <div class="diagram-box nginx-box">Nginx</div>
+              <div class="diagram-arrow">--&gt;</div>
+              <div class="diagram-box app-box">Application<br/>(Monolith)</div>
+              <div class="diagram-arrow">--&gt;</div>
+              <div class="diagram-box db-box">PostgreSQL</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-phase">
+          <div class="phase-indicator">
+            <span class="phase-number">02</span>
+            <span class="phase-label">Modular</span>
+          </div>
+          <div class="phase-content">
+            <h3>Modular Decomposition</h3>
+            <p>As the platform grows, the monolith is organized into clearly bounded modules with enforced internal APIs. Modules are deployed as discrete containers but remain coordinated through a shared orchestration layer.</p>
+            <ul class="detail-list">
+              <li>Bounded modules: identity, commerce, operations, monitoring</li>
+              <li>Centralized JWT issuance via Arthemiz identity service</li>
+              <li>RBAC policies extracted to a dedicated authorization module</li>
+              <li>Redis introduced for distributed session caching and pub/sub</li>
+              <li>RabbitMQ for asynchronous inter-module messaging</li>
+              <li>Docker with named service networks isolating module communication</li>
+              <li>Nginx routing by path prefix to appropriate module containers</li>
+              <li>CI/CD pipeline extended with per-module build and test stages</li>
+            </ul>
+            <div class="arch-diagram modular-diagram">
+              <div class="diagram-row">
+                <div class="diagram-box client-box">Client</div>
+                <div class="diagram-arrow">--&gt;</div>
+                <div class="diagram-box nginx-box">Nginx<br/>Gateway</div>
+              </div>
+              <div class="diagram-row modules-row">
+                <div class="diagram-box mod-box">Identity<br/>(Arthemiz)</div>
+                <div class="diagram-box mod-box">Commerce<br/>(Vendas3D)</div>
+                <div class="diagram-box mod-box">Operations<br/>(OpsLedger)</div>
+                <div class="diagram-box mod-box">Monitoring<br/>(SystemHealth)</div>
+              </div>
+              <div class="diagram-row infra-row">
+                <div class="diagram-box db-box">PostgreSQL</div>
+                <div class="diagram-box cache-box">Redis</div>
+                <div class="diagram-box mq-box">RabbitMQ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-phase">
+          <div class="phase-indicator">
+            <span class="phase-number">03</span>
+            <span class="phase-label">Microservices</span>
+          </div>
+          <div class="phase-content">
+            <h3>Microservices Distribution</h3>
+            <p>Modules that have demonstrated clear ownership, independent release cycles, and high load requirements are promoted to independent microservices. Each service is owned by a team, versioned independently, and communicates through well-defined contracts.</p>
+            <ul class="detail-list">
+              <li>Independent services: each with its own repository, database, and CI pipeline</li>
+              <li>API Gateway handles authentication via JWT verification and routes to services</li>
+              <li>RBAC enforced at the gateway and re-validated at service boundaries</li>
+              <li>RabbitMQ as the central event bus for cross-service events</li>
+              <li>Redis per-service for local caching, preventing cross-service cache coupling</li>
+              <li>Nginx as the external load balancer with upstream health checks</li>
+              <li>Docker images published to a private registry and deployed via CI/CD</li>
+              <li>Distributed tracing for end-to-end request visibility across service hops</li>
+              <li>Service mesh (future) for mTLS, circuit breaking, and traffic policies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Core Infrastructure Components</h2>
+      <div class="infra-grid">
+        <div class="infra-item">
+          <h3>JWT Authentication</h3>
+          <p>JSON Web Tokens are issued by the Arthemiz identity service and validated at every service entry point. Tokens carry a minimal claim set (subject, roles, tenant) and are short-lived with refresh token rotation. Private key signing ensures token integrity across service boundaries.</p>
+        </div>
+        <div class="infra-item">
+          <h3>RBAC Authorization</h3>
+          <p>Role-Based Access Control governs all resource access across the platform. Roles are defined per-tenant and scoped to resource types. The authorization engine resolves permissions from JWT claims at the gateway and enforces them in each service, ensuring consistent policy application.</p>
+        </div>
+        <div class="infra-item">
+          <h3>Docker and Containerization</h3>
+          <p>All services run as Docker containers. Compose files define local development environments. Production deployments use isolated container networks, health checks, and restart policies. Container images are versioned and pinned for reproducible deployments.</p>
+        </div>
+        <div class="infra-item">
+          <h3>Nginx</h3>
+          <p>Nginx serves as the edge layer for TLS termination, HTTP/2 support, and reverse proxy routing. Configuration is versioned alongside application code. Rate limiting and request filtering are applied at this layer before traffic reaches application services.</p>
+        </div>
+        <div class="infra-item">
+          <h3>RabbitMQ</h3>
+          <p>RabbitMQ enables reliable asynchronous communication between services through topic exchanges and durable queues. Events such as user provisioning, order state changes, and audit entries are published and consumed by interested services without direct coupling.</p>
+        </div>
+        <div class="infra-item">
+          <h3>Redis</h3>
+          <p>Redis provides sub-millisecond caching for session tokens, rate limit counters, and frequently read configuration data. It also supports pub/sub patterns for real-time event notifications within a service boundary. Persistence is enabled for critical state.</p>
+        </div>
+        <div class="infra-item">
+          <h3>CI/CD</h3>
+          <p>GitHub Actions runs automated pipelines on every pull request and push to main. Pipelines include linting, unit and integration tests, container builds, vulnerability scans, and deployment to staging. Production deployments require a passing pipeline and manual approval gate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo">ArthemizLabs</a>
+      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="roadmap.html">Roadmap</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

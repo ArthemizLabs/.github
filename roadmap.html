@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roadmap - ArthemizLabs</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">ArthemizLabs</a>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="roadmap.html" class="active">Roadmap</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Engineering Roadmap 2026-2029</h1>
+      <p class="hero-sub">A four-year technical progression focused on platform maturity, operational reliability, and ecosystem expansion.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-intro">Each phase of the roadmap is grounded in engineering outcomes rather than features. The goal is to build infrastructure and capabilities that compound—each year's work providing a more stable and capable foundation for the next.</p>
+
+      <div class="roadmap-full">
+
+        <div class="roadmap-year-block">
+          <div class="year-header">
+            <span class="year-label">2026</span>
+            <h2>Foundation and Stability</h2>
+          </div>
+          <div class="year-body">
+            <p class="year-summary">Establish production-grade infrastructure, standardize development workflows, and deliver the first stable versions of the core ecosystem services. Focus is on reliability, security fundamentals, and continuous delivery discipline.</p>
+            <div class="milestones">
+              <div class="milestone-group">
+                <h4>Infrastructure</h4>
+                <ul>
+                  <li>Production Docker environments with defined health checks and restart policies</li>
+                  <li>Nginx configuration standardized across all services with TLS and rate limiting</li>
+                  <li>Centralized logging pipeline with structured JSON output</li>
+                  <li>Secrets management using environment-based injection, no hardcoded credentials</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Security</h4>
+                <ul>
+                  <li>JWT issuance and validation across all service entry points</li>
+                  <li>RBAC model defined and enforced for all resource types</li>
+                  <li>Automated dependency vulnerability scanning in CI</li>
+                  <li>TLS certificates managed and renewed automatically</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Delivery</h4>
+                <ul>
+                  <li>GitHub Actions CI pipeline for all active repositories</li>
+                  <li>Automated test coverage requirements before merge</li>
+                  <li>Staging environment that mirrors production topology</li>
+                  <li>Deployment runbooks documented for each service</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Product</h4>
+                <ul>
+                  <li>OpsLedger v1 deployed to production</li>
+                  <li>Arthemiz identity service with multi-tenant support</li>
+                  <li>SystemHealth dashboard operational with alerting</li>
+                  <li>Sentinel v1 with access pattern monitoring</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-year-block">
+          <div class="year-header">
+            <span class="year-label">2027</span>
+            <h2>Scale and Modularity</h2>
+          </div>
+          <div class="year-body">
+            <p class="year-summary">Transition from a single-deployment monolith to well-defined modules with isolated concerns. Introduce messaging infrastructure, multi-tenancy, and the first public-facing product release. Engineering velocity should increase as modules become independently releasable.</p>
+            <div class="milestones">
+              <div class="milestone-group">
+                <h4>Architecture</h4>
+                <ul>
+                  <li>Bounded module boundaries enforced with internal APIs</li>
+                  <li>RabbitMQ deployed as the async messaging layer</li>
+                  <li>Redis cache layer introduced for session and config data</li>
+                  <li>Inter-module communication via events, not direct database access</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Multi-Tenancy</h4>
+                <ul>
+                  <li>Tenant isolation at the data and routing layer</li>
+                  <li>Per-tenant RBAC configuration and role inheritance</li>
+                  <li>Tenant provisioning workflow automated end-to-end</li>
+                  <li>Billing and usage tracking integrated into OpsLedger</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Delivery</h4>
+                <ul>
+                  <li>Per-module CI pipelines with independent versioning</li>
+                  <li>Blue/green deployment capability on the staging environment</li>
+                  <li>Post-deployment smoke tests automated per release</li>
+                  <li>Rollback procedures tested quarterly</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Product</h4>
+                <ul>
+                  <li>Vendas3D v1 public release with REST API</li>
+                  <li>Developer documentation for all public APIs</li>
+                  <li>Arthemiz OAuth 2.0 authorization server</li>
+                  <li>SystemHealth extended with queue depth and cache metrics</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-year-block">
+          <div class="year-header">
+            <span class="year-label">2028</span>
+            <h2>Microservices and Distribution</h2>
+          </div>
+          <div class="year-body">
+            <p class="year-summary">Services with independent release cadence and high load requirements are extracted into fully autonomous microservices. Distributed tracing and advanced observability provide the visibility needed to operate a multi-service platform safely.</p>
+            <div class="milestones">
+              <div class="milestone-group">
+                <h4>Architecture</h4>
+                <ul>
+                  <li>High-traffic modules promoted to independent microservices</li>
+                  <li>API Gateway handling authentication and routing centrally</li>
+                  <li>Per-service databases enforcing data ownership boundaries</li>
+                  <li>gRPC for synchronous internal communication where latency is critical</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Observability</h4>
+                <ul>
+                  <li>Distributed tracing with trace context propagated across all hops</li>
+                  <li>Grafana dashboards per service with SLI/SLO definitions</li>
+                  <li>Error budget tracking for all production services</li>
+                  <li>Incident response runbooks integrated with alerting</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Resilience</h4>
+                <ul>
+                  <li>Circuit breakers on all cross-service calls</li>
+                  <li>Retry policies and dead-letter queues for all RabbitMQ consumers</li>
+                  <li>Chaos engineering experiments run against staging monthly</li>
+                  <li>Data backup and point-in-time recovery tested per service</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Platform</h4>
+                <ul>
+                  <li>Private container registry with signed and scanned images</li>
+                  <li>Infrastructure-as-code for all environment provisioning</li>
+                  <li>Developer portal with API catalog and self-service access</li>
+                  <li>Automated scaling policies based on queue depth and CPU metrics</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-year-block">
+          <div class="year-header">
+            <span class="year-label">2029</span>
+            <h2>Platform Maturity</h2>
+          </div>
+          <div class="year-body">
+            <p class="year-summary">The platform reaches full operational maturity: self-service developer tooling, enterprise SLA capabilities, partner integrations, and a stable API surface that external systems can depend on. Engineering focus shifts toward platform efficiency, cost optimization, and maintainability.</p>
+            <div class="milestones">
+              <div class="milestone-group">
+                <h4>Platform API</h4>
+                <ul>
+                  <li>Public platform API with versioning and long-term stability guarantees</li>
+                  <li>SDK libraries for primary integration languages</li>
+                  <li>Webhook delivery for all platform events with retry guarantees</li>
+                  <li>API usage analytics and quota management for all consumers</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Enterprise Capabilities</h4>
+                <ul>
+                  <li>SLA-backed uptime commitments for production services</li>
+                  <li>Enterprise SSO integration (SAML, OIDC)</li>
+                  <li>Data residency and compliance configuration per tenant</li>
+                  <li>Dedicated support channels with defined response SLOs</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Developer Experience</h4>
+                <ul>
+                  <li>Self-service provisioning for new tenants and environments</li>
+                  <li>Internal developer platform for service scaffolding and deployment</li>
+                  <li>Onboarding documentation with runnable code examples</li>
+                  <li>Sandbox environments available for integration testing</li>
+                </ul>
+              </div>
+              <div class="milestone-group">
+                <h4>Efficiency</h4>
+                <ul>
+                  <li>Cost attribution per service, tenant, and feature area</li>
+                  <li>Automated resource right-sizing recommendations</li>
+                  <li>Dependency audit and reduction of third-party surface area</li>
+                  <li>Platform carbon footprint reporting for sustainability compliance</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo">ArthemizLabs</a>
+      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="roadmap.html">Roadmap</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
