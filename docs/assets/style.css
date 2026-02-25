@@ -119,11 +119,21 @@ h1, h2, h3, h4 {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--color-heading);
   letter-spacing: 0.02em;
   text-decoration: none;
+}
+
+.logo-mark {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  object-fit: cover;
 }
 
 .site-nav {
