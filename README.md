@@ -111,6 +111,17 @@ This repository (`.github`) serves as the engineering governance layer for the A
 
 Repository-specific documentation, architecture decision records, and runbooks live in their respective repositories.
 
+### Public Site
+
+The public-facing website is located in the [`site/`](./site/) directory. It contains:
+
+- `site/index.html` — Home page
+- `site/architecture.html` — System architecture overview
+- `site/roadmap.html` — Engineering roadmap (2026–2029)
+- `site/assets/` — Stylesheets and static assets
+
+GitHub Pages is configured to deploy from the `site/` directory on the `main` branch.
+
 ---
 
 *ArthemizLabs — Engineering-driven SaaS.*
