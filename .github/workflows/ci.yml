@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Lint, Test, and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect runtime
+        id: detect
+        run: |
+          if [ -f "package.json" ]; then
+            echo "runtime=node" >> "$GITHUB_OUTPUT"
+          elif [ -f "go.mod" ]; then
+            echo "runtime=go" >> "$GITHUB_OUTPUT"
+          elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+            echo "runtime=python" >> "$GITHUB_OUTPUT"
+          else
+            echo "runtime=none" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Node.js setup
+      - name: Set up Node.js
+        if: steps.detect.outputs.runtime == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node.js dependencies
+        if: steps.detect.outputs.runtime == 'node'
+        run: npm ci
+
+      - name: Lint (Node.js)
+        if: steps.detect.outputs.runtime == 'node'
+        run: npm run lint
+
+      - name: Run tests (Node.js)
+        if: steps.detect.outputs.runtime == 'node'
+        run: npm test
+
+      # Go setup
+      - name: Set up Go
+        if: steps.detect.outputs.runtime == 'go'
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+          cache: true
+
+      - name: Install Go dependencies
+        if: steps.detect.outputs.runtime == 'go'
+        run: go mod download
+
+      - name: Lint (Go)
+        if: steps.detect.outputs.runtime == 'go'
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+      - name: Run tests (Go)
+        if: steps.detect.outputs.runtime == 'go'
+        run: go test ./... -race -coverprofile=coverage.out
+
+      # Python setup
+      - name: Set up Python
+        if: steps.detect.outputs.runtime == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Python dependencies
+        if: steps.detect.outputs.runtime == 'python'
+        run: |
+          pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e ".[dev]"; fi
+
+      - name: Lint (Python)
+        if: steps.detect.outputs.runtime == 'python'
+        run: |
+          pip install ruff
+          ruff check .
+
+      - name: Run tests (Python)
+        if: steps.detect.outputs.runtime == 'python'
+        run: |
+          pip install pytest
+          pytest --tb=short
+
+      - name: No recognized runtime detected
+        if: steps.detect.outputs.runtime == 'none'
+        run: |
+          echo "No recognized runtime detected (Node.js, Go, or Python). Skipping dependency installation, lint, and test steps."
+          echo "Add support for your runtime to .github/workflows/ci.yml."

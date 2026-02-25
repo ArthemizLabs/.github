@@ -1,0 +1,81 @@
+name: Bug Report
+description: Report a reproducible defect in a production or staging environment.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to report a reproducible defect. Provide all requested information to expedite investigation.
+        For security vulnerabilities, do **not** use this template — refer to the [Security Policy](../../SECURITY.md).
+
+  - type: input
+    id: service
+    attributes:
+      label: Affected Service
+      description: Which service or repository is affected? (e.g., OpsLedger, Arthemiz, Vendas3D, Sentinel, SystemHealth)
+      placeholder: "e.g., OpsLedger"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version / Release
+      description: The version or release tag where this bug was observed.
+      placeholder: "e.g., v2.3.1"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: The environment where the bug was observed.
+      placeholder: "e.g., production, staging, local"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the defect.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Provide a minimal, reproducible set of steps.
+      placeholder: |
+        1. Authenticate as a tenant admin
+        2. Navigate to ...
+        3. Submit the form with ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Include error messages, stack traces, or log excerpts.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, relevant configuration, related issues, or any other context that may assist in diagnosis.
+    validations:
+      required: false
