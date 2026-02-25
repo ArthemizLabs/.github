@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArthemizLabs - SaaS Engineering Ecosystem</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <span class="logo">ArthemizLabs</span>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="roadmap.html">Roadmap</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Engineering-First SaaS Ecosystem</h1>
+      <p class="hero-sub">Scalable infrastructure, modular design, and production-grade systems built for long-term growth.</p>
+      <div class="hero-actions">
+        <a href="architecture.html" class="btn btn-primary">System Architecture</a>
+        <a href="roadmap.html" class="btn btn-outline">2026-2029 Roadmap</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="mission" class="section">
+    <div class="container">
+      <h2 class="section-title">Mission</h2>
+      <div class="section-body">
+        <p>ArthemizLabs is a SaaS engineering organization dedicated to designing and operating reliable, scalable software systems. Our work is grounded in sound architectural principles, continuous delivery practices, and a long-term product vision that prioritizes operational excellence over short-term iteration.</p>
+        <p>We build internal platforms, developer tooling, and domain-specific applications that function as an integrated ecosystem—sharing infrastructure, identity, and observability layers to reduce duplication and increase system coherence.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="engineering" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Engineering Focus</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Infrastructure Reliability</h3>
+          <p>Containerized workloads, reverse proxy configuration, and health monitoring designed for zero-downtime deployments in multi-service environments.</p>
+        </div>
+        <div class="card">
+          <h3>Distributed Systems</h3>
+          <p>Message-driven architectures using RabbitMQ and Redis enable asynchronous processing, event sourcing, and decoupled service communication.</p>
+        </div>
+        <div class="card">
+          <h3>Identity and Access</h3>
+          <p>Centralized authentication via JWT with role-based access control (RBAC) enforced at service boundaries, supporting fine-grained permission models.</p>
+        </div>
+        <div class="card">
+          <h3>Observability</h3>
+          <p>Structured logging, system health dashboards, and alerting pipelines give operations teams full visibility into platform behavior under load.</p>
+        </div>
+        <div class="card">
+          <h3>CI/CD Pipelines</h3>
+          <p>Automated build, test, and deployment workflows reduce release risk and ensure that every change to production has been validated through a consistent pipeline.</p>
+        </div>
+        <div class="card">
+          <h3>API Design</h3>
+          <p>RESTful and event-driven interfaces designed with versioning, rate limiting, and contract-first documentation to support stable integrations across services.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ecosystem" class="section">
+    <div class="container">
+      <h2 class="section-title">Ecosystem Projects</h2>
+      <div class="project-list">
+        <div class="project-item">
+          <div class="project-header">
+            <span class="project-name">OpsLedger</span>
+            <span class="badge badge-active">Active</span>
+          </div>
+          <p>Internal operations ledger for tracking service-level events, cost attribution, and change history across the platform. Provides an audit trail for compliance and incident retrospectives.</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <span class="project-name">Arthemiz</span>
+            <span class="badge badge-active">Active</span>
+          </div>
+          <p>Core identity and configuration management service. Handles authentication, tenant configuration, feature flags, and centralized settings propagated across dependent services.</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <span class="project-name">Vendas3D</span>
+            <span class="badge badge-development">In Development</span>
+          </div>
+          <p>3D commerce and product visualization platform. Enables vendors to present configurable products with real-time rendering, quote generation, and order management workflows.</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <span class="project-name">Sentinel</span>
+            <span class="badge badge-development">In Development</span>
+          </div>
+          <p>Security monitoring and threat detection service. Monitors API access patterns, flags anomalous behavior, and enforces rate limiting and policy rules at the gateway layer.</p>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <span class="project-name">SystemHealth</span>
+            <span class="badge badge-active">Active</span>
+          </div>
+          <p>Platform-wide health monitoring dashboard. Aggregates uptime metrics, dependency status, queue depths, and latency indicators into a unified operational view for on-call engineers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech-stack" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Tech Stack</h2>
+      <div class="stack-grid">
+        <div class="stack-category">
+          <h3>Runtime and Services</h3>
+          <ul>
+            <li>Node.js</li>
+            <li>Python</li>
+            <li>Go</li>
+            <li>REST / gRPC</li>
+          </ul>
+        </div>
+        <div class="stack-category">
+          <h3>Infrastructure</h3>
+          <ul>
+            <li>Docker / Compose</li>
+            <li>Nginx (reverse proxy)</li>
+            <li>Linux (Ubuntu Server)</li>
+            <li>GitHub Actions (CI/CD)</li>
+          </ul>
+        </div>
+        <div class="stack-category">
+          <h3>Data and Messaging</h3>
+          <ul>
+            <li>PostgreSQL</li>
+            <li>Redis</li>
+            <li>RabbitMQ</li>
+            <li>S3-compatible object storage</li>
+          </ul>
+        </div>
+        <div class="stack-category">
+          <h3>Security and Identity</h3>
+          <ul>
+            <li>JWT (JSON Web Tokens)</li>
+            <li>RBAC (Role-Based Access Control)</li>
+            <li>TLS/HTTPS everywhere</li>
+            <li>OAuth 2.0</li>
+          </ul>
+        </div>
+        <div class="stack-category">
+          <h3>Observability</h3>
+          <ul>
+            <li>Prometheus</li>
+            <li>Grafana</li>
+            <li>Structured JSON logging</li>
+            <li>Alerting pipelines</li>
+          </ul>
+        </div>
+        <div class="stack-category">
+          <h3>Frontend</h3>
+          <ul>
+            <li>React</li>
+            <li>TypeScript</li>
+            <li>REST API clients</li>
+            <li>Static site generation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roadmap-preview" class="section">
+    <div class="container">
+      <h2 class="section-title">Roadmap 2026-2029</h2>
+      <div class="roadmap-timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-content">
+            <h3>Foundation and Stability</h3>
+            <p>Establish production-ready infrastructure, standardize CI/CD pipelines, complete core service integrations, and deploy Sentinel and OpsLedger to production.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2027</div>
+          <div class="timeline-content">
+            <h3>Scale and Modularity</h3>
+            <p>Transition to modular service boundaries, implement multi-tenant support across the ecosystem, and complete Vendas3D public release with full API coverage.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2028</div>
+          <div class="timeline-content">
+            <h3>Microservices and Distribution</h3>
+            <p>Decompose core monoliths into independently deployable services, introduce service mesh capabilities, and expand observability with distributed tracing.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2029</div>
+          <div class="timeline-content">
+            <h3>Platform Maturity</h3>
+            <p>Full platform API, partner integrations, self-service developer tooling, automated scaling policies, and enterprise SLA support across all active products.</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-footer">
+        <a href="roadmap.html" class="btn btn-outline">View Full Roadmap</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="logo">ArthemizLabs</span>
+      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="roadmap.html">Roadmap</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

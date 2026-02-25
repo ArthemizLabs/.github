@@ -1,0 +1,728 @@
+/* ============================================================
+   ArthemizLabs – Site Stylesheet
+   Dark theme, engineering-oriented, no dependencies
+   ============================================================ */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #0d0f12;
+  --color-bg-alt:      #111418;
+  --color-surface:     #161b22;
+  --color-border:      #21262d;
+  --color-text:        #c9d1d9;
+  --color-text-muted:  #8b949e;
+  --color-heading:     #e6edf3;
+  --color-accent:      #1f6feb;
+  --color-accent-dim:  #1158c7;
+  --color-accent-soft: rgba(31, 111, 235, 0.12);
+  --color-success:     #3fb950;
+  --color-warning:     #d29922;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --radius:    6px;
+  --max-width: 1100px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #58a6ff;
+}
+
+ul {
+  list-style: none;
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-heading);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-alt {
+  background-color: var(--color-bg-alt);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  margin-bottom: 32px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--color-accent);
+  display: inline-block;
+}
+
+.section-body p + p {
+  margin-top: 16px;
+}
+
+.section-intro {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  max-width: 820px;
+  margin-bottom: 40px;
+}
+
+.section-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.site-nav a {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  color: var(--color-heading);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 96px 0 80px;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  max-width: 700px;
+  margin-bottom: 20px;
+}
+
+.page-hero {
+  padding: 64px 0 48px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  margin-bottom: 16px;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  max-width: 640px;
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #fff;
+  border: 1px solid var(--color-accent);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-dim);
+  border-color: var(--color-accent-dim);
+  color: #fff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-heading);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-text-muted);
+  color: var(--color-heading);
+}
+
+/* ---------- Cards (Engineering Focus) ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+}
+
+.card h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--color-heading);
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ---------- Project List (Ecosystem) ---------- */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.project-item {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  transition: background-color 0.2s;
+}
+
+.project-item:last-child {
+  border-bottom: none;
+}
+
+.project-item:hover {
+  background-color: #1c2128;
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.project-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  font-family: var(--font-mono);
+}
+
+.project-item > p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  max-width: 760px;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-active {
+  background-color: rgba(63, 185, 80, 0.15);
+  color: var(--color-success);
+  border: 1px solid rgba(63, 185, 80, 0.4);
+}
+
+.badge-development {
+  background-color: rgba(210, 153, 34, 0.15);
+  color: var(--color-warning);
+  border: 1px solid rgba(210, 153, 34, 0.4);
+}
+
+/* ---------- Tech Stack Grid ---------- */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.stack-category {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.stack-category h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.stack-category ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stack-category li {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  padding-left: 14px;
+  position: relative;
+}
+
+.stack-category li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 5px;
+  height: 1px;
+  background-color: var(--color-accent);
+}
+
+/* ---------- Roadmap Timeline (index) ---------- */
+.roadmap-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.roadmap-timeline::before {
+  content: '';
+  position: absolute;
+  left: 56px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-border);
+}
+
+.timeline-item {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-year {
+  min-width: 80px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  padding-top: 2px;
+  text-align: center;
+}
+
+.timeline-content h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.timeline-content p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Architecture Page ---------- */
+.arch-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.arch-phase {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 32px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.arch-phase:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.phase-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+.phase-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-border);
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+.phase-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.phase-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+.phase-content > p {
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+  max-width: 680px;
+}
+
+.detail-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.detail-list li {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  padding-left: 18px;
+  position: relative;
+}
+
+.detail-list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+/* ---------- Architecture Diagrams ---------- */
+.arch-diagram {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.modular-diagram {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.diagram-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modules-row,
+.infra-row {
+  gap: 8px;
+  padding-left: 8px;
+}
+
+.diagram-box {
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.client-box  { border-color: var(--color-text-muted); }
+.nginx-box   { border-color: var(--color-accent); color: var(--color-accent); }
+.app-box     { border-color: var(--color-success); color: var(--color-success); }
+.mod-box     { border-color: var(--color-success); color: var(--color-success); }
+.db-box      { border-color: var(--color-warning); color: var(--color-warning); }
+.cache-box   { border-color: #f0883e; color: #f0883e; }
+.mq-box      { border-color: #bc8cff; color: #bc8cff; }
+
+.diagram-arrow {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ---------- Infrastructure Grid ---------- */
+.infra-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.infra-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.infra-item h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.infra-item p {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ---------- Roadmap Full Page ---------- */
+.roadmap-full {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.roadmap-year-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.year-header {
+  background-color: var(--color-surface);
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.year-label {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--color-accent);
+  min-width: 60px;
+}
+
+.year-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.year-body {
+  padding: 28px;
+}
+
+.year-summary {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  max-width: 820px;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.milestone-group {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.milestone-group h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.milestone-group ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.milestone-group li {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.milestone-group li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 1px;
+  background-color: var(--color-accent);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 40px 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.footer-tagline {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-nav a {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.footer-nav a:hover {
+  color: var(--color-heading);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .hero { padding: 64px 0 56px; }
+
+  .hero h1 { font-size: 1.8rem; }
+
+  .arch-phase {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .phase-indicator {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .roadmap-timeline::before { display: none; }
+
+  .timeline-item { flex-direction: column; gap: 4px; }
+
+  .year-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  .header-inner { flex-direction: column; height: auto; padding: 12px 24px; gap: 8px; }
+
+  .site-nav { gap: 16px; }
+}
