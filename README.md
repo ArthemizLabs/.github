@@ -113,14 +113,14 @@ Repository-specific documentation, architecture decision records, and runbooks l
 
 ### Public Site
 
-The public-facing website is located in the [`site/`](./site/) directory. It contains:
+The public-facing website is located in the [`docs/`](./docs/) directory. It contains:
 
-- `site/index.html` — Home page
-- `site/architecture.html` — System architecture overview
-- `site/roadmap.html` — Engineering roadmap (2026–2029)
-- `site/assets/` — Stylesheets and static assets
+- `docs/index.html` — Home page
+- `docs/architecture.html` — System architecture overview
+- `docs/roadmap.html` — Engineering roadmap (2026–2029)
+- `docs/assets/` — Stylesheets and static assets
 
-GitHub Pages is configured to deploy from the `site/` directory on the `main` branch.
+GitHub Pages is configured to deploy from the `docs/` directory on the `main` branch.
 
 ---
 
