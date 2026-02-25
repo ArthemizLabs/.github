@@ -1,0 +1,66 @@
+name: Architecture Discussion
+description: Propose or discuss a significant architectural decision or cross-cutting concern.
+labels: ["architecture", "discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to initiate a discussion about a significant architectural decision, a cross-cutting concern, or a proposal that affects multiple services or teams.
+        Discussions of this type may result in a formal Architecture Decision Record (ADR).
+
+  - type: input
+    id: scope
+    attributes:
+      label: Scope
+      description: Which services or systems are affected by this discussion?
+      placeholder: "e.g., OpsLedger, Arthemiz (multi-service) or All services"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and Background
+      description: Describe the current state and the circumstances that motivate this discussion.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Decision Required
+      description: What architectural problem needs to be solved, or what decision needs to be made?
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: Options Under Consideration
+      description: List the architectural options or approaches being evaluated. Include trade-offs for each.
+      placeholder: |
+        **Option A: ...**
+        Pros: ...
+        Cons: ...
+
+        **Option B: ...**
+        Pros: ...
+        Cons: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints and Requirements
+      description: List any technical, regulatory, operational, or organizational constraints that apply.
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Link to relevant ADRs, RFCs, external documentation, or prior discussions.
+    validations:
+      required: false

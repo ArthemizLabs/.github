@@ -1,0 +1,51 @@
+name: Security Issue (Non-Sensitive)
+description: Report a non-sensitive security concern such as a configuration hardening request or a dependency advisory.
+labels: ["security", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Important:** This template is for non-sensitive security concerns only, such as:
+        - Dependency version upgrades in response to public advisories (CVEs with no active exploitation)
+        - Security hardening requests (headers, TLS configuration, rate limiting)
+        - Security documentation gaps
+
+        **If you have identified a vulnerability that could be exploited in a production system, do NOT use this form.**
+        Report it privately per the [Security Policy](../../SECURITY.md).
+
+  - type: input
+    id: service
+    attributes:
+      label: Affected Service
+      description: Which service or repository is affected?
+      placeholder: "e.g., Sentinel"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - "Dependency advisory / CVE upgrade"
+        - "Security hardening request"
+        - "Security documentation gap"
+        - "Other (non-sensitive)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the security concern. Include CVE identifiers, advisory links, or relevant references.
+    validations:
+      required: true
+
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommended Remediation
+      description: What action should be taken to address this concern?
+    validations:
+      required: false
