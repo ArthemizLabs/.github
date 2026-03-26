@@ -30,11 +30,11 @@ To design, build, and operate reliable, secure, and scalable SaaS platforms that
 
 | System | Description | Status |
 |---|---|---|
-| **OpsLedger** | Financial operations and audit ledger platform for SMBs. Double-entry accounting, reconciliation, and compliance reporting. | Active |
+| **OpsLedger** | Financial operations and audit ledger platform for SMBs. Double-entry accounting, reconciliation, and compliance reporting. | In Development |
 | **Arthemiz** | Core identity, billing, and tenant management layer shared across the ecosystem. Multi-tenant SaaS foundation. | Active |
-| **Vendas3D** | 3D product commerce platform. Enables merchants to publish interactive 3D product experiences and manage digital storefronts. | Active |
-| **Sentinel** | Security intelligence and threat monitoring service. Centralized log ingestion, anomaly detection, and alerting. | Active |
-| **SystemHealth** | Infrastructure observability and health dashboard. Aggregates uptime, latency, error rates, and deployment health across all services. | Active |
+| **Vendas3D** | 3D product commerce platform. Enables merchants to publish interactive 3D product experiences and manage digital storefronts. | In Development |
+| **Sentinel** | Security intelligence and threat monitoring service. Centralized log ingestion, anomaly detection, and alerting. | Not Started |
+| **SystemHealth** | Infrastructure observability and health dashboard. Aggregates uptime, latency, error rates, and deployment health across all services. | Not Started |
 
 ---
 
