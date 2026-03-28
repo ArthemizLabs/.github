@@ -2,11 +2,7 @@
 
 ### What was implemented?
 
-<!-- Describe the changes introduced by this pull request. Be specific. Reference the issue or ticket if applicable (e.g., Closes #123). -->
-
-### Why?
-
-<!-- Explain the motivation behind this change. What problem does it solve? What business or technical requirement does it address? -->
+<!-- Describe the changes introduced by this pull request. Be specific but quick. Theres no need to make it complex Reference the issue or ticket if applicable (e.g., Closes #123). -->
 
 ---
 
@@ -37,7 +33,6 @@
 
 ## Checklist
 
-- [ ] Code follows the project's style guidelines and passes lint checks
 - [ ] All existing tests pass locally
 - [ ] New tests have been added for changed functionality
 - [ ] Documentation has been updated (README, ADRs, API contracts, inline comments)
