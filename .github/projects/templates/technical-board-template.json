@@ -48,14 +48,14 @@
       "name": "Tipo",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Feature 🚀",    "color": "GREEN",  "description": "Nova funcionalidade" },
-        { "name": "Bug Fix 🐛",    "color": "RED",    "description": "Correção de bug" },
-        { "name": "Refactor ♻️",  "color": "YELLOW", "description": "Melhoria de código sem mudança de comportamento" },
-        { "name": "Test 🧪",       "color": "PURPLE", "description": "Adição ou melhoria de testes" },
-        { "name": "Docs 📚",       "color": "BLUE",   "description": "Documentação" },
-        { "name": "Security 🔒",   "color": "RED",    "description": "Correção ou melhoria de segurança" },
+        { "name": "Feature",    "color": "GREEN",  "description": "Nova funcionalidade" },
+        { "name": "Bug Fix",    "color": "RED",    "description": "Correção de bug" },
+        { "name": "Refactor",  "color": "YELLOW", "description": "Melhoria de código sem mudança de comportamento" },
+        { "name": "Test",       "color": "PURPLE", "description": "Adição ou melhoria de testes" },
+        { "name": "Docs",       "color": "BLUE",   "description": "Documentação" },
+        { "name": "Security",   "color": "RED",    "description": "Correção ou melhoria de segurança" },
         { "name": "Infra/DevOps",  "color": "ORANGE", "description": "CI/CD, Docker, deploy, infra" },
-        { "name": "Chore 🔧",      "color": "GRAY",   "description": "Dependências, configurações, manutenção" }
+        { "name": "Chore",      "color": "GRAY",   "description": "Dependências, configurações, manutenção" }
       ]
     },
     {
@@ -77,33 +77,33 @@
       "name": "Contribui para",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Diploma 🎓",    "color": "GREEN",  "description": "Contribui para o diploma universitário" },
-        { "name": "Idioma 🗣️",    "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
-        { "name": "Portfólio 💼",  "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" }
+        { "name": "Diploma",    "color": "GREEN",  "description": "Contribui para o diploma universitário" },
+        { "name": "Idioma",    "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
+        { "name": "Portfólio",  "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" }
       ]
     }
   ],
   "views": [
     {
-      "name": "🗂 Board Principal",
+      "name": "Board Principal",
       "layout": "BOARD_LAYOUT",
       "groupBy": "Status",
       "description": "Board Kanban — visão de execução diária"
     },
     {
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Tabela agrupada por fase do roadmap"
     },
     {
-      "name": "🔥 Prioridade",
+      "name": "Prioridade",
       "layout": "TABLE_LAYOUT",
       "sortBy": "Prioridade",
       "description": "Tarefas ordenadas por prioridade"
     },
     {
-      "name": "📋 Backlog Refinado",
+      "name": "Backlog Refinado",
       "layout": "TABLE_LAYOUT",
       "filterBy": ["Status:Backlog", "Status:Ready to Dev"],
       "description": "Apenas itens do backlog para refinamento"
