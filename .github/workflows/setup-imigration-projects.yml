@@ -13,11 +13,11 @@ on:
         default: "all"
         options:
           - all
-          - master-roadmap
-          - ops-ledger-sentinel
-          - vendas3d
-          - arthemiz-systemhealth
           - global-resume
+          - master-roadmap
+          - ops-ledger/system-health
+          - vendas3d
+          - arthemiz/sentinel-agent
 
 permissions:
   contents: read
@@ -94,10 +94,10 @@ jobs:
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # JOB 2 — Master Roadmap 2030 (Table)
+  # JOB 2 — Master Roadmap (Table)
   # ─────────────────────────────────────────────────────────────────────────────
   master-roadmap:
-    name: "📊 Master Roadmap 2030"
+    name: "Master Roadmap"
     runs-on: ubuntu-latest
     needs: preflight
     if: inputs.project == 'all' || inputs.project == 'master-roadmap'
@@ -110,22 +110,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create Master Roadmap 2030
+      - name: Create Master Roadmap
         id: create-project
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Master Roadmap 2030' (TABLE_LAYOUT)"
+            echo "🔸 [DRY-RUN] Criaria projeto: 'Master Roadmap' (TABLE_LAYOUT)"
             echo "project_id=DRY_RUN_ID" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "📊 Criando projeto 'Master Roadmap 2030'..."
+          echo "📊 Criando projeto 'Master Roadmap'..."
 
           # Idempotência: reutiliza projeto existente com o mesmo título
           EXISTING_ID=$(gh api graphql -f query='
             query($login: String!) {
               organization(login: $login) {
-                projectsV2(query: "Master Roadmap 2030", first: 5) {
+                projectsV2(query: "Master Roadmap", first: 5) {
                   nodes { id title }
                 }
               }
@@ -134,7 +134,7 @@ jobs:
             jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Master Roadmap 2030") | .id' 2>/dev/null | head -1 || true)
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
-            echo "ℹ️ Projeto 'Master Roadmap 2030' já existe ($EXISTING_ID) — reutilizando."
+            echo "ℹ️ Projeto 'Master Roadmap' já existe ($EXISTING_ID) — reutilizando."
             PROJECT_ID="$EXISTING_ID"
           else
             CREATE_RESULT=$(gh api graphql -f query='
@@ -144,7 +144,7 @@ jobs:
                 }
               }' \
               -f ownerId="$ORG_ID" \
-              -f title="Master Roadmap 2030")
+              -f title="Master Roadmap")
 
             PROJECT_ID=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.id')
             PROJECT_URL=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.url')
@@ -404,7 +404,7 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## 📊 Master Roadmap 2030" >> "$GITHUB_STEP_SUMMARY"
+          echo "## 📊 Master Roadmap" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           if [ "$DRY_RUN" = "true" ]; then
             echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
@@ -416,13 +416,13 @@ jobs:
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # JOB 3 — OpsLedger & Sentinel Agent (Board)
+  # JOB 3 — OpsLedger & SystemHealth (Board)
   # ─────────────────────────────────────────────────────────────────────────────
   ops-ledger-sentinel:
-    name: "⚙️ OpsLedger & Sentinel Agent"
+    name: "⚙️ OpsLedger & SystemHealth"
     runs-on: ubuntu-latest
     needs: preflight
-    if: inputs.project == 'all' || inputs.project == 'ops-ledger-sentinel'
+    if: inputs.project == 'all' || inputs.project == 'ops-ledger/system-health'
     env:
       GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
       ORG_ID: ${{ needs.preflight.outputs.org_id }}
@@ -435,13 +435,13 @@ jobs:
       - name: Create project and configure board
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'OpsLedger & Sentinel Agent' (BOARD_LAYOUT)"
+            echo "🔸 [DRY-RUN] Criaria projeto: 'OpsLedger & SystemHealth' (BOARD_LAYOUT)"
             echo "🔸 [DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa (h), PR Link"
             echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🔧 Por Componente"
             exit 0
           fi
 
-          echo "⚙️ Criando projeto 'OpsLedger & Sentinel Agent'..."
+          echo "⚙️ Criando projeto 'OpsLedger & SystemHealth'..."
 
           # Idempotência: reutiliza projeto existente com o mesmo título
           EXISTING_ID=$(gh api graphql -f query='
@@ -453,10 +453,10 @@ jobs:
               }
             }' \
             -f login="ArthemizLabs" | \
-            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "OpsLedger & Sentinel Agent") | .id' 2>/dev/null | head -1 || true)
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "OpsLedger & SystemHealth") | .id' 2>/dev/null | head -1 || true)
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
-            echo "ℹ️ Projeto 'OpsLedger & Sentinel Agent' já existe ($EXISTING_ID) — reutilizando."
+            echo "ℹ️ Projeto 'OpsLedger & SystemHealth' já existe ($EXISTING_ID) — reutilizando."
             PROJECT_ID="$EXISTING_ID"
           else
             PROJECT_ID=$(gh api graphql -f query='
@@ -466,7 +466,7 @@ jobs:
                 }
               }' \
               -f ownerId="$ORG_ID" \
-              -f title="OpsLedger & Sentinel Agent" \
+              -f title="OpsLedger & SystemHealth" \
               --jq '.data.createProjectV2.projectV2.id')
             echo "✅ Projeto criado: $PROJECT_ID"
           fi
@@ -519,7 +519,7 @@ jobs:
                 name: "Componente"
                 singleSelectOptions: [
                   { name: "OpsLedger",      color: BLUE, description: "Plataforma financeira Java/Spring Boot" }
-                  { name: "Sentinel Agent", color: RED,  description: "Agente de telemetria em C" }
+                  { name: "SystemHealth",   color: RED,  description: "...." }
                   { name: "Shared",         color: GRAY, description: "Infraestrutura compartilhada" }
                 ]
               }) {
@@ -576,11 +576,11 @@ jobs:
               -f layout="$VIEW_LAYOUT"
           done
 
-          echo "✅ OpsLedger & Sentinel Agent configurado com sucesso"
+          echo "✅ OpsLedger & SystemHealth configurado com sucesso"
 
       - name: Summary
         run: |
-          echo "## ⚙️ OpsLedger & Sentinel Agent" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ⚙️ OpsLedger & SystemHealth" >> "$GITHUB_STEP_SUMMARY"
           if [ "$DRY_RUN" = "true" ]; then
             echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
           else
@@ -761,13 +761,13 @@ jobs:
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # JOB 5 — Arthemiz & SystemHealth (Board)
+  # JOB 5 — Arthemiz & Sentinel Agent (Board)
   # ─────────────────────────────────────────────────────────────────────────────
   arthemiz-systemhealth:
-    name: "🔒 Arthemiz & SystemHealth"
+    name: "🔒 Arthemiz & SentinelAgent"
     runs-on: ubuntu-latest
     needs: preflight
-    if: inputs.project == 'all' || inputs.project == 'arthemiz-systemhealth'
+    if: inputs.project == 'all' || inputs.project == 'arthemiz/sentinel-agent'
     env:
       GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
       ORG_ID: ${{ needs.preflight.outputs.org_id }}
@@ -777,16 +777,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create Arthemiz & SystemHealth board
+      - name: Create Arthemiz & SentinelAgent board
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Arthemiz & SystemHealth' (BOARD_LAYOUT)"
+            echo "🔸 [DRY-RUN] Criaria projeto: 'Arthemiz & SentinelAgent' (BOARD_LAYOUT)"
             echo "🔸 [DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa (h), PR Link"
             echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🖥 Por Sistema, 🔒 Segurança & Infra"
             exit 0
           fi
 
-          echo "🔒 Criando projeto 'Arthemiz & SystemHealth'..."
+          echo "🔒 Criando projeto 'Arthemiz & SentinelAgent'..."
 
           # Idempotência: reutiliza projeto existente com o mesmo título
           EXISTING_ID=$(gh api graphql -f query='
@@ -798,10 +798,10 @@ jobs:
               }
             }' \
             -f login="ArthemizLabs" | \
-            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Arthemiz & SystemHealth") | .id' 2>/dev/null | head -1 || true)
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Arthemiz & SentinelAgent") | .id' 2>/dev/null | head -1 || true)
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
-            echo "ℹ️ Projeto 'Arthemiz & SystemHealth' já existe ($EXISTING_ID) — reutilizando."
+            echo "ℹ️ Projeto 'Arthemiz & SentinelAgent' já existe ($EXISTING_ID) — reutilizando."
             PROJECT_ID="$EXISTING_ID"
             echo "ℹ️ Projeto já inicializado — pulando criação de campos e views para evitar duplicatas."
             exit 0
@@ -813,7 +813,7 @@ jobs:
                 }
               }' \
               -f ownerId="$ORG_ID" \
-              -f title="Arthemiz & SystemHealth" \
+              -f title="Arthemiz & SentinelAgent" \
               --jq '.data.createProjectV2.projectV2.id')
             echo "✅ Projeto criado: $PROJECT_ID"
           fi
@@ -865,7 +865,7 @@ jobs:
                 name: "Sistema"
                 singleSelectOptions: [
                   { name: "Arthemiz",     color: BLUE,  description: "DNS, proxy reverso e segurança de rede em Go" }
-                  { name: "SystemHealth", color: GREEN, description: "Observabilidade, Docker e monitoramento" }
+                  { name: "SentinelAgent", color: GREEN, description: "..." }
                   { name: "Shared",       color: GRAY,  description: "Infra e configurações compartilhadas" }
                 ]
               }) {
@@ -939,11 +939,11 @@ jobs:
               -f layout="$VIEW_LAYOUT"
           done
 
-          echo "✅ Arthemiz & SystemHealth configurado com sucesso"
+          echo "✅ Arthemiz & SentinelAgent configurado com sucesso"
 
       - name: Summary
         run: |
-          echo "## 🔒 Arthemiz & SystemHealth" >> "$GITHUB_STEP_SUMMARY"
+          echo "## 🔒 Arthemiz & SentinelAgent" >> "$GITHUB_STEP_SUMMARY"
           if [ "$DRY_RUN" = "true" ]; then
             echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
           else
