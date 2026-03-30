@@ -23,17 +23,17 @@
       "options": [
         { "name": "Japão 🇯🇵",  "color": "RED",   "description": "Visto HSP — High Skilled Professional" },
         { "name": "Canadá 🇨🇦", "color": "RED",   "description": "Express Entry — Federal Skilled Worker" },
-        { "name": "Global 🌍",  "color": "BLUE",  "description": "Aplicável a múltiplos destinos" }
+        { "name": "Global",  "color": "BLUE",  "description": "Aplicável a múltiplos destinos" }
       ]
     },
     {
       "name": "Tipo",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Certificação 📜", "color": "YELLOW", "description": "Exames e certificações profissionais" },
-        { "name": "Idioma 🗣️",       "color": "PURPLE", "description": "Inglês e Japonês" },
-        { "name": "Acadêmico 🎓",    "color": "GREEN",  "description": "Faculdade e formação acadêmica" },
-        { "name": "Tech 💻",         "color": "BLUE",   "description": "Projetos técnicos e portfólio SaaS" }
+        { "name": "Certificação", "color": "YELLOW", "description": "Exames e certificações profissionais" },
+        { "name": "Idioma",       "color": "PURPLE", "description": "Inglês e Japonês" },
+        { "name": "Acadêmico",    "color": "GREEN",  "description": "Faculdade e formação acadêmica" },
+        { "name": "Tech",         "color": "BLUE",   "description": "Projetos técnicos e portfólio SaaS" }
       ]
     },
     {
@@ -56,38 +56,38 @@
       "name": "Pilar de Imigração",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Diploma 🎓",          "color": "GREEN",  "description": "Contribui para o diploma universitário" },
-        { "name": "Idioma C1/N2 🗣️",     "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
-        { "name": "Portfólio 💼",        "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" },
-        { "name": "Certificação 📜",      "color": "PURPLE", "description": "Contribui para certificações reconhecidas" }
+        { "name": "Diploma",          "color": "GREEN",  "description": "Contribui para o diploma universitário" },
+        { "name": "Idioma C1/N2",     "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
+        { "name": "Portfólio",        "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" },
+        { "name": "Certificação",     "color": "PURPLE", "description": "Contribui para certificações reconhecidas" }
       ]
     }
   ],
   "views": [
     {
-      "name": "📋 Backlog Completo",
+      "name": "Backlog Completo",
       "layout": "TABLE_LAYOUT",
       "description": "Visão tabular de todas as tarefas do roadmap"
     },
     {
-      "name": "📅 Timeline por Fase",
+      "name": "Timeline por Fase",
       "layout": "ROADMAP_LAYOUT",
       "groupBy": "Fase",
       "description": "Timeline agrupada por fase anual — visão de longo prazo"
     },
     {
-      "name": "🏆 Priority — Certificações & Idiomas",
+      "name": "Priority — Certificações & Idiomas",
       "layout": "TABLE_LAYOUT",
-      "filterBy": ["Tipo:Certificação 📜", "Tipo:Idioma 🗣️"],
+      "filterBy": ["Tipo:Certificação", "Tipo:Idioma"],
       "description": "Filtrado para certificações e idiomas — itens críticos para o visto"
     },
     {
-      "name": "📊 Kanban por Status",
+      "name": "Kanban por Status",
       "layout": "BOARD_LAYOUT",
       "description": "Board por status para execução diária"
     },
     {
-      "name": "🗂 Por Épico",
+      "name": "Por Épico",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Épico",
       "description": "Tabela agrupada por épico — visão modular"
