@@ -53,13 +53,20 @@ jobs:
             }' \
             -f login="ArthemizLabs")
 
-          ORG_ID=$(echo "$ORG_JSON" | jq -r '.data.organization.id')
-          ORG_NAME=$(echo "$ORG_JSON" | jq -r '.data.organization.name')
-          EXISTING_PROJECTS=$(echo "$ORG_JSON" | jq -r '.data.organization.projectsV2.totalCount')
+          # Verifica se o nó .data.organization veio nulo (org inexistente ou sem acesso)
+          if echo "$ORG_JSON" | jq -e '.data.organization == null' >/dev/null; then
+            echo "❌ Organização 'ArthemizLabs' não encontrada ou inacessível. Verifique se o PROJECTS_TOKEN tem acesso à organização e se o login está correto."
+            exit 1
+          fi
+
+          # Extrai campos garantindo que valores nulos não virem a string literal \"null\"
+          ORG_ID=$(echo "$ORG_JSON" | jq -r '.data.organization.id // empty')
+          ORG_NAME=$(echo "$ORG_JSON" | jq -r '.data.organization.name // empty')
+          EXISTING_PROJECTS=$(echo "$ORG_JSON" | jq -r '.data.organization.projectsV2.totalCount // 0')
           echo "📁 Organização: $ORG_NAME — projetos existentes: $EXISTING_PROJECTS"
 
-          if [ -z "$ORG_ID" ]; then
-            echo "❌ Falha ao obter o ID da organização. Verifique o PROJECTS_TOKEN."
+          if [ -z "$ORG_ID" ] || [ "$ORG_ID" = "null" ]; then
+            echo "❌ Falha ao obter o ID da organização. Verifique o PROJECTS_TOKEN e as permissões de acesso à organização 'ArthemizLabs'."
             exit 1
           fi
 
