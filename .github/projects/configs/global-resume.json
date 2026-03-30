@@ -11,12 +11,12 @@
       "name": "Status da Contribuição",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Hunting 🔍",     "color": "GRAY",   "description": "Buscando issue para contribuir" },
-        { "name": "Draft 📝",       "color": "YELLOW", "description": "PR aberto em rascunho — em desenvolvimento" },
-        { "name": "In Review 👀",   "color": "BLUE",   "description": "PR aberto aguardando revisão dos maintainers" },
-        { "name": "Merged ✅",      "color": "GREEN",  "description": "PR aceito e merged — contribuição validada" },
-        { "name": "Rejected ❌",    "color": "RED",    "description": "PR rejeitado — revisar feedback e reutilizar" },
-        { "name": "Abandoned ⚠️",  "color": "ORANGE", "description": "Issue abandonada — sem resposta dos maintainers" }
+        { "name": "Hunting",     "color": "GRAY",   "description": "Buscando issue para contribuir" },
+        { "name": "Draft",       "color": "YELLOW", "description": "PR aberto em rascunho — em desenvolvimento" },
+        { "name": "In Review",   "color": "BLUE",   "description": "PR aberto aguardando revisão dos maintainers" },
+        { "name": "Merged",      "color": "GREEN",  "description": "PR aceito e merged — contribuição validada" },
+        { "name": "Rejected",    "color": "RED",    "description": "PR rejeitado — revisar feedback e reutilizar" },
+        { "name": "Abandoned",   "color": "ORANGE", "description": "Issue abandonada — sem resposta dos maintainers" }
       ]
     },
     {
@@ -43,12 +43,12 @@
       "name": "Tipo de Contribuição",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Bug Fix 🐛",          "color": "RED",    "description": "Correção de bug reportado em issue" },
-        { "name": "Feature 🚀",          "color": "GREEN",  "description": "Nova funcionalidade ou melhoria" },
-        { "name": "Docs 📚",             "color": "BLUE",   "description": "Melhoria de documentação ou README" },
-        { "name": "Refactor ♻️",        "color": "YELLOW", "description": "Refatoração sem mudança de comportamento" },
-        { "name": "Test 🧪",             "color": "PURPLE", "description": "Adição ou melhoria de testes" },
-        { "name": "Chore 🔧",            "color": "GRAY",   "description": "Atualização de dependências, CI, configs" }
+        { "name": "Bug Fix",          "color": "RED",    "description": "Correção de bug reportado em issue" },
+        { "name": "Feature",          "color": "GREEN",  "description": "Nova funcionalidade ou melhoria" },
+        { "name": "Docs",             "color": "BLUE",   "description": "Melhoria de documentação ou README" },
+        { "name": "Refactor",         "color": "YELLOW", "description": "Refatoração sem mudança de comportamento" },
+        { "name": "Test",             "color": "PURPLE", "description": "Adição ou melhoria de testes" },
+        { "name": "Chore",            "color": "GRAY",   "description": "Atualização de dependências, CI, configs" }
       ]
     },
     {
@@ -73,9 +73,9 @@
       "name": "Impacto no Visto",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Alto ⭐⭐⭐",  "color": "GREEN",  "description": "Projeto tier-1 (>10k stars) — alto peso no portfólio" },
-        { "name": "Médio ⭐⭐",   "color": "YELLOW", "description": "Projeto relevante (1k-10k stars)" },
-        { "name": "Baixo ⭐",    "color": "GRAY",   "description": "Projeto menor — valor de aprendizado" }
+        { "name": "Alto",  "color": "GREEN",  "description": "Projeto tier-1 (>10k stars) — alto peso no portfólio" },
+        { "name": "Médio",   "color": "YELLOW", "description": "Projeto relevante (1k-10k stars)" },
+        { "name": "Baixo",    "color": "GRAY",   "description": "Projeto menor — valor de aprendizado" }
       ]
     },
     {
@@ -86,24 +86,24 @@
   ],
   "views": [
     {
-      "name": "📋 Todas as Contribuições",
+      "name": "Todas as Contribuições",
       "layout": "TABLE_LAYOUT",
       "description": "Lista completa de todas as contribuições Open Source"
     },
     {
-      "name": "✅ Merged — Portfólio Público",
+      "name": "Merged — Portfólio Público",
       "layout": "TABLE_LAYOUT",
-      "filterBy": ["Status da Contribuição:Merged ✅"],
+      "filterBy": ["Status da Contribuição:Merged"],
       "description": "Apenas contribuições aceitas — portfólio para o visto"
     },
     {
-      "name": "📊 Board de Acompanhamento",
+      "name": "Board de Acompanhamento",
       "layout": "BOARD_LAYOUT",
       "groupBy": "Status da Contribuição",
       "description": "Kanban para acompanhar o fluxo de contribuições"
     },
     {
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Contribuições agrupadas por fase do roadmap"
