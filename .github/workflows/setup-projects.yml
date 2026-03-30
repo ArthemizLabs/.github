@@ -333,74 +333,13 @@ jobs:
       - name: Create views — Backlog, Timeline, Priority, Kanban & Épico
         if: env.DRY_RUN != 'true'
         run: |
-          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
-
-          echo "Criando view 'Backlog Completo'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2View(input: {
-                projectId: $projectId
-                name: "Backlog Completo"
-                layout: TABLE_LAYOUT
-              }) {
-                projectV2View { id name }
-              }
-            }' \
-            -f projectId="$PROJECT_ID"
-
-          echo "Criando view 'Timeline por Fase'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2View(input: {
-                projectId: $projectId
-                name: "Timeline por Fase"
-                layout: ROADMAP_LAYOUT
-              }) {
-                projectV2View { id name }
-              }
-            }' \
-            -f projectId="$PROJECT_ID"
-
-          echo "Criando view 'Priority — Certificações & Idiomas'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2View(input: {
-                projectId: $projectId
-                name: "Priority — Certificações & Idiomas"
-                layout: TABLE_LAYOUT
-              }) {
-                projectV2View { id name }
-              }
-            }' \
-            -f projectId="$PROJECT_ID"
-
-          echo "Criando view 'Kanban por Status'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2View(input: {
-                projectId: $projectId
-                name: "Kanban por Status"
-                layout: BOARD_LAYOUT
-              }) {
-                projectV2View { id name }
-              }
-            }' \
-            -f projectId="$PROJECT_ID"
-
-          echo "Criando view 'Por Épico'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2View(input: {
-                projectId: $projectId
-                name: "Por Épico"
-                layout: TABLE_LAYOUT
-              }) {
-                projectV2View { id name }
-              }
-            }' \
-            -f projectId="$PROJECT_ID"
-
-          echo "Views criadas"
+          echo "Nota: a API GraphQL pública do GitHub não suporta criação de views (createProjectV2View não existe)."
+          echo "Crie as views manualmente na interface do projeto:"
+          echo "  - Backlog Completo (TABLE_LAYOUT)"
+          echo "  - Timeline por Fase (ROADMAP_LAYOUT)"
+          echo "  - Priority — Certificações & Idiomas (TABLE_LAYOUT)"
+          echo "  - Kanban por Status (BOARD_LAYOUT)"
+          echo "  - Por Épico (TABLE_LAYOUT)"
 
       - name: Summary
         run: |
@@ -472,25 +411,40 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Criando campo 'Status'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2Field(input: {
-                projectId: $projectId
-                dataType: SINGLE_SELECT
-                name: "Status"
-                singleSelectOptions: [
-                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro — pronta para dev" }
-                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo — branch criada" }
-                  { name: "In Review",    color: PURPLE, description: "Código aguardando revisão de PR" }
-                  { name: "Done",         color: GREEN,  description: "Finalizado, aprovado e deployed" }
-                ]
-              }) {
-                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+          echo "Verificando se o campo 'Status' já existe..."
+          if gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 50) { nodes { name } }
+                }
               }
             }' \
-            -f projectId="$PROJECT_ID"
+            -f projectId="$PROJECT_ID" \
+            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
+            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
+          else
+            echo "Criando campo 'Status'..."
+            gh api graphql -f query='
+              mutation($projectId: ID!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: SINGLE_SELECT
+                  name: "Status"
+                  singleSelectOptions: [
+                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro — pronta para dev" }
+                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo — branch criada" }
+                    { name: "In Review",    color: PURPLE, description: "Código aguardando revisão de PR" }
+                    { name: "Done",         color: GREEN,  description: "Finalizado, aprovado e deployed" }
+                  ]
+                }) {
+                  projectV2Field { ... on ProjectV2SingleSelectField { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID"
+            echo "Campo 'Status' criado"
+          fi
 
           echo "Criando campo 'Fase'..."
           gh api graphql -f query='
@@ -558,24 +512,11 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
-          echo "Criando views..."
-          for VIEW in "Board Principal:BOARD_LAYOUT" "Por Fase:TABLE_LAYOUT" "Por Componente:TABLE_LAYOUT"; do
-            VIEW_NAME="${VIEW%%:*}"
-            VIEW_LAYOUT="${VIEW##*:}"
-            gh api graphql -f query='
-              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
-                createProjectV2View(input: {
-                  projectId: $projectId
-                  name: $name
-                  layout: $layout
-                }) {
-                  projectV2View { id name }
-                }
-              }' \
-              -f projectId="$PROJECT_ID" \
-              -f name="$VIEW_NAME" \
-              -f layout="$VIEW_LAYOUT"
-          done
+          echo "Nota: a API GraphQL pública do GitHub não suporta criação de views."
+          echo "Crie as views manualmente na interface do projeto:"
+          echo "  - Board Principal (BOARD_LAYOUT)"
+          echo "  - Por Fase (TABLE_LAYOUT)"
+          echo "  - Por Componente (TABLE_LAYOUT)"
 
           echo "OpsLedger & SystemHealth configurado com sucesso"
 
@@ -645,25 +586,40 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Criando campo 'Status'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2Field(input: {
-                projectId: $projectId
-                dataType: SINGLE_SELECT
-                name: "Status"
-                singleSelectOptions: [
-                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
-                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
-                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
-                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
-                ]
-              }) {
-                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+          echo "Verificando se o campo 'Status' já existe..."
+          if gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 50) { nodes { name } }
+                }
               }
             }' \
-            -f projectId="$PROJECT_ID"
+            -f projectId="$PROJECT_ID" \
+            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
+            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
+          else
+            echo "Criando campo 'Status'..."
+            gh api graphql -f query='
+              mutation($projectId: ID!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: SINGLE_SELECT
+                  name: "Status"
+                  singleSelectOptions: [
+                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                    { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                    { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                  ]
+                }) {
+                  projectV2Field { ... on ProjectV2SingleSelectField { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID"
+            echo "Campo 'Status' criado"
+          fi
 
           echo "Criando campo 'Fase'..."
           gh api graphql -f query='
@@ -733,23 +689,11 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
-          for VIEW in "Board Principal:BOARD_LAYOUT" "Por Fase:TABLE_LAYOUT" "Por Módulo:TABLE_LAYOUT"; do
-            VIEW_NAME="${VIEW%%:*}"
-            VIEW_LAYOUT="${VIEW##*:}"
-            gh api graphql -f query='
-              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
-                createProjectV2View(input: {
-                  projectId: $projectId
-                  name: $name
-                  layout: $layout
-                }) {
-                  projectV2View { id }
-                }
-              }' \
-              -f projectId="$PROJECT_ID" \
-              -f name="$VIEW_NAME" \
-              -f layout="$VIEW_LAYOUT"
-          done
+          echo "Nota: a API GraphQL pública do GitHub não suporta criação de views."
+          echo "Crie as views manualmente na interface do projeto:"
+          echo "  - Board Principal (BOARD_LAYOUT)"
+          echo "  - Por Fase (TABLE_LAYOUT)"
+          echo "  - Por Módulo (TABLE_LAYOUT)"
 
           echo "Vendas3D configurado com sucesso"
 
@@ -820,25 +764,40 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Criando campo 'Status'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2Field(input: {
-                projectId: $projectId
-                dataType: SINGLE_SELECT
-                name: "Status"
-                singleSelectOptions: [
-                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
-                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
-                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
-                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
-                ]
-              }) {
-                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+          echo "Verificando se o campo 'Status' já existe..."
+          if gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 50) { nodes { name } }
+                }
               }
             }' \
-            -f projectId="$PROJECT_ID"
+            -f projectId="$PROJECT_ID" \
+            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
+            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
+          else
+            echo "Criando campo 'Status'..."
+            gh api graphql -f query='
+              mutation($projectId: ID!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: SINGLE_SELECT
+                  name: "Status"
+                  singleSelectOptions: [
+                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                    { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                    { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                  ]
+                }) {
+                  projectV2Field { ... on ProjectV2SingleSelectField { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID"
+            echo "Campo 'Status' criado"
+          fi
 
           echo "Criando campos 'Fase', 'Sistema' e 'Camada'..."
           gh api graphql -f query='
@@ -923,23 +882,12 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
-          for VIEW in "Board Principal:BOARD_LAYOUT" "Por Fase:TABLE_LAYOUT" "Por Sistema:TABLE_LAYOUT" "Segurança & Infra:TABLE_LAYOUT"; do
-            VIEW_NAME="${VIEW%%:*}"
-            VIEW_LAYOUT="${VIEW##*:}"
-            gh api graphql -f query='
-              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
-                createProjectV2View(input: {
-                  projectId: $projectId
-                  name: $name
-                  layout: $layout
-                }) {
-                  projectV2View { id }
-                }
-              }' \
-              -f projectId="$PROJECT_ID" \
-              -f name="$VIEW_NAME" \
-              -f layout="$VIEW_LAYOUT"
-          done
+          echo "Nota: a API GraphQL pública do GitHub não suporta criação de views."
+          echo "Crie as views manualmente na interface do projeto:"
+          echo "  - Board Principal (BOARD_LAYOUT)"
+          echo "  - Por Fase (TABLE_LAYOUT)"
+          echo "  - Por Sistema (TABLE_LAYOUT)"
+          echo "  - Segurança & Infra (TABLE_LAYOUT)"
 
           echo "Arthemiz & SentinelAgent configurado com sucesso"
 
@@ -1137,24 +1085,12 @@ jobs:
               }
             }' \
             -f projectId="$PROJECT_ID"
-          echo "Criando views..."
-          for VIEW in "Todas as Contribuições:TABLE_LAYOUT" "Merged — Portfólio Público:TABLE_LAYOUT" "Board de Acompanhamento:BOARD_LAYOUT" "Por Fase:TABLE_LAYOUT"; do
-            VIEW_NAME="${VIEW%%:*}"
-            VIEW_LAYOUT="${VIEW##*:}"
-            gh api graphql -f query='
-              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
-                createProjectV2View(input: {
-                  projectId: $projectId
-                  name: $name
-                  layout: $layout
-                }) {
-                  projectV2View { id }
-                }
-              }' \
-              -f projectId="$PROJECT_ID" \
-              -f name="$VIEW_NAME" \
-              -f layout="$VIEW_LAYOUT"
-          done
+          echo "Nota: a API GraphQL pública do GitHub não suporta criação de views."
+          echo "Crie as views manualmente na interface do projeto:"
+          echo "  - Todas as Contribuições (TABLE_LAYOUT)"
+          echo "  - Merged — Portfólio Público (TABLE_LAYOUT)"
+          echo "  - Board de Acompanhamento (BOARD_LAYOUT)"
+          echo "  - Por Fase (TABLE_LAYOUT)"
 
           echo "Global Resume configurado com sucesso"
 
