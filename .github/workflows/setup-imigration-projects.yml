@@ -42,6 +42,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
         run: |
+          # Valida se o GH_TOKEN (secrets.PROJECTS_TOKEN) está definido
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "❌ GH_TOKEN não está definido. Configure o secret 'PROJECTS_TOKEN' com um token de acesso pessoal que tenha as permissões 'project' e 'read:org'."
+            exit 1
+          fi
+
           echo "🔍 Buscando ID da organização ArthemizLabs..."
           ORG_JSON=$(gh api graphql -f query='
             query($login: String!) {
@@ -1117,7 +1123,7 @@ jobs:
           if [ "$DRY_RUN" = "true" ]; then
             echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "✅ Lista criada | Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo, Impacto no Visto" >> "$GITHUB_STEP_SUMMARY"
+            echo "✅ Lista criada e campos configurados para The Global Resume" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────

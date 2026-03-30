@@ -2,7 +2,7 @@
   "_meta": {
     "template": "project-generic-v1",
     "description": "Template genérico para qualquer tipo de projeto GitHub Projects v2 dentro da organização ArthemizLabs. Suporta Table, Board e Roadmap layouts.",
-    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, ajuste os campos e execute o workflow setup-imigration-projects.yml.",
+    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, ajuste os campos e execute o workflow: gh workflow run setup-imigration-projects.yml -f project=<seu-projeto> (atenção: o workflow só cria os 5 projetos pré-configurados — novos projetos precisam de suporte adicional no YAML).",
     "layouts": {
       "TABLE_LAYOUT":   "Tabela — ideal para backlogs, relatórios e visão macro",
       "BOARD_LAYOUT":   "Board Kanban — ideal para fluxo de desenvolvimento diário",

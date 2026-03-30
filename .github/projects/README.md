@@ -109,6 +109,14 @@ Backlog → Ready to Dev → In Progress → In Review → Done
 | **Estimativa (h)** | Número | Horas estimadas |
 | **PR Link** | Texto | URL do Pull Request |
 
+### Views
+
+| View | Layout | Descrição |
+|---|---|---|
+| 🗂 Board Principal | Board | Kanban por Status — execução diária |
+| 📅 Por Fase | Tabela | Agrupado por fase do roadmap |
+| 🔧 Por Componente | Tabela | Separação entre OpsLedger e Sentinel Agent |
+
 ### Config
 
 Arquivo: [`.github/projects/configs/ops-ledger-sentinel.json`](./configs/ops-ledger-sentinel.json)
@@ -137,6 +145,14 @@ Backlog → Ready to Dev → In Progress → In Review → Done
 | **DoD** | Texto | Definition of Done |
 | **Estimativa (h)** | Número | Horas estimadas |
 | **PR Link** | Texto | URL do Pull Request |
+
+### Views
+
+| View | Layout | Descrição |
+|---|---|---|
+| 🗂 Board Principal | Board | Kanban por Status — execução diária |
+| 📅 Por Fase | Tabela | Agrupado por fase do roadmap |
+| 🔧 Por Módulo | Tabela | Separado por módulo do sistema |
 
 ### Config
 
