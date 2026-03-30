@@ -60,19 +60,19 @@
   ],
   "views": [
     {
-      "name": "🗂 Board Principal",
+      "name": "Board Principal",
       "layout": "BOARD_LAYOUT",
       "groupBy": "Status",
       "description": "Board Kanban — visão de execução diária"
     },
     {
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Tabela agrupada por fase do roadmap"
     },
     {
-      "name": "🔧 Por Módulo",
+      "name": "Por Módulo",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Módulo",
       "description": "Separação de tarefas por módulo do sistema"
