@@ -48,7 +48,7 @@
       "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
     },
     {
-      "name": "Estimativa",
+      "name": "Estimativa (h)",
       "dataType": "NUMBER",
       "description": "Estimativa em horas de desenvolvimento"
     },

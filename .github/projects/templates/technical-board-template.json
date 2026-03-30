@@ -2,7 +2,7 @@
   "_meta": {
     "template": "technical-board-v1",
     "description": "Template padrão para projetos técnicos individuais (Board/Kanban) dentro do ecossistema ArthemizLabs. Copia este arquivo, ajusta os campos de configuração e execute o workflow setup-imigration-projects.yml.",
-    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, preencha os campos e execute: gh workflow run setup-imigration-projects.yml -f project_config=<seu-projeto>"
+    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, preencha os campos e execute: gh workflow run setup-imigration-projects.yml -f project=<seu-projeto>"
   },
   "project": {
     "title": "{{PROJECT_TITLE}}",

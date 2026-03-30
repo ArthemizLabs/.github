@@ -225,25 +225,24 @@ Arquivo: [`.github/projects/configs/global-resume.json`](./configs/global-resume
 
 ## Templates
 
-Para criar novos projetos a partir dos templates:
+Os templates abaixo servem como base para montar ou atualizar arquivos de configuração de projetos:
 
 | Template | Uso |
 |---|---|
 | [`technical-board-template.json`](./templates/technical-board-template.json) | Boards Kanban para projetos técnicos — inclui workflow padrão sênior e campos de DoD/PR Link |
 | [`project-template.json`](./templates/project-template.json) | Template genérico para qualquer tipo de projeto — suporta Table, Board e Roadmap |
 
-### Como usar um template
+⚠️ **Limitação atual do workflow**
 
-1. Copie o arquivo de template para `.github/projects/configs/<nome-do-projeto>.json`
-2. Substitua todos os placeholders `{{...}}` com os valores reais
-3. Execute o workflow:
-   ```bash
-   gh workflow run setup-imigration-projects.yml \
-     -f dry_run=false \
-     -f project=all
-   ```
-4. Verifique o projeto criado em `https://github.com/orgs/ArthemizLabs/projects`
+O workflow `setup-imigration-projects.yml` **não lê automaticamente** todos os arquivos em `.github/projects/configs/`.  
+Neste momento, ele cria apenas os **5 projetos pré-configurados** descritos na seção de visão geral (Master Roadmap, OpsLedger & Sentinel Agent, Vendas3D, Arthemiz & SystemHealth e The Global Resume), usando arquivos JSON específicos.
 
+Isso significa que:
+
+- Copiar um template para `.github/projects/configs/<nome-do-projeto>.json` **não fará com que um novo projeto seja criado automaticamente**.
+- O comando abaixo, com `project=all`, **apenas (re)cria os 5 projetos existentes**, mesmo que haja outros arquivos em `configs/`:
+
+  
 ---
 
 ## Pilares de Imigração
