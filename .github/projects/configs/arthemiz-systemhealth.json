@@ -1,0 +1,117 @@
+{
+  "project": {
+    "title": "Arthemiz & SystemHealth",
+    "shortDescription": "Infra em Go (Arthemiz — DNS, proxy, TLS) + monitoramento Docker/observabilidade (SystemHealth). Infraestrutura e segurança de rede.",
+    "readme": "## Arthemiz & SystemHealth\n\n### Arthemiz\nCamada central de identidade, faturamento e gerenciamento de tenants. Controla tráfego, DNS e segurança de roteamento dos serviços.\n\n**Stack:** Go, Linux, Nginx (Reverse Proxy, Rate Limiting, TLS)\n\n### SystemHealth\nDashboard de observabilidade de infraestrutura. Agrega uptime, latência, taxas de erro e saúde de deploy de todos os serviços.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker, RabbitMQ\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "layout": "BOARD_LAYOUT",
+    "linkedRepositories": ["Arthemiz", "SystemHealth"],
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Backlog",      "color": "GRAY",   "description": "Ideias e requisitos brutos — ainda não refinados" },
+        { "name": "Ready to Dev", "color": "BLUE",   "description": "Issue com DoD claro — pronta para desenvolvimento" },
+        { "name": "In Progress",  "color": "YELLOW", "description": "Trabalho ativo — branch criada" },
+        { "name": "In Review",    "color": "PURPLE", "description": "Código aguardando revisão de Pull Request" },
+        { "name": "Done",         "color": "GREEN",  "description": "Finalizado, aprovado e deployed" }
+      ]
+    },
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "name": "Sistema",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Arthemiz",     "color": "BLUE",   "description": "DNS, proxy reverso e segurança de rede em Go" },
+        { "name": "SystemHealth", "color": "GREEN",  "description": "Observabilidade, Docker e monitoramento" },
+        { "name": "Shared",       "color": "GRAY",   "description": "Infra e configurações compartilhadas" }
+      ]
+    },
+    {
+      "name": "Camada",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Network",      "color": "BLUE",   "description": "DNS, TLS, proxy reverso, roteamento" },
+        { "name": "Auth",         "color": "RED",    "description": "Autenticação, RBAC, permissões" },
+        { "name": "Observability","color": "YELLOW", "description": "Métricas, logs, alertas, uptime" },
+        { "name": "Container",    "color": "PURPLE", "description": "Docker, Kubernetes, orquestração" },
+        { "name": "Security",     "color": "RED",    "description": "Hardening, OWASP, auditoria" },
+        { "name": "Infra/DevOps", "color": "ORANGE", "description": "CI/CD, Terraform, deploy" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
+    },
+    {
+      "name": "Estimativa",
+      "dataType": "NUMBER",
+      "description": "Estimativa em horas de desenvolvimento"
+    },
+    {
+      "name": "PR Link",
+      "dataType": "TEXT",
+      "description": "Link do Pull Request associado"
+    }
+  ],
+  "views": [
+    {
+      "name": "🗂 Board Principal",
+      "layout": "BOARD_LAYOUT",
+      "groupBy": "Status",
+      "description": "Board Kanban — visão de execução diária"
+    },
+    {
+      "name": "📅 Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Tabela agrupada por fase do roadmap"
+    },
+    {
+      "name": "🖥 Por Sistema",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Sistema",
+      "description": "Separação de tarefas entre Arthemiz e SystemHealth"
+    },
+    {
+      "name": "🔒 Segurança & Infra",
+      "layout": "TABLE_LAYOUT",
+      "filterBy": ["Camada:Security", "Camada:Network", "Camada:Container"],
+      "description": "Filtrado para tarefas de segurança e infraestrutura"
+    }
+  ],
+  "columns": [
+    {
+      "name": "Backlog",
+      "description": "Ideias e requisitos brutos — ainda não refinados para desenvolvimento"
+    },
+    {
+      "name": "Ready to Dev",
+      "description": "Issues com Definition of Done (DoD) claro — prontas para entrar em desenvolvimento"
+    },
+    {
+      "name": "In Progress",
+      "description": "Trabalho ativo — branch aberta e desenvolvimento em andamento"
+    },
+    {
+      "name": "In Review",
+      "description": "Código aguardando Pull Request e revisão de pares"
+    },
+    {
+      "name": "Done",
+      "description": "Finalizado, aprovado em revisão e deployed para o ambiente correspondente"
+    }
+  ]
+}

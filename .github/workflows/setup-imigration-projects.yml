@@ -1,0 +1,1021 @@
+name: 🚀 Setup IMIGRATION_2030 GitHub Projects
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run mode (exibe comandos sem criar projetos)"
+        type: boolean
+        default: true
+      project:
+        description: "Projeto a criar (deixe em branco para criar todos)"
+        type: choice
+        default: "all"
+        options:
+          - all
+          - master-roadmap
+          - ops-ledger-sentinel
+          - vendas3d
+          - arthemiz-systemhealth
+          - global-resume
+
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 1 — Valida pré-requisitos e obtém o ID da organização
+  # ─────────────────────────────────────────────────────────────────────────────
+  preflight:
+    name: "🔍 Preflight — Validar organização e permissões"
+    runs-on: ubuntu-latest
+    outputs:
+      org_id: ${{ steps.get-org.outputs.org_id }}
+      dry_run: ${{ inputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get Organization ID
+        id: get-org
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        run: |
+          echo "🔍 Buscando ID da organização ArthemizLabs..."
+          ORG_JSON=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                id
+                name
+                projectsV2 { totalCount }
+              }
+            }' \
+            -f login="ArthemizLabs")
+
+          ORG_ID=$(echo "$ORG_JSON" | jq -r '.data.organization.id')
+          ORG_NAME=$(echo "$ORG_JSON" | jq -r '.data.organization.name')
+          EXISTING_PROJECTS=$(echo "$ORG_JSON" | jq -r '.data.organization.projectsV2.totalCount')
+          echo "📁 Organização: $ORG_NAME — projetos existentes: $EXISTING_PROJECTS"
+
+          if [ -z "$ORG_ID" ]; then
+            echo "❌ Falha ao obter o ID da organização. Verifique o PROJECTS_TOKEN."
+            exit 1
+          fi
+
+          echo "✅ Organization ID: $ORG_ID"
+          echo "org_id=$ORG_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        run: |
+          echo "## 🚀 IMIGRATION_2030 — Preflight Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Campo | Valor |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Organização | ArthemizLabs |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Projeto selecionado | ${{ inputs.project }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Dry-run | ${{ inputs.dry_run }} |" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> ⚠️ **Modo dry-run ativo** — nenhum projeto será criado." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 2 — Master Roadmap 2030 (Table)
+  # ─────────────────────────────────────────────────────────────────────────────
+  master-roadmap:
+    name: "📊 Master Roadmap 2030"
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: inputs.project == 'all' || inputs.project == 'master-roadmap'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG_ID: ${{ needs.preflight.outputs.org_id }}
+      DRY_RUN: ${{ needs.preflight.outputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Master Roadmap 2030
+        id: create-project
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "🔸 [DRY-RUN] Criaria projeto: 'Master Roadmap 2030' (TABLE_LAYOUT)"
+            echo "project_id=DRY_RUN_ID" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "📊 Criando projeto 'Master Roadmap 2030'..."
+          CREATE_RESULT=$(gh api graphql -f query='
+            mutation($ownerId: ID!, $title: String!) {
+              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                projectV2 { id number url }
+              }
+            }' \
+            -f ownerId="$ORG_ID" \
+            -f title="Master Roadmap 2030")
+
+          PROJECT_ID=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.id')
+          PROJECT_URL=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.url')
+
+          if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+            echo "❌ Falha ao criar o projeto Master Roadmap 2030"
+            exit 1
+          fi
+
+          echo "✅ Projeto criado: $PROJECT_ID — $PROJECT_URL"
+          echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Add custom fields — Fase
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+          echo "🔧 Criando campo 'Fase'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Fase"
+                singleSelectOptions: [
+                  { name: "PHASE_2026", color: GREEN,  description: "Foundation — Base técnica sólida e primeiros sistemas reais" }
+                  { name: "PHASE_2027", color: BLUE,   description: "Expansion — Cloud, ETL e complexidade real" }
+                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security — AppSec, CI/CD profissional" }
+                  { name: "PHASE_2029", color: RED,    description: "Mastery — Arquitetura, microserviços e certificações finais" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "✅ Campo 'Fase' criado"
+
+      - name: Add custom fields — País Alvo
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+          echo "🔧 Criando campo 'País Alvo'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "País Alvo"
+                singleSelectOptions: [
+                  { name: "Japão 🇯🇵",  color: RED,  description: "Visto HSP — High Skilled Professional" }
+                  { name: "Canadá 🇨🇦", color: RED,  description: "Express Entry — Federal Skilled Worker" }
+                  { name: "Global 🌍",  color: BLUE, description: "Aplicável a múltiplos destinos" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "✅ Campo 'País Alvo' criado"
+
+      - name: Add custom fields — Tipo
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+          echo "🔧 Criando campo 'Tipo'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Tipo"
+                singleSelectOptions: [
+                  { name: "Certificação 📜", color: YELLOW, description: "Exames e certificações profissionais" }
+                  { name: "Idioma 🗣️",       color: PURPLE, description: "Inglês e Japonês" }
+                  { name: "Acadêmico 🎓",    color: GREEN,  description: "Faculdade e formação acadêmica" }
+                  { name: "Tech 💻",         color: BLUE,   description: "Projetos técnicos e portfólio SaaS" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "✅ Campo 'Tipo' criado"
+
+      - name: Add custom fields — Épico
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+          echo "🔧 Criando campo 'Épico'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Épico"
+                singleSelectOptions: [
+                  { name: "TECH_STACK",     color: BLUE,   description: "Habilidades e ferramentas técnicas" }
+                  { name: "PORTFOLIO",      color: GREEN,  description: "Projetos SaaS e portfólio" }
+                  { name: "LANG_EN",        color: YELLOW, description: "Inglês — meta C1 / IELTS 7.0+" }
+                  { name: "LANG_JP",        color: RED,    description: "Japonês — meta N2" }
+                  { name: "CERTIFICATIONS", color: PURPLE, description: "Certificações profissionais" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "✅ Campo 'Épico' criado"
+
+      - name: Add custom fields — Pilar de Imigração & DoD
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+
+          echo "🔧 Criando campo 'Pilar de Imigração'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Pilar de Imigração"
+                singleSelectOptions: [
+                  { name: "Diploma 🎓",     color: GREEN,  description: "Contribui para o diploma universitário" }
+                  { name: "Idioma C1/N2 🗣️", color: YELLOW, description: "Contribui para fluência em inglês ou japonês" }
+                  { name: "Portfólio 💼",   color: BLUE,   description: "Contribui para o portfólio de alta qualificação" }
+                  { name: "Certificação 📜", color: PURPLE, description: "Contribui para certificações reconhecidas" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo de texto 'DoD'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: TEXT
+                name: "DoD"
+              }) {
+                projectV2Field { ... on ProjectV2Field { id name } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "✅ Campos 'Pilar de Imigração' e 'DoD' criados"
+
+      - name: Create views — Timeline & Priority
+        if: env.DRY_RUN != 'true'
+        run: |
+          PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+
+          echo "📅 Criando view 'Timeline por Fase'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2View(input: {
+                projectId: $projectId
+                name: "📅 Timeline por Fase"
+                layout: ROADMAP_LAYOUT
+              }) {
+                projectV2View { id name }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🏆 Criando view 'Priority — Certificações & Idiomas'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2View(input: {
+                projectId: $projectId
+                name: "🏆 Priority — Certificações & Idiomas"
+                layout: TABLE_LAYOUT
+              }) {
+                projectV2View { id name }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "📊 Criando view 'Kanban por Status'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2View(input: {
+                projectId: $projectId
+                name: "📊 Kanban por Status"
+                layout: BOARD_LAYOUT
+              }) {
+                projectV2View { id name }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "✅ Views criadas"
+
+      - name: Summary
+        run: |
+          echo "## 📊 Master Roadmap 2030" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ Projeto criado com sucesso." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Campos criados:** Fase, País Alvo, Tipo, Épico, Pilar de Imigração, DoD" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Views criadas:** Backlog Completo, Timeline por Fase, Priority (Certificações & Idiomas), Kanban por Status" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 3 — OpsLedger & Sentinel Agent (Board)
+  # ─────────────────────────────────────────────────────────────────────────────
+  ops-ledger-sentinel:
+    name: "⚙️ OpsLedger & Sentinel Agent"
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: inputs.project == 'all' || inputs.project == 'ops-ledger-sentinel'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG_ID: ${{ needs.preflight.outputs.org_id }}
+      DRY_RUN: ${{ needs.preflight.outputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create project and configure board
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "🔸 [DRY-RUN] Criaria projeto: 'OpsLedger & Sentinel Agent' (BOARD_LAYOUT)"
+            echo "🔸 [DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa, PR Link"
+            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Componente"
+            exit 0
+          fi
+
+          echo "⚙️ Criando projeto 'OpsLedger & Sentinel Agent'..."
+          PROJECT_ID=$(gh api graphql -f query='
+            mutation($ownerId: ID!, $title: String!) {
+              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                projectV2 { id }
+              }
+            }' \
+            -f ownerId="$ORG_ID" \
+            -f title="OpsLedger & Sentinel Agent" \
+            --jq '.data.createProjectV2.projectV2.id')
+
+          echo "✅ Projeto criado: $PROJECT_ID"
+
+          echo "🔧 Criando campo 'Status'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro — pronta para dev" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo — branch criada" }
+                  { name: "In Review",    color: PURPLE, description: "Código aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado, aprovado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Fase'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Fase"
+                singleSelectOptions: [
+                  { name: "PHASE_2026", color: GREEN,  description: "Foundation" }
+                  { name: "PHASE_2027", color: BLUE,   description: "Expansion" }
+                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security" }
+                  { name: "PHASE_2029", color: RED,    description: "Mastery" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Componente'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Componente"
+                singleSelectOptions: [
+                  { name: "OpsLedger",      color: BLUE, description: "Plataforma financeira Java/Spring Boot" }
+                  { name: "Sentinel Agent", color: RED,  description: "Agente de telemetria em C" }
+                  { name: "Shared",         color: GRAY, description: "Infraestrutura compartilhada" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campos de texto..."
+          for FIELD_NAME in "DoD" "PR Link"; do
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: TEXT
+                  name: $name
+                }) {
+                  projectV2Field { ... on ProjectV2Field { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$FIELD_NAME"
+          done
+
+          echo "🔧 Criando campo numérico 'Estimativa (h)'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: NUMBER
+                name: "Estimativa (h)"
+              }) {
+                projectV2Field { ... on ProjectV2Field { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "📋 Criando views..."
+          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Componente:TABLE_LAYOUT"; do
+            VIEW_NAME="${VIEW%%:*}"
+            VIEW_LAYOUT="${VIEW##*:}"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
+                createProjectV2View(input: {
+                  projectId: $projectId
+                  name: $name
+                  layout: $layout
+                }) {
+                  projectV2View { id name }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$VIEW_NAME" \
+              -f layout="$VIEW_LAYOUT"
+          done
+
+          echo "✅ OpsLedger & Sentinel Agent configurado com sucesso"
+
+      - name: Summary
+        run: |
+          echo "## ⚙️ OpsLedger & Sentinel Agent" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ Board Kanban criado | Workflow: Backlog → Ready to Dev → In Progress → In Review → Done" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 4 — Vendas3D (Board)
+  # ─────────────────────────────────────────────────────────────────────────────
+  vendas3d:
+    name: "🛒 Vendas3D"
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: inputs.project == 'all' || inputs.project == 'vendas3d'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG_ID: ${{ needs.preflight.outputs.org_id }}
+      DRY_RUN: ${{ needs.preflight.outputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Vendas3D board
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "🔸 [DRY-RUN] Criaria projeto: 'Vendas3D' (BOARD_LAYOUT)"
+            echo "🔸 [DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa, PR Link"
+            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Módulo"
+            exit 0
+          fi
+
+          echo "🛒 Criando projeto 'Vendas3D'..."
+          PROJECT_ID=$(gh api graphql -f query='
+            mutation($ownerId: ID!, $title: String!) {
+              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                projectV2 { id }
+              }
+            }' \
+            -f ownerId="$ORG_ID" \
+            -f title="Vendas3D" \
+            --jq '.data.createProjectV2.projectV2.id')
+
+          echo "✅ Projeto criado: $PROJECT_ID"
+
+          echo "🔧 Criando campo 'Status'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Fase'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Fase"
+                singleSelectOptions: [
+                  { name: "PHASE_2026", color: GREEN,  description: "Foundation" }
+                  { name: "PHASE_2027", color: BLUE,   description: "Expansion" }
+                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security" }
+                  { name: "PHASE_2029", color: RED,    description: "Mastery" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Módulo'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Módulo"
+                singleSelectOptions: [
+                  { name: "Catálogo",     color: BLUE,   description: "Produtos, preços e variantes" }
+                  { name: "Produção",     color: YELLOW, description: "Fila de impressão e status" }
+                  { name: "Inventário",   color: GREEN,  description: "Controle de estoque de filamento" }
+                  { name: "Pagamentos",   color: PURPLE, description: "Stripe/PayPal e webhooks PCI" }
+                  { name: "Segurança",    color: RED,    description: "Hardening, rate limiting, OWASP" }
+                  { name: "API Pública",  color: GRAY,   description: "Endpoints para parceiros" }
+                  { name: "Infra/DevOps", color: ORANGE, description: "CI/CD, Docker, Deploy" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          for FIELD_NAME in "DoD" "PR Link"; do
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: TEXT
+                  name: $name
+                }) {
+                  projectV2Field { ... on ProjectV2Field { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$FIELD_NAME"
+          done
+
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: NUMBER
+                name: "Estimativa (h)"
+              }) {
+                projectV2Field { ... on ProjectV2Field { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Módulo:TABLE_LAYOUT"; do
+            VIEW_NAME="${VIEW%%:*}"
+            VIEW_LAYOUT="${VIEW##*:}"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
+                createProjectV2View(input: {
+                  projectId: $projectId
+                  name: $name
+                  layout: $layout
+                }) {
+                  projectV2View { id }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$VIEW_NAME" \
+              -f layout="$VIEW_LAYOUT"
+          done
+
+          echo "✅ Vendas3D configurado com sucesso"
+
+      - name: Summary
+        run: |
+          echo "## 🛒 Vendas3D" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ Board Kanban criado | Workflow: Backlog → Ready to Dev → In Progress → In Review → Done" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 5 — Arthemiz & SystemHealth (Board)
+  # ─────────────────────────────────────────────────────────────────────────────
+  arthemiz-systemhealth:
+    name: "🔒 Arthemiz & SystemHealth"
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: inputs.project == 'all' || inputs.project == 'arthemiz-systemhealth'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG_ID: ${{ needs.preflight.outputs.org_id }}
+      DRY_RUN: ${{ needs.preflight.outputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Arthemiz & SystemHealth board
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "🔸 [DRY-RUN] Criaria projeto: 'Arthemiz & SystemHealth' (BOARD_LAYOUT)"
+            echo "🔸 [DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa, PR Link"
+            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Sistema, Segurança & Infra"
+            exit 0
+          fi
+
+          echo "🔒 Criando projeto 'Arthemiz & SystemHealth'..."
+          PROJECT_ID=$(gh api graphql -f query='
+            mutation($ownerId: ID!, $title: String!) {
+              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                projectV2 { id }
+              }
+            }' \
+            -f ownerId="$ORG_ID" \
+            -f title="Arthemiz & SystemHealth" \
+            --jq '.data.createProjectV2.projectV2.id')
+
+          echo "✅ Projeto criado: $PROJECT_ID"
+
+          echo "🔧 Criando campo 'Status'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campos 'Fase', 'Sistema' e 'Camada'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Fase"
+                singleSelectOptions: [
+                  { name: "PHASE_2026", color: GREEN,  description: "Foundation" }
+                  { name: "PHASE_2027", color: BLUE,   description: "Expansion" }
+                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security" }
+                  { name: "PHASE_2029", color: RED,    description: "Mastery" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Sistema"
+                singleSelectOptions: [
+                  { name: "Arthemiz",     color: BLUE,  description: "DNS, proxy reverso e segurança de rede em Go" }
+                  { name: "SystemHealth", color: GREEN, description: "Observabilidade, Docker e monitoramento" }
+                  { name: "Shared",       color: GRAY,  description: "Infra e configurações compartilhadas" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Camada"
+                singleSelectOptions: [
+                  { name: "Network",       color: BLUE,   description: "DNS, TLS, proxy reverso" }
+                  { name: "Auth",          color: RED,    description: "Autenticação, RBAC, permissões" }
+                  { name: "Observability", color: YELLOW, description: "Métricas, logs, alertas" }
+                  { name: "Container",     color: PURPLE, description: "Docker, Kubernetes" }
+                  { name: "Security",      color: RED,    description: "Hardening, OWASP, auditoria" }
+                  { name: "Infra/DevOps",  color: ORANGE, description: "CI/CD, Terraform, deploy" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          for FIELD_NAME in "DoD" "PR Link"; do
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: TEXT
+                  name: $name
+                }) {
+                  projectV2Field { ... on ProjectV2Field { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$FIELD_NAME"
+          done
+
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: NUMBER
+                name: "Estimativa (h)"
+              }) {
+                projectV2Field { ... on ProjectV2Field { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🖥 Por Sistema:TABLE_LAYOUT" "🔒 Segurança & Infra:TABLE_LAYOUT"; do
+            VIEW_NAME="${VIEW%%:*}"
+            VIEW_LAYOUT="${VIEW##*:}"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
+                createProjectV2View(input: {
+                  projectId: $projectId
+                  name: $name
+                  layout: $layout
+                }) {
+                  projectV2View { id }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$VIEW_NAME" \
+              -f layout="$VIEW_LAYOUT"
+          done
+
+          echo "✅ Arthemiz & SystemHealth configurado com sucesso"
+
+      - name: Summary
+        run: |
+          echo "## 🔒 Arthemiz & SystemHealth" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ Board Kanban criado | Workflow: Backlog → Ready to Dev → In Progress → In Review → Done" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 6 — The Global Resume (List/Table)
+  # ─────────────────────────────────────────────────────────────────────────────
+  global-resume:
+    name: "🌐 The Global Resume"
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: inputs.project == 'all' || inputs.project == 'global-resume'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG_ID: ${{ needs.preflight.outputs.org_id }}
+      DRY_RUN: ${{ needs.preflight.outputs.dry_run }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create The Global Resume project
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "🔸 [DRY-RUN] Criaria projeto: 'The Global Resume' (TABLE_LAYOUT)"
+            echo "🔸 [DRY-RUN] Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo de Contribuição, Linguagem, Stars do Repositório, Impacto no Visto, Observações"
+            echo "🔸 [DRY-RUN] Views: Todas as Contribuições, Merged (Portfólio Público), Board de Acompanhamento, Por Fase"
+            exit 0
+          fi
+
+          echo "🌐 Criando projeto 'The Global Resume'..."
+          PROJECT_ID=$(gh api graphql -f query='
+            mutation($ownerId: ID!, $title: String!) {
+              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                projectV2 { id }
+              }
+            }' \
+            -f ownerId="$ORG_ID" \
+            -f title="The Global Resume" \
+            --jq '.data.createProjectV2.projectV2.id')
+
+          echo "✅ Projeto criado: $PROJECT_ID"
+
+          echo "🔧 Criando campo 'Status da Contribuição'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status da Contribuição"
+                singleSelectOptions: [
+                  { name: "Hunting 🔍",    color: GRAY,   description: "Buscando issue para contribuir" }
+                  { name: "Draft 📝",      color: YELLOW, description: "PR em rascunho — em desenvolvimento" }
+                  { name: "In Review 👀",  color: BLUE,   description: "PR aberto aguardando revisão" }
+                  { name: "Merged ✅",     color: GREEN,  description: "PR aceito e merged — contribuição validada" }
+                  { name: "Rejected ❌",   color: RED,    description: "PR rejeitado — revisar feedback" }
+                  { name: "Abandoned ⚠️", color: ORANGE, description: "Issue abandonada — sem resposta" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campos de texto: Link do PR, Repositório Pai, Observações..."
+          for FIELD_NAME in "Link do PR" "Repositório Pai" "Observações"; do
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: TEXT
+                  name: $name
+                }) {
+                  projectV2Field { ... on ProjectV2Field { id } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$FIELD_NAME"
+          done
+
+          echo "🔧 Criando campo 'Fase'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Fase"
+                singleSelectOptions: [
+                  { name: "PHASE_2026", color: GREEN,  description: "Foundation" }
+                  { name: "PHASE_2027", color: BLUE,   description: "Expansion" }
+                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security" }
+                  { name: "PHASE_2029", color: RED,    description: "Mastery" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Tipo de Contribuição'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Tipo de Contribuição"
+                singleSelectOptions: [
+                  { name: "Bug Fix 🐛",    color: RED,    description: "Correção de bug reportado" }
+                  { name: "Feature 🚀",    color: GREEN,  description: "Nova funcionalidade ou melhoria" }
+                  { name: "Docs 📚",       color: BLUE,   description: "Melhoria de documentação" }
+                  { name: "Refactor ♻️",  color: YELLOW, description: "Refatoração sem mudança de comportamento" }
+                  { name: "Test 🧪",       color: PURPLE, description: "Adição ou melhoria de testes" }
+                  { name: "Chore 🔧",      color: GRAY,   description: "Dependências, configs, manutenção" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo 'Impacto no Visto'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Impacto no Visto"
+                singleSelectOptions: [
+                  { name: "Alto ⭐⭐⭐", color: GREEN,  description: "Projeto tier-1 (>10k stars)" }
+                  { name: "Médio ⭐⭐",  color: YELLOW, description: "Projeto relevante (1k-10k stars)" }
+                  { name: "Baixo ⭐",   color: GRAY,   description: "Projeto menor — valor de aprendizado" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "🔧 Criando campo numérico 'Stars do Repositório'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: NUMBER
+                name: "Stars do Repositório"
+              }) {
+                projectV2Field { ... on ProjectV2Field { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
+          echo "📋 Criando views..."
+          for VIEW in "✅ Merged — Portfólio Público:TABLE_LAYOUT" "📊 Board de Acompanhamento:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT"; do
+            VIEW_NAME="${VIEW%%:*}"
+            VIEW_LAYOUT="${VIEW##*:}"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout!) {
+                createProjectV2View(input: {
+                  projectId: $projectId
+                  name: $name
+                  layout: $layout
+                }) {
+                  projectV2View { id }
+                }
+              }' \
+              -f projectId="$PROJECT_ID" \
+              -f name="$VIEW_NAME" \
+              -f layout="$VIEW_LAYOUT"
+          done
+
+          echo "✅ The Global Resume configurado com sucesso"
+
+      - name: Summary
+        run: |
+          echo "## 🌐 The Global Resume" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "⚠️ **Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ Lista criada | Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo, Impacto no Visto" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 7 — Sumário Final
+  # ─────────────────────────────────────────────────────────────────────────────
+  summary:
+    name: "📋 Sumário Final"
+    runs-on: ubuntu-latest
+    needs:
+      - preflight
+      - master-roadmap
+      - ops-ledger-sentinel
+      - vendas3d
+      - arthemiz-systemhealth
+      - global-resume
+    if: always()
+
+    steps:
+      - name: Final summary
+        run: |
+          echo "# 🚀 IMIGRATION_2030 — Setup Concluído" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Projetos Configurados" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Projeto | Tipo | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 📊 Master Roadmap 2030 | Tabela | ${{ needs.master-roadmap.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ⚙️ OpsLedger & Sentinel Agent | Board (Kanban) | ${{ needs.ops-ledger-sentinel.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 🛒 Vendas3D | Board (Kanban) | ${{ needs.vendas3d.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 🔒 Arthemiz & SystemHealth | Board (Kanban) | ${{ needs.arthemiz-systemhealth.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 🌐 The Global Resume | Lista | ${{ needs.global-resume.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Pilares de Imigração" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Cada task movida para **Done** contribui para um dos pilares:" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 🎓 **Diploma** — Graduação em Ciência da Computação" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 🗣️ **Idioma C1/N2** — Inglês C1 (IELTS 7.0+) e Japonês N2 (JLPT)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 💼 **Portfólio de Alta Qualificação** — SaaS em produção + Open Source + Certificações" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "---" >> "$GITHUB_STEP_SUMMARY"
+          echo "*Gerado pelo workflow \`setup-imigration-projects.yml\`*" >> "$GITHUB_STEP_SUMMARY"
