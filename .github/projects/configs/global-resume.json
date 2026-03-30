@@ -1,0 +1,112 @@
+{
+  "project": {
+    "title": "Global Resume",
+    "shortDescription": "Monitoramento de contribuições Open Source — trilha de portfólio público para imigração de alta qualificação.",
+    "readme": "## Global Resume\n\nEste projeto rastreia contribuições Open Source como pilar do portfólio de alta qualificação para o visto de 'High Skilled Professional'.\n\n### Objetivo\nManter um registro público e auditável de contribuições em projetos relevantes (NestJS, Spring Security, Terraform, etc.), demonstrando proatividade e maturidade técnica para recrutadores e autoridades de imigração.\n\n### Fluxo de Contribuição\n1. **Hunting** — Identificar issues com `good-first-issue` ou `help-wanted`\n2. **Reprodução** — Clonar, configurar (Docker) e reproduzir o bug\n3. **Code** — Submeter Pull Request com correção ou melhoria de documentação\n4. **Community** — Participar de discussões e Discord oficial\n5. **Manutenção** — Participar de módulos relevantes\n\n### Por que importa para o visto?\n- Demonstra **nível de inglês técnico** (comunicação em PRs internacionais)\n- Comprova **experiência prática** em projetos reais de grande porte\n- Adiciona **pontos** no sistema de pontos de imigração (HSP Japão / Express Entry Canadá)",
+    "layout": "TABLE_LAYOUT",
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Status da Contribuição",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Hunting",     "color": "GRAY",   "description": "Buscando issue para contribuir" },
+        { "name": "Draft",       "color": "YELLOW", "description": "PR aberto em rascunho — em desenvolvimento" },
+        { "name": "In Review",   "color": "BLUE",   "description": "PR aberto aguardando revisão dos maintainers" },
+        { "name": "Merged",      "color": "GREEN",  "description": "PR aceito e merged — contribuição validada" },
+        { "name": "Rejected",    "color": "RED",    "description": "PR rejeitado — revisar feedback e reutilizar" },
+        { "name": "Abandoned",   "color": "ORANGE", "description": "Issue abandonada — sem resposta dos maintainers" }
+      ]
+    },
+    {
+      "name": "Link do PR",
+      "dataType": "TEXT",
+      "description": "URL completa do Pull Request no repositório upstream"
+    },
+    {
+      "name": "Repositório Pai",
+      "dataType": "TEXT",
+      "description": "Nome completo do repositório (ex: nestjs/nest, hashicorp/terraform)"
+    },
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "name": "Tipo de Contribuição",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Bug Fix",          "color": "RED",    "description": "Correção de bug reportado em issue" },
+        { "name": "Feature",          "color": "GREEN",  "description": "Nova funcionalidade ou melhoria" },
+        { "name": "Docs",             "color": "BLUE",   "description": "Melhoria de documentação ou README" },
+        { "name": "Refactor",         "color": "YELLOW", "description": "Refatoração sem mudança de comportamento" },
+        { "name": "Test",             "color": "PURPLE", "description": "Adição ou melhoria de testes" },
+        { "name": "Chore",            "color": "GRAY",   "description": "Atualização de dependências, CI, configs" }
+      ]
+    },
+    {
+      "name": "Linguagem",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "TypeScript/JavaScript", "color": "YELLOW", "description": "" },
+        { "name": "Java",                  "color": "ORANGE", "description": "" },
+        { "name": "Python",                "color": "BLUE",   "description": "" },
+        { "name": "Go",                    "color": "BLUE",   "description": "" },
+        { "name": "C/C++",                 "color": "GRAY",   "description": "" },
+        { "name": "HCL (Terraform)",       "color": "PURPLE", "description": "" },
+        { "name": "Other",                 "color": "GRAY",   "description": "" }
+      ]
+    },
+    {
+      "name": "Stars do Repositório",
+      "dataType": "NUMBER",
+      "description": "Popularidade do projeto upstream (número de stars no GitHub)"
+    },
+    {
+      "name": "Impacto no Visto",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Alto",  "color": "GREEN",  "description": "Projeto tier-1 (>10k stars) — alto peso no portfólio" },
+        { "name": "Médio",   "color": "YELLOW", "description": "Projeto relevante (1k-10k stars)" },
+        { "name": "Baixo",    "color": "GRAY",   "description": "Projeto menor — valor de aprendizado" }
+      ]
+    },
+    {
+      "name": "Observações",
+      "dataType": "TEXT",
+      "description": "Feedback dos maintainers, lições aprendidas ou notas para o portfólio"
+    }
+  ],
+  "views": [
+    {
+      "name": "Todas as Contribuições",
+      "layout": "TABLE_LAYOUT",
+      "description": "Lista completa de todas as contribuições Open Source"
+    },
+    {
+      "name": "Merged — Portfólio Público",
+      "layout": "TABLE_LAYOUT",
+      "filterBy": ["Status da Contribuição:Merged"],
+      "description": "Apenas contribuições aceitas — portfólio para o visto"
+    },
+    {
+      "name": "Board de Acompanhamento",
+      "layout": "BOARD_LAYOUT",
+      "groupBy": "Status da Contribuição",
+      "description": "Kanban para acompanhar o fluxo de contribuições"
+    },
+    {
+      "name": "Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Contribuições agrupadas por fase do roadmap"
+    }
+  ]
+}

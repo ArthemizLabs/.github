@@ -1,0 +1,99 @@
+{
+  "project": {
+    "title": "OpsLedger & SystemHealth",
+    "shortDescription": "Backend Java/Spring Boot (OpsLedger) + SystemHealth. Monitoramento financeiro.",
+    "readme": "## OpsLedger & SystemHealth\n\n### OpsLedger\nPlataforma de operações financeiras e ledger de auditoria para PMEs. Double-entry accounting, reconciliação e relatórios de compliance.\n\n**Stack:** Java (Spring Boot), PostgreSQL, RabbitMQ, React/TypeScript\n\n### SystemHealth\nAgente de telemetria em C para coleta de métricas de sistema (CPU, memória, disco) via chamadas POSIX/Linux, com envio TCP para OpsLedger.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "layout": "BOARD_LAYOUT",
+    "linkedRepositories": ["OpsLedger", "sentinel-agent"],
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Backlog",      "color": "GRAY",   "description": "Ideias e requisitos brutos — ainda não refinados" },
+        { "name": "Ready to Dev", "color": "BLUE",   "description": "Issue com DoD claro — pronta para desenvolvimento" },
+        { "name": "In Progress",  "color": "YELLOW", "description": "Trabalho ativo — branch criada" },
+        { "name": "In Review",    "color": "PURPLE", "description": "Código aguardando revisão de Pull Request" },
+        { "name": "Done",         "color": "GREEN",  "description": "Finalizado, aprovado e deployed" }
+      ]
+    },
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "name": "Componente",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "OpsLedger",      "color": "BLUE",   "description": "Plataforma financeira Java/Spring Boot" },
+        { "name": "SystemHealth",   "color": "RED",    "description": "Agente de telemetria em C" },
+        { "name": "Shared",         "color": "GRAY",   "description": "Infraestrutura e DevOps compartilhados" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
+    },
+    {
+      "name": "Estimativa (h)",
+      "dataType": "NUMBER",
+      "description": "Estimativa em horas de desenvolvimento"
+    },
+    {
+      "name": "PR Link",
+      "dataType": "TEXT",
+      "description": "Link do Pull Request associado"
+    }
+  ],
+  "views": [
+    {
+      "name": "Board Principal",
+      "layout": "BOARD_LAYOUT",
+      "groupBy": "Status",
+      "description": "Board Kanban — visão de execução diária"
+    },
+    {
+      "name": "Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Tabela agrupada por fase do roadmap"
+    },
+    {
+      "name": "Por Componente",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Componente",
+      "description": "Separação de tarefas por OpsLedger vs Sentinel Agent"
+    }
+  ],
+  "columns": [
+    {
+      "name": "Backlog",
+      "description": "Ideias e requisitos brutos — ainda não refinados para desenvolvimento"
+    },
+    {
+      "name": "Ready to Dev",
+      "description": "Issues com Definition of Done (DoD) claro — prontas para entrar em desenvolvimento"
+    },
+    {
+      "name": "In Progress",
+      "description": "Trabalho ativo — branch aberta e desenvolvimento em andamento"
+    },
+    {
+      "name": "In Review",
+      "description": "Código aguardando Pull Request e revisão de pares"
+    },
+    {
+      "name": "Done",
+      "description": "Finalizado, aprovado em revisão e deployed para o ambiente correspondente"
+    }
+  ]
+}

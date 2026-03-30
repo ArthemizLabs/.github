@@ -1,0 +1,103 @@
+{
+  "project": {
+    "title": "Vendas3D",
+    "shortDescription": "E-commerce de produtos 3D — backend Python/FastAPI, catálogo de produtos, fila de produção e integração com pagamentos.",
+    "readme": "## Vendas3D\n\nPlataforma de e-commerce para produtos impressos em 3D. Permite que lojistas publiquem experiências interativas de produtos 3D e gerenciem vitrines digitais.\n\n### Funcionalidades Core\n- Catálogo de produtos com variantes (cores, tamanhos, materiais)\n- Algoritmo de precificação baseado em custo de filamento + energia + margem\n- Fila de produção: `Pendente → Imprimindo → Acabamento → Enviado`\n- Gestão de inventário com controle de estoque de filamento\n- Integração PCI-compliant com Stripe/PayPal via webhooks HMAC\n\n**Stack:** Python (FastAPI), PostgreSQL, RabbitMQ, Redis, React/TypeScript\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "layout": "BOARD_LAYOUT",
+    "linkedRepositories": ["Vendas3D"],
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Backlog",      "color": "GRAY",   "description": "Ideias e requisitos brutos — ainda não refinados" },
+        { "name": "Ready to Dev", "color": "BLUE",   "description": "Issue com DoD claro — pronta para desenvolvimento" },
+        { "name": "In Progress",  "color": "YELLOW", "description": "Trabalho ativo — branch criada" },
+        { "name": "In Review",    "color": "PURPLE", "description": "Código aguardando revisão de Pull Request" },
+        { "name": "Done",         "color": "GREEN",  "description": "Finalizado, aprovado e deployed" }
+      ]
+    },
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "name": "Módulo",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Catálogo",        "color": "BLUE",   "description": "Produtos, preços, variantes e materiais" },
+        { "name": "Produção",        "color": "YELLOW", "description": "Fila de impressão e status de pedidos" },
+        { "name": "Inventário",      "color": "GREEN",  "description": "Controle de estoque de filamento" },
+        { "name": "Pagamentos",      "color": "PURPLE", "description": "Integração Stripe/PayPal e webhooks" },
+        { "name": "Segurança",       "color": "RED",    "description": "Hardening, rate limiting, OWASP" },
+        { "name": "API Pública",     "color": "GRAY",   "description": "Endpoints para parceiros e revendedores" },
+        { "name": "Infra/DevOps",    "color": "ORANGE", "description": "CI/CD, Docker, Deploy" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
+    },
+    {
+      "name": "Estimativa (h)",
+      "dataType": "NUMBER",
+      "description": "Estimativa em horas de desenvolvimento"
+    },
+    {
+      "name": "PR Link",
+      "dataType": "TEXT",
+      "description": "Link do Pull Request associado"
+    }
+  ],
+  "views": [
+    {
+      "name": "Board Principal",
+      "layout": "BOARD_LAYOUT",
+      "groupBy": "Status",
+      "description": "Board Kanban — visão de execução diária"
+    },
+    {
+      "name": "Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Tabela agrupada por fase do roadmap"
+    },
+    {
+      "name": "Por Módulo",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Módulo",
+      "description": "Separação de tarefas por módulo do sistema"
+    }
+  ],
+  "columns": [
+    {
+      "name": "Backlog",
+      "description": "Ideias e requisitos brutos — ainda não refinados para desenvolvimento"
+    },
+    {
+      "name": "Ready to Dev",
+      "description": "Issues com Definition of Done (DoD) claro — prontas para entrar em desenvolvimento"
+    },
+    {
+      "name": "In Progress",
+      "description": "Trabalho ativo — branch aberta e desenvolvimento em andamento"
+    },
+    {
+      "name": "In Review",
+      "description": "Código aguardando Pull Request e revisão de pares"
+    },
+    {
+      "name": "Done",
+      "description": "Finalizado, aprovado em revisão e deployed para o ambiente correspondente"
+    }
+  ]
+}

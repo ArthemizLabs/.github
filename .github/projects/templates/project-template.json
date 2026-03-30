@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "template": "project-generic-v1",
+    "description": "Template genérico para qualquer tipo de projeto GitHub Projects v2 dentro da organização ArthemizLabs. Suporta Table, Board e Roadmap layouts.",
+    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, ajuste os campos e execute o workflow: gh workflow run setup-imigration-projects.yml -f project=<seu-projeto> (atenção: o workflow só cria os 5 projetos pré-configurados — novos projetos precisam de suporte adicional no YAML).",
+    "layouts": {
+      "TABLE_LAYOUT":   "Tabela — ideal para backlogs, relatórios e visão macro",
+      "BOARD_LAYOUT":   "Board Kanban — ideal para fluxo de desenvolvimento diário",
+      "ROADMAP_LAYOUT": "Timeline — ideal para planejamento de longo prazo"
+    },
+    "field_types": {
+      "TEXT":          "Campo de texto livre",
+      "NUMBER":        "Campo numérico (estimativas, pontos, stars)",
+      "DATE":          "Campo de data (início, fim, deadline)",
+      "SINGLE_SELECT": "Seleção única com opções pré-definidas e cores",
+      "ITERATION":     "Sprints ou iterações com datas automáticas"
+    },
+    "option_colors": [
+      "GRAY", "BLUE", "GREEN", "YELLOW", "ORANGE", "RED", "PINK", "PURPLE"
+    ]
+  },
+  "project": {
+    "title": "{{PROJECT_TITLE}}",
+    "shortDescription": "{{SHORT_DESCRIPTION — máximo 255 caracteres}}",
+    "readme": "## {{PROJECT_TITLE}}\n\n{{DESCRIÇÃO COMPLETA DO PROJETO}}\n\n### Objetivo\n{{OBJETIVO}}\n\n### Stakeholders\n{{STAKEHOLDERS}}",
+    "layout": "{{TABLE_LAYOUT | BOARD_LAYOUT | ROADMAP_LAYOUT}}",
+    "linkedRepositories": ["{{REPOSITORY_1}}", "{{REPOSITORY_2}}"],
+    "public": false
+  },
+  "fields": [
+    {
+      "_comment": "Campo de status — OBRIGATÓRIO para projetos com Board layout",
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "{{STATUS_1}}", "color": "GRAY",   "description": "{{DESCRIÇÃO}}" },
+        { "name": "{{STATUS_2}}", "color": "YELLOW", "description": "{{DESCRIÇÃO}}" },
+        { "name": "{{STATUS_3}}", "color": "GREEN",  "description": "{{DESCRIÇÃO}}" }
+      ]
+    },
+    {
+      "_comment": "Campo de fase — RECOMENDADO para todos os projetos IMIGRATION_2030",
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "_comment": "Campos customizados — adicione ou remova conforme a necessidade do projeto",
+      "name": "{{CAMPO_CUSTOM_1}}",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "{{OPÇÃO_1}}", "color": "BLUE",   "description": "{{DESCRIÇÃO}}" },
+        { "name": "{{OPÇÃO_2}}", "color": "GREEN",  "description": "{{DESCRIÇÃO}}" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
+    },
+    {
+      "name": "Estimativa (h)",
+      "dataType": "NUMBER",
+      "description": "Estimativa em horas"
+    }
+  ],
+  "views": [
+    {
+      "_comment": "View principal — OBRIGATÓRIA",
+      "name": "{{NOME_DA_VIEW_PRINCIPAL}}",
+      "layout": "{{TABLE_LAYOUT | BOARD_LAYOUT | ROADMAP_LAYOUT}}",
+      "groupBy": "{{FIELD_NAME — opcional}}",
+      "sortBy": "{{FIELD_NAME — opcional}}",
+      "filterBy": ["{{FIELD:VALUE — opcional}}"],
+      "description": "{{DESCRIÇÃO DA VIEW}}"
+    },
+    {
+      "_comment": "Views adicionais — adicione conforme necessidade",
+      "name": "Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Agrupado por fase do roadmap IMIGRATION_2030"
+    }
+  ],
+  "columns": [
+    {
+      "_comment": "Colunas para Board layout — devem corresponder às opções do campo Status",
+      "name": "{{COLUNA_1}}",
+      "description": "{{DESCRIÇÃO}}"
+    }
+  ],
+  "automations": [
+    {
+      "_comment": "Automações GitHub nativas — configuradas via UI ou API",
+      "trigger": "item_added",
+      "action": "set_field",
+      "field": "Status",
+      "value": "{{STATUS_INICIAL}}",
+      "description": "Novos itens entram automaticamente no status inicial"
+    },
+    {
+      "trigger": "pull_request_merged",
+      "action": "set_field",
+      "field": "Status",
+      "value": "Done",
+      "description": "PR merged → issue vai para Done"
+    }
+  ],
+  "checklist": {
+    "_comment": "Use este checklist ao criar um novo projeto a partir deste template",
+    "steps": [
+      "[ ] Copiar este arquivo para .github/projects/configs/<nome>.json",
+      "[ ] Substituir todos os placeholders {{...}}",
+      "[ ] Ajustar campos e opções para o contexto do projeto",
+      "[ ] Executar o workflow setup-imigration-projects.yml",
+      "[ ] Verificar que o projeto foi criado na organização ArthemizLabs",
+      "[ ] Adicionar link do projeto ao README do repositório associado",
+      "[ ] Configurar permissões de acesso (Settings → Manage Access)",
+      "[ ] Vincular repositório(s) ao projeto (Settings → Linked Repositories)"
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "project": {
+    "title": "Master Roadmap",
+    "shortDescription": "Visão macro do roadmap IMIGRATION_2030 — trilha rumo a Engenheiro Pleno/Sênior com diploma, C1/N2 e portfólio de alta qualificação.",
+    "readme": "## Master Roadmap\n\nEste projeto centraliza todas as tarefas e marcos do roadmap IMIGRATION_2030, organizado por fase anual e tipo de atividade.\n\n### Pilares\n- **Diploma** — Graduação em Ciência da Computação\n- **Idioma C1/N2** — Inglês C1 (IELTS 7.0+) e Japonês N2\n- **Portfolio de Alta Qualificacao** — SaaS em produção, Open Source, certificações\n\n### Fases\n- **PHASE_2026** — Foundation: base técnica sólida + primeiros sistemas reais\n- **PHASE_2027** — Expansion: Cloud, ETL, complexidade real\n- **PHASE_2028** — Quality & Security: AppSec, CI/CD profissional\n- **PHASE_2029** — Mastery: arquitetura de sistemas, microserviços, certificações finais",
+    "layout": "TABLE_LAYOUT",
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation — Base técnica sólida e primeiros sistemas reais" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion — Cloud, ETL e complexidade real" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security — AppSec, CI/CD profissional" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery — Arquitetura, microserviços e certificações finais" }
+      ]
+    },
+    {
+      "name": "País Alvo",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Japão",  "color": "RED",   "description": "Visto HSP — High Skilled Professional" },
+        { "name": "Canada", "color": "RED",   "description": "Express Entry — Federal Skilled Worker" },
+        { "name": "Global",  "color": "BLUE",  "description": "Aplicável a múltiplos destinos" }
+      ]
+    },
+    {
+      "name": "Tipo",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Certificação", "color": "YELLOW", "description": "Exames e certificações profissionais" },
+        { "name": "Idioma",       "color": "PURPLE", "description": "Inglês e Japonês" },
+        { "name": "Acadêmico",    "color": "GREEN",  "description": "Faculdade e formação acadêmica" },
+        { "name": "Tech",         "color": "BLUE",   "description": "Projetos técnicos e portfólio SaaS" }
+      ]
+    },
+    {
+      "name": "Épico",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "TECH_STACK",      "color": "BLUE",   "description": "Habilidades e ferramentas técnicas" },
+        { "name": "PORTFOLIO",       "color": "GREEN",  "description": "Projetos SaaS e portfólio" },
+        { "name": "LANG_EN",         "color": "YELLOW", "description": "Inglês — meta C1 / IELTS 7.0+" },
+        { "name": "LANG_JP",         "color": "RED",    "description": "Japonês — meta N2" },
+        { "name": "CERTIFICATIONS",  "color": "PURPLE", "description": "Certificações profissionais" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos de conclusão da tarefa"
+    },
+    {
+      "name": "Pilar de Imigração",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Diploma",          "color": "GREEN",  "description": "Contribui para o diploma universitário" },
+        { "name": "Idioma C1/N2",     "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
+        { "name": "Portfólio",        "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" },
+        { "name": "Certificação",     "color": "PURPLE", "description": "Contribui para certificações reconhecidas" }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "name": "Backlog Completo",
+      "layout": "TABLE_LAYOUT",
+      "description": "Visão tabular de todas as tarefas do roadmap"
+    },
+    {
+      "name": "Timeline por Fase",
+      "layout": "ROADMAP_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Timeline agrupada por fase anual — visão de longo prazo"
+    },
+    {
+      "name": "Priority — Certificações & Idiomas",
+      "layout": "TABLE_LAYOUT",
+      "filterBy": ["Tipo:Certificação", "Tipo:Idioma"],
+      "description": "Filtrado para certificações e idiomas — itens críticos para o visto"
+    },
+    {
+      "name": "Kanban por Status",
+      "layout": "BOARD_LAYOUT",
+      "description": "Board por status para execução diária"
+    },
+    {
+      "name": "Por Épico",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Épico",
+      "description": "Tabela agrupada por épico — visão modular"
+    }
+  ]
+}

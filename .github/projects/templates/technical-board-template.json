@@ -1,0 +1,164 @@
+{
+  "_meta": {
+    "template": "technical-board-v1",
+    "description": "Template padrão para projetos técnicos individuais (Board/Kanban) dentro do ecossistema ArthemizLabs. Copia este arquivo, ajusta os campos de configuração e execute o workflow setup-imigration-projects.yml.",
+    "usage": "Copie este arquivo para .github/projects/configs/<seu-projeto>.json, preencha os campos e execute: gh workflow run setup-imigration-projects.yml -f project=<seu-projeto>"
+  },
+  "project": {
+    "title": "{{PROJECT_TITLE}}",
+    "shortDescription": "{{SHORT_DESCRIPTION}}",
+    "readme": "## {{PROJECT_TITLE}}\n\n{{PROJECT_DESCRIPTION}}\n\n### Stack\n{{STACK}}\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "layout": "BOARD_LAYOUT",
+    "linkedRepositories": ["{{REPOSITORY_NAME}}"],
+    "public": false
+  },
+  "fields": [
+    {
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Backlog",      "color": "GRAY",   "description": "Ideias e requisitos brutos — ainda não refinados" },
+        { "name": "Ready to Dev", "color": "BLUE",   "description": "Issue com DoD claro — pronta para desenvolvimento" },
+        { "name": "In Progress",  "color": "YELLOW", "description": "Trabalho ativo — branch criada" },
+        { "name": "In Review",    "color": "PURPLE", "description": "Código aguardando revisão de Pull Request" },
+        { "name": "Done",         "color": "GREEN",  "description": "Finalizado, aprovado e deployed" }
+      ]
+    },
+    {
+      "name": "Fase",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "PHASE_2026", "color": "GREEN",  "description": "Foundation" },
+        { "name": "PHASE_2027", "color": "BLUE",   "description": "Expansion" },
+        { "name": "PHASE_2028", "color": "YELLOW", "description": "Quality & Security" },
+        { "name": "PHASE_2029", "color": "RED",    "description": "Mastery" }
+      ]
+    },
+    {
+      "name": "Prioridade",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Crítico",  "color": "RED",    "description": "Bloqueia outras tarefas ou é blocker de deploy" },
+        { "name": "Alto",     "color": "ORANGE", "description": "Impacto direto no core do sistema" },
+        { "name": "Médio",    "color": "YELLOW", "description": "Melhoria importante mas não urgente" },
+        { "name": "Baixo",    "color": "GREEN",  "description": "Nice-to-have ou refatoração futura" }
+      ]
+    },
+    {
+      "name": "Tipo",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Feature",    "color": "GREEN",  "description": "Nova funcionalidade" },
+        { "name": "Bug Fix",    "color": "RED",    "description": "Correção de bug" },
+        { "name": "Refactor",  "color": "YELLOW", "description": "Melhoria de código sem mudança de comportamento" },
+        { "name": "Test",       "color": "PURPLE", "description": "Adição ou melhoria de testes" },
+        { "name": "Docs",       "color": "BLUE",   "description": "Documentação" },
+        { "name": "Security",   "color": "RED",    "description": "Correção ou melhoria de segurança" },
+        { "name": "Infra/DevOps",  "color": "ORANGE", "description": "CI/CD, Docker, deploy, infra" },
+        { "name": "Chore",      "color": "GRAY",   "description": "Dependências, configurações, manutenção" }
+      ]
+    },
+    {
+      "name": "DoD",
+      "dataType": "TEXT",
+      "description": "Definition of Done — critérios objetivos e verificáveis para conclusão"
+    },
+    {
+      "name": "Estimativa (h)",
+      "dataType": "NUMBER",
+      "description": "Estimativa em horas de desenvolvimento"
+    },
+    {
+      "name": "PR Link",
+      "dataType": "TEXT",
+      "description": "Link do Pull Request associado"
+    },
+    {
+      "name": "Contribui para",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        { "name": "Diploma",    "color": "GREEN",  "description": "Contribui para o diploma universitário" },
+        { "name": "Idioma",    "color": "YELLOW", "description": "Contribui para fluência em inglês ou japonês" },
+        { "name": "Portfólio",  "color": "BLUE",   "description": "Contribui para o portfólio de alta qualificação" }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "name": "Board Principal",
+      "layout": "BOARD_LAYOUT",
+      "groupBy": "Status",
+      "description": "Board Kanban — visão de execução diária"
+    },
+    {
+      "name": "Por Fase",
+      "layout": "TABLE_LAYOUT",
+      "groupBy": "Fase",
+      "description": "Tabela agrupada por fase do roadmap"
+    },
+    {
+      "name": "Prioridade",
+      "layout": "TABLE_LAYOUT",
+      "sortBy": "Prioridade",
+      "description": "Tarefas ordenadas por prioridade"
+    },
+    {
+      "name": "Backlog Refinado",
+      "layout": "TABLE_LAYOUT",
+      "filterBy": ["Status:Backlog", "Status:Ready to Dev"],
+      "description": "Apenas itens do backlog para refinamento"
+    }
+  ],
+  "columns": [
+    {
+      "name": "Backlog",
+      "description": "Ideias e requisitos brutos — ainda não refinados para desenvolvimento"
+    },
+    {
+      "name": "Ready to Dev",
+      "description": "Issues com Definition of Done (DoD) claro — prontas para entrar em desenvolvimento"
+    },
+    {
+      "name": "In Progress",
+      "description": "Trabalho ativo — branch aberta e desenvolvimento em andamento"
+    },
+    {
+      "name": "In Review",
+      "description": "Código aguardando Pull Request e revisão de pares"
+    },
+    {
+      "name": "Done",
+      "description": "Finalizado, aprovado em revisão e deployed para o ambiente correspondente"
+    }
+  ],
+  "automations": [
+    {
+      "trigger": "item_added",
+      "action": "set_field",
+      "field": "Status",
+      "value": "Backlog",
+      "description": "Novos itens adicionados ao projeto entram automaticamente no Backlog"
+    },
+    {
+      "trigger": "pull_request_opened",
+      "action": "set_field",
+      "field": "Status",
+      "value": "In Review",
+      "description": "Quando um PR é aberto, a issue relacionada vai para In Review"
+    },
+    {
+      "trigger": "pull_request_merged",
+      "action": "set_field",
+      "field": "Status",
+      "value": "Done",
+      "description": "Quando um PR é merged, a issue relacionada vai para Done"
+    },
+    {
+      "trigger": "pull_request_closed",
+      "action": "set_field",
+      "field": "Status",
+      "value": "Backlog",
+      "description": "Quando um PR é fechado sem merge, a issue volta para o Backlog"
+    }
+  ]
+}
