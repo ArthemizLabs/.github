@@ -81,7 +81,7 @@
     },
     {
       "_comment": "Views adicionais — adicione conforme necessidade",
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Agrupado por fase do roadmap IMIGRATION_2030"
