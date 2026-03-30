@@ -1,4 +1,4 @@
-name: Setup IMIGRATION_2030 GitHub Projects
+name: Setup GitHub Projects
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       dry_run:
         description: "Dry-run mode (exibe comandos sem criar projetos)"
         type: boolean
-        default: true
+        default: false
       project:
         description: "Projeto a criar (selecione `all` para criar todos)"
         type: choice
