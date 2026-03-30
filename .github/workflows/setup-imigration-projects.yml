@@ -6,7 +6,7 @@ on:
       dry_run:
         description: "Dry-run mode (exibe comandos sem criar projetos)"
         type: boolean
-        default: false
+        default: true
       project:
         description: "Projeto a criar (selecione `all` para criar todos)"
         type: choice
