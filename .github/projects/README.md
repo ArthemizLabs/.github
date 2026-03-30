@@ -11,7 +11,7 @@ O roadmap IMIGRATION_2030 é estruturado em **5 projetos GitHub** que cobrem tod
 | Projeto | Tipo | Repositórios | Descrição |
 |---|---|---|---|
 | [📊 Master Roadmap 2030](#-master-roadmap-2030) | Tabela | — | Visão macro de carreira — todas as fases e epics |
-| [⚙️ OpsLedger & Sentinel Agent](#️-opsledger--sentinel-agent) | Board (Kanban) | `OpsLedger`, `sentinel-agent` | Backend Java/Spring Boot + agente de telemetria em C |
+| [⚙️ OpsLedger & Sentinel Agent](#-opsledger--sentinel-agent) | Board (Kanban) | `OpsLedger`, `sentinel-agent` | Backend Java/Spring Boot + agente de telemetria em C |
 | [🛒 Vendas3D](#-vendas3d) | Board (Kanban) | `Vendas3D` | E-commerce Python/FastAPI |
 | [🔒 Arthemiz & SystemHealth](#-arthemiz--systemhealth) | Board (Kanban) | `Arthemiz`, `SystemHealth` | Infra Go + monitoramento Docker |
 | [🌐 The Global Resume](#-the-global-resume) | Lista | — | Contribuições Open Source para o portfólio |
