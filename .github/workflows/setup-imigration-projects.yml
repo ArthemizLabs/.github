@@ -114,24 +114,43 @@ jobs:
           fi
 
           echo "📊 Criando projeto 'Master Roadmap 2030'..."
-          CREATE_RESULT=$(gh api graphql -f query='
-            mutation($ownerId: ID!, $title: String!) {
-              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
-                projectV2 { id number url }
+
+          # Idempotência: reutiliza projeto existente com o mesmo título
+          EXISTING_ID=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                projectsV2(query: "Master Roadmap 2030", first: 5) {
+                  nodes { id title }
+                }
               }
             }' \
-            -f ownerId="$ORG_ID" \
-            -f title="Master Roadmap 2030")
+            -f login="ArthemizLabs" | \
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Master Roadmap 2030") | .id' 2>/dev/null | head -1 || true)
 
-          PROJECT_ID=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.id')
-          PROJECT_URL=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.url')
+          if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
+            echo "ℹ️ Projeto 'Master Roadmap 2030' já existe ($EXISTING_ID) — reutilizando."
+            PROJECT_ID="$EXISTING_ID"
+          else
+            CREATE_RESULT=$(gh api graphql -f query='
+              mutation($ownerId: ID!, $title: String!) {
+                createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                  projectV2 { id number url }
+                }
+              }' \
+              -f ownerId="$ORG_ID" \
+              -f title="Master Roadmap 2030")
 
-          if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
-            echo "❌ Falha ao criar o projeto Master Roadmap 2030"
-            exit 1
+            PROJECT_ID=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.id')
+            PROJECT_URL=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.url')
+
+            if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+              echo "❌ Falha ao criar o projeto Master Roadmap 2030"
+              exit 1
+            fi
+
+            echo "✅ Projeto criado: $PROJECT_ID — $PROJECT_URL"
           fi
 
-          echo "✅ Projeto criado: $PROJECT_ID — $PROJECT_URL"
           echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
 
       - name: Add custom fields — Fase
@@ -269,10 +288,23 @@ jobs:
 
           echo "✅ Campos 'Pilar de Imigração' e 'DoD' criados"
 
-      - name: Create views — Timeline & Priority
+      - name: Create views — Backlog, Timeline, Priority, Kanban & Épico
         if: env.DRY_RUN != 'true'
         run: |
           PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
+
+          echo "📋 Criando view 'Backlog Completo'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2View(input: {
+                projectId: $projectId
+                name: "📋 Backlog Completo"
+                layout: TABLE_LAYOUT
+              }) {
+                projectV2View { id name }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
 
           echo "📅 Criando view 'Timeline por Fase'..."
           gh api graphql -f query='
@@ -313,6 +345,19 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
+          echo "🗂 Criando view 'Por Épico'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2View(input: {
+                projectId: $projectId
+                name: "🗂 Por Épico"
+                layout: TABLE_LAYOUT
+              }) {
+                projectV2View { id name }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+
           echo "✅ Views criadas"
 
       - name: Summary
@@ -325,7 +370,7 @@ jobs:
             echo "✅ Projeto criado com sucesso." >> "$GITHUB_STEP_SUMMARY"
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "**Campos criados:** Fase, País Alvo, Tipo, Épico, Pilar de Imigração, DoD" >> "$GITHUB_STEP_SUMMARY"
-            echo "**Views criadas:** Timeline por Fase, Priority — Certificações & Idiomas, Kanban por Status" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Views criadas:** Backlog Completo, Timeline por Fase, Priority — Certificações & Idiomas, Kanban por Status, Por Épico" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
@@ -349,23 +394,40 @@ jobs:
         run: |
           if [ "$DRY_RUN" = "true" ]; then
             echo "🔸 [DRY-RUN] Criaria projeto: 'OpsLedger & Sentinel Agent' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa, PR Link"
-            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Componente"
+            echo "🔸 [DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa (h), PR Link"
+            echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🔧 Por Componente"
             exit 0
           fi
 
           echo "⚙️ Criando projeto 'OpsLedger & Sentinel Agent'..."
-          PROJECT_ID=$(gh api graphql -f query='
-            mutation($ownerId: ID!, $title: String!) {
-              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
-                projectV2 { id }
+
+          # Idempotência: reutiliza projeto existente com o mesmo título
+          EXISTING_ID=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                projectsV2(query: "OpsLedger", first: 5) {
+                  nodes { id title }
+                }
               }
             }' \
-            -f ownerId="$ORG_ID" \
-            -f title="OpsLedger & Sentinel Agent" \
-            --jq '.data.createProjectV2.projectV2.id')
+            -f login="ArthemizLabs" | \
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "OpsLedger & Sentinel Agent") | .id' 2>/dev/null | head -1 || true)
 
-          echo "✅ Projeto criado: $PROJECT_ID"
+          if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
+            echo "ℹ️ Projeto 'OpsLedger & Sentinel Agent' já existe ($EXISTING_ID) — reutilizando."
+            PROJECT_ID="$EXISTING_ID"
+          else
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation($ownerId: ID!, $title: String!) {
+                createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                  projectV2 { id }
+                }
+              }' \
+              -f ownerId="$ORG_ID" \
+              -f title="OpsLedger & Sentinel Agent" \
+              --jq '.data.createProjectV2.projectV2.id')
+            echo "✅ Projeto criado: $PROJECT_ID"
+          fi
 
           echo "🔧 Criando campo 'Status'..."
           gh api graphql -f query='
@@ -454,7 +516,7 @@ jobs:
             -f projectId="$PROJECT_ID"
 
           echo "📋 Criando views..."
-          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Componente:TABLE_LAYOUT"; do
+          for VIEW in "🗂 Board Principal:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Componente:TABLE_LAYOUT"; do
             VIEW_NAME="${VIEW%%:*}"
             VIEW_LAYOUT="${VIEW##*:}"
             gh api graphql -f query='
@@ -504,23 +566,40 @@ jobs:
         run: |
           if [ "$DRY_RUN" = "true" ]; then
             echo "🔸 [DRY-RUN] Criaria projeto: 'Vendas3D' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa, PR Link"
-            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Módulo"
+            echo "🔸 [DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa (h), PR Link"
+            echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🔧 Por Módulo"
             exit 0
           fi
 
           echo "🛒 Criando projeto 'Vendas3D'..."
-          PROJECT_ID=$(gh api graphql -f query='
-            mutation($ownerId: ID!, $title: String!) {
-              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
-                projectV2 { id }
+
+          # Idempotência: reutiliza projeto existente com o mesmo título
+          EXISTING_ID=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                projectsV2(query: "Vendas3D", first: 5) {
+                  nodes { id title }
+                }
               }
             }' \
-            -f ownerId="$ORG_ID" \
-            -f title="Vendas3D" \
-            --jq '.data.createProjectV2.projectV2.id')
+            -f login="ArthemizLabs" | \
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Vendas3D") | .id' 2>/dev/null | head -1 || true)
 
-          echo "✅ Projeto criado: $PROJECT_ID"
+          if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
+            echo "ℹ️ Projeto 'Vendas3D' já existe ($EXISTING_ID) — reutilizando."
+            PROJECT_ID="$EXISTING_ID"
+          else
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation($ownerId: ID!, $title: String!) {
+                createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                  projectV2 { id }
+                }
+              }' \
+              -f ownerId="$ORG_ID" \
+              -f title="Vendas3D" \
+              --jq '.data.createProjectV2.projectV2.id')
+            echo "✅ Projeto criado: $PROJECT_ID"
+          fi
 
           echo "🔧 Criando campo 'Status'..."
           gh api graphql -f query='
@@ -610,7 +689,7 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
-          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Módulo:TABLE_LAYOUT"; do
+          for VIEW in "🗂 Board Principal:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT" "🔧 Por Módulo:TABLE_LAYOUT"; do
             VIEW_NAME="${VIEW%%:*}"
             VIEW_LAYOUT="${VIEW##*:}"
             gh api graphql -f query='
@@ -660,23 +739,40 @@ jobs:
         run: |
           if [ "$DRY_RUN" = "true" ]; then
             echo "🔸 [DRY-RUN] Criaria projeto: 'Arthemiz & SystemHealth' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa, PR Link"
-            echo "🔸 [DRY-RUN] Views: Board Principal, Por Fase, Por Sistema, Segurança & Infra"
+            echo "🔸 [DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa (h), PR Link"
+            echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🖥 Por Sistema, 🔒 Segurança & Infra"
             exit 0
           fi
 
           echo "🔒 Criando projeto 'Arthemiz & SystemHealth'..."
-          PROJECT_ID=$(gh api graphql -f query='
-            mutation($ownerId: ID!, $title: String!) {
-              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
-                projectV2 { id }
+
+          # Idempotência: reutiliza projeto existente com o mesmo título
+          EXISTING_ID=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                projectsV2(query: "Arthemiz", first: 5) {
+                  nodes { id title }
+                }
               }
             }' \
-            -f ownerId="$ORG_ID" \
-            -f title="Arthemiz & SystemHealth" \
-            --jq '.data.createProjectV2.projectV2.id')
+            -f login="ArthemizLabs" | \
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Arthemiz & SystemHealth") | .id' 2>/dev/null | head -1 || true)
 
-          echo "✅ Projeto criado: $PROJECT_ID"
+          if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
+            echo "ℹ️ Projeto 'Arthemiz & SystemHealth' já existe ($EXISTING_ID) — reutilizando."
+            PROJECT_ID="$EXISTING_ID"
+          else
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation($ownerId: ID!, $title: String!) {
+                createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                  projectV2 { id }
+                }
+              }' \
+              -f ownerId="$ORG_ID" \
+              -f title="Arthemiz & SystemHealth" \
+              --jq '.data.createProjectV2.projectV2.id')
+            echo "✅ Projeto criado: $PROJECT_ID"
+          fi
 
           echo "🔧 Criando campo 'Status'..."
           gh api graphql -f query='
@@ -781,7 +877,7 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
-          for VIEW in "📅 Por Fase:TABLE_LAYOUT" "🖥 Por Sistema:TABLE_LAYOUT" "🔒 Segurança & Infra:TABLE_LAYOUT"; do
+          for VIEW in "🗂 Board Principal:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT" "🖥 Por Sistema:TABLE_LAYOUT" "🔒 Segurança & Infra:TABLE_LAYOUT"; do
             VIEW_NAME="${VIEW%%:*}"
             VIEW_LAYOUT="${VIEW##*:}"
             gh api graphql -f query='
@@ -832,22 +928,39 @@ jobs:
           if [ "$DRY_RUN" = "true" ]; then
             echo "🔸 [DRY-RUN] Criaria projeto: 'The Global Resume' (TABLE_LAYOUT)"
             echo "🔸 [DRY-RUN] Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo de Contribuição, Linguagem, Stars do Repositório, Impacto no Visto, Observações"
-            echo "🔸 [DRY-RUN] Views: Todas as Contribuições, Merged (Portfólio Público), Board de Acompanhamento, Por Fase"
+            echo "🔸 [DRY-RUN] Views: 📋 Todas as Contribuições, ✅ Merged (Portfólio Público), 📊 Board de Acompanhamento, 📅 Por Fase"
             exit 0
           fi
 
           echo "🌐 Criando projeto 'The Global Resume'..."
-          PROJECT_ID=$(gh api graphql -f query='
-            mutation($ownerId: ID!, $title: String!) {
-              createProjectV2(input: { ownerId: $ownerId, title: $title }) {
-                projectV2 { id }
+
+          # Idempotência: reutiliza projeto existente com o mesmo título
+          EXISTING_ID=$(gh api graphql -f query='
+            query($login: String!) {
+              organization(login: $login) {
+                projectsV2(query: "Global Resume", first: 5) {
+                  nodes { id title }
+                }
               }
             }' \
-            -f ownerId="$ORG_ID" \
-            -f title="The Global Resume" \
-            --jq '.data.createProjectV2.projectV2.id')
+            -f login="ArthemizLabs" | \
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "The Global Resume") | .id' 2>/dev/null | head -1 || true)
 
-          echo "✅ Projeto criado: $PROJECT_ID"
+          if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
+            echo "ℹ️ Projeto 'The Global Resume' já existe ($EXISTING_ID) — reutilizando."
+            PROJECT_ID="$EXISTING_ID"
+          else
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation($ownerId: ID!, $title: String!) {
+                createProjectV2(input: { ownerId: $ownerId, title: $title }) {
+                  projectV2 { id }
+                }
+              }' \
+              -f ownerId="$ORG_ID" \
+              -f title="The Global Resume" \
+              --jq '.data.createProjectV2.projectV2.id')
+            echo "✅ Projeto criado: $PROJECT_ID"
+          fi
 
           echo "🔧 Criando campo 'Status da Contribuição'..."
           gh api graphql -f query='
@@ -978,7 +1091,7 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
           echo "📋 Criando views..."
-          for VIEW in "✅ Merged — Portfólio Público:TABLE_LAYOUT" "📊 Board de Acompanhamento:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT"; do
+          for VIEW in "📋 Todas as Contribuições:TABLE_LAYOUT" "✅ Merged — Portfólio Público:TABLE_LAYOUT" "📊 Board de Acompanhamento:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT"; do
             VIEW_NAME="${VIEW%%:*}"
             VIEW_LAYOUT="${VIEW##*:}"
             gh api graphql -f query='
