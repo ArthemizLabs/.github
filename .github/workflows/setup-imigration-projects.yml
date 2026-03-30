@@ -8,7 +8,7 @@ on:
         type: boolean
         default: true
       project:
-        description: "Projeto a criar (deixe em branco para criar todos)"
+        description: "Projeto a criar (selecione `all` para criar todos)"
         type: choice
         default: "all"
         options:
