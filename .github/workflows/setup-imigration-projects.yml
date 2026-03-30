@@ -950,6 +950,26 @@ jobs:
             }' \
             -f projectId="$PROJECT_ID"
 
+          echo "🔧 Criando campo 'Linguagem'..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Linguagem"
+                singleSelectOptions: [
+                  { name: "JavaScript",  color: YELLOW, description: "Contribuições em JavaScript" }
+                  { name: "TypeScript",  color: BLUE,   description: "Contribuições em TypeScript" }
+                  { name: "Python",      color: GREEN,  description: "Contribuições em Python" }
+                  { name: "Go",          color: ORANGE, description: "Contribuições em Go" }
+                  { name: "Java",        color: RED,    description: "Contribuições em Java" }
+                  { name: "Outras",      color: GRAY,   description: "Outras linguagens" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
           echo "📋 Criando views..."
           for VIEW in "✅ Merged — Portfólio Público:TABLE_LAYOUT" "📊 Board de Acompanhamento:BOARD_LAYOUT" "📅 Por Fase:TABLE_LAYOUT"; do
             VIEW_NAME="${VIEW%%:*}"
