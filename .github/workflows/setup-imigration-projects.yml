@@ -318,7 +318,7 @@ jobs:
             echo "✅ Projeto criado com sucesso." >> "$GITHUB_STEP_SUMMARY"
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "**Campos criados:** Fase, País Alvo, Tipo, Épico, Pilar de Imigração, DoD" >> "$GITHUB_STEP_SUMMARY"
-            echo "**Views criadas:** Backlog Completo, Timeline por Fase, Priority (Certificações & Idiomas), Kanban por Status" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Views criadas:** Timeline por Fase, Priority — Certificações & Idiomas, Kanban por Status" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
