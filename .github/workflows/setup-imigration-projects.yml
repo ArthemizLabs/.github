@@ -767,6 +767,8 @@ jobs:
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
             echo "ℹ️ Projeto 'Arthemiz & SystemHealth' já existe ($EXISTING_ID) — reutilizando."
             PROJECT_ID="$EXISTING_ID"
+            echo "ℹ️ Projeto já inicializado — pulando criação de campos e views para evitar duplicatas."
+            exit 0
           else
             PROJECT_ID=$(gh api graphql -f query='
               mutation($ownerId: ID!, $title: String!) {
