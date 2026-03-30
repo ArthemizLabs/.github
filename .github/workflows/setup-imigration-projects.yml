@@ -114,7 +114,7 @@ jobs:
         id: create-project
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Master Roadmap' (TABLE_LAYOUT)"
+            echo "[DRY-RUN] Criaria projeto: 'Master Roadmap' (TABLE_LAYOUT)"
             echo "project_id=DRY_RUN_ID" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -230,8 +230,8 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "País Alvo"
                   singleSelectOptions: [
-                    { name: "Japão 🇯🇵",  color: RED,  description: "Visto HSP — High Skilled Professional" }
-                    { name: "Canadá 🇨🇦", color: RED,  description: "Express Entry — Federal Skilled Worker" }
+                    { name: "Japão",  color: RED,  description: "Visto HSP — High Skilled Professional" }
+                    { name: "Canada", color: RED,  description: "Express Entry — Federal Skilled Worker" }
                     { name: "Global",    color: BLUE, description: "Aplicável a múltiplos destinos" }
                   ]
                 }) {
@@ -435,9 +435,9 @@ jobs:
       - name: Create project and configure board
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'OpsLedger & SystemHealth' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa (h), PR Link"
-            echo "🔸 [DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Componente"
+            echo "[DRY-RUN] Criaria projeto: 'OpsLedger & SystemHealth' (BOARD_LAYOUT)"
+            echo "[DRY-RUN] Campos: Status (Backlog/Ready to Dev/In Progress/In Review/Done), Fase, Componente, DoD, Estimativa (h), PR Link"
+            echo "[DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Componente"
             exit 0
           fi
 
@@ -457,7 +457,8 @@ jobs:
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
             echo "Projeto 'OpsLedger & SystemHealth' já existe ($EXISTING_ID) — reutilizando."
-            PROJECT_ID="$EXISTING_ID"
+            echo "Projeto ja inicializado — pulando criacao de campos e views para evitar duplicatas."
+            exit 0
           else
             PROJECT_ID=$(gh api graphql -f query='
               mutation($ownerId: ID!, $title: String!) {
@@ -607,9 +608,9 @@ jobs:
       - name: Create Vendas3D board
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Vendas3D' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa (h), PR Link"
-            echo "🔸 [DRY-RUN] Views: 🗂 Board Principal (BOARD_LAYOUT), 📅 Por Fase, 🔧 Por Módulo"
+            echo "[DRY-RUN] Criaria projeto: 'Vendas3D' (BOARD_LAYOUT)"
+            echo "[DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa (h), PR Link"
+            echo "[DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Modulo"
             exit 0
           fi
 
@@ -629,7 +630,8 @@ jobs:
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
             echo "Projeto 'Vendas3D' já existe ($EXISTING_ID) — reutilizando."
-            PROJECT_ID="$EXISTING_ID"
+            echo "Projeto ja inicializado — pulando criacao de campos e views para evitar duplicatas."
+            exit 0
           else
             PROJECT_ID=$(gh api graphql -f query='
               mutation($ownerId: ID!, $title: String!) {
@@ -780,9 +782,9 @@ jobs:
       - name: Create Arthemiz & SentinelAgent board
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Arthemiz & SentinelAgent' (BOARD_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa (h), PR Link"
-            echo "🔸 [DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Sistema, Segurança & Infra"
+            echo "[DRY-RUN] Criaria projeto: 'Arthemiz & SentinelAgent' (BOARD_LAYOUT)"
+            echo "[DRY-RUN] Campos: Status, Fase, Sistema, Camada, DoD, Estimativa (h), PR Link"
+            echo "[DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Sistema, Segurança & Infra"
             exit 0
           fi
 
@@ -970,9 +972,9 @@ jobs:
       - name: Create Global Resume project
         run: |
           if [ "$DRY_RUN" = "true" ]; then
-            echo "🔸 [DRY-RUN] Criaria projeto: 'Global Resume' (TABLE_LAYOUT)"
-            echo "🔸 [DRY-RUN] Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo de Contribuição, Linguagem, Stars do Repositório, Impacto no Visto, Observações"
-            echo "🔸 [DRY-RUN] Views: Todas as Contribuições, Merged (Portfólio Público), Board de Acompanhamento, Por Fase"
+            echo "[DRY-RUN] Criaria projeto: 'Global Resume' (TABLE_LAYOUT)"
+            echo "[DRY-RUN] Campos: Status da Contribuição, Link do PR, Repositório Pai, Fase, Tipo de Contribuição, Linguagem, Stars do Repositório, Impacto no Visto, Observações"
+            echo "[DRY-RUN] Views: Todas as Contribuições, Merged (Portfólio Público), Board de Acompanhamento, Por Fase"
             exit 0
           fi
 
@@ -992,7 +994,8 @@ jobs:
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
             echo "Projeto 'Global Resume' já existe ($EXISTING_ID) — reutilizando."
-            PROJECT_ID="$EXISTING_ID"
+            echo "Projeto ja inicializado — pulando criacao de campos e views para evitar duplicatas."
+            exit 0
           else
             PROJECT_ID=$(gh api graphql -f query='
               mutation($ownerId: ID!, $title: String!) {

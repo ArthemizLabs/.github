@@ -56,7 +56,7 @@ Visão macro centralizada de todo o roadmap. Cada item representa uma tarefa ou 
 | Campo | Tipo | Opções |
 |---|---|---|
 | **Fase** | Select | `PHASE_2026` · `PHASE_2027` · `PHASE_2028` · `PHASE_2029` |
-| **País Alvo** | Select | `Japão 🇯🇵` · `Canadá 🇨🇦` · `Global` |
+| **País Alvo** | Select | `Japão` · `Canada` · `Global` |
 | **Tipo** | Select | `Certificação` · `Idioma` · `Acadêmico` · `Tech` |
 | **Épico** | Select | `TECH_STACK` · `PORTFOLIO` · `LANG_EN` · `LANG_JP` · `CERTIFICATIONS` |
 | **Pilar de Imigração** | Select | `Diploma` · `Idioma C1/N2` · `Portfólio` · `Certificação` |

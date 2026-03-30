@@ -2,7 +2,7 @@
   "project": {
     "title": "Master Roadmap 2030",
     "shortDescription": "Visão macro do roadmap IMIGRATION_2030 — trilha rumo a Engenheiro Pleno/Sênior com diploma, C1/N2 e portfólio de alta qualificação.",
-    "readme": "## Master Roadmap 2030\n\nEste projeto centraliza todas as tarefas e marcos do roadmap IMIGRATION_2030, organizado por fase anual e tipo de atividade.\n\n### Pilares\n- 🎓 **Diploma** — Graduação em Ciência da Computação\n- 🗣️ **Idioma C1/N2** — Inglês C1 (IELTS 7.0+) e Japonês N2\n- 💼 **Portfólio de Alta Qualificação** — SaaS em produção, Open Source, certificações\n\n### Fases\n- **PHASE_2026** — Foundation: base técnica sólida + primeiros sistemas reais\n- **PHASE_2027** — Expansion: Cloud, ETL, complexidade real\n- **PHASE_2028** — Quality & Security: AppSec, CI/CD profissional\n- **PHASE_2029** — Mastery: arquitetura de sistemas, microserviços, certificações finais",
+    "readme": "## Master Roadmap 2030\n\nEste projeto centraliza todas as tarefas e marcos do roadmap IMIGRATION_2030, organizado por fase anual e tipo de atividade.\n\n### Pilares\n- **Diploma** — Graduação em Ciência da Computação\n- **Idioma C1/N2** — Inglês C1 (IELTS 7.0+) e Japonês N2\n- **Portfolio de Alta Qualificacao** — SaaS em produção, Open Source, certificações\n\n### Fases\n- **PHASE_2026** — Foundation: base técnica sólida + primeiros sistemas reais\n- **PHASE_2027** — Expansion: Cloud, ETL, complexidade real\n- **PHASE_2028** — Quality & Security: AppSec, CI/CD profissional\n- **PHASE_2029** — Mastery: arquitetura de sistemas, microserviços, certificações finais",
     "layout": "TABLE_LAYOUT",
     "public": false
   },
@@ -21,8 +21,8 @@
       "name": "País Alvo",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "Japão 🇯🇵",  "color": "RED",   "description": "Visto HSP — High Skilled Professional" },
-        { "name": "Canadá 🇨🇦", "color": "RED",   "description": "Express Entry — Federal Skilled Worker" },
+        { "name": "Japão",  "color": "RED",   "description": "Visto HSP — High Skilled Professional" },
+        { "name": "Canada", "color": "RED",   "description": "Express Entry — Federal Skilled Worker" },
         { "name": "Global",  "color": "BLUE",  "description": "Aplicável a múltiplos destinos" }
       ]
     },
