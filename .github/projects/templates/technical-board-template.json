@@ -38,10 +38,10 @@
       "name": "Prioridade",
       "dataType": "SINGLE_SELECT",
       "options": [
-        { "name": "🔴 Crítico",  "color": "RED",    "description": "Bloqueia outras tarefas ou é blocker de deploy" },
-        { "name": "🟠 Alto",     "color": "ORANGE", "description": "Impacto direto no core do sistema" },
-        { "name": "🟡 Médio",    "color": "YELLOW", "description": "Melhoria importante mas não urgente" },
-        { "name": "🟢 Baixo",    "color": "GREEN",  "description": "Nice-to-have ou refatoração futura" }
+        { "name": "Crítico",  "color": "RED",    "description": "Bloqueia outras tarefas ou é blocker de deploy" },
+        { "name": "Alto",     "color": "ORANGE", "description": "Impacto direto no core do sistema" },
+        { "name": "Médio",    "color": "YELLOW", "description": "Melhoria importante mas não urgente" },
+        { "name": "Baixo",    "color": "GREEN",  "description": "Nice-to-have ou refatoração futura" }
       ]
     },
     {
