@@ -10,11 +10,11 @@ O roadmap IMIGRATION_2030 é estruturado em **5 projetos GitHub** que cobrem tod
 
 | Projeto | Tipo | Repositórios | Descrição |
 |---|---|---|---|
-| [📊 Master Roadmap 2030](#-master-roadmap-2030) | Tabela | — | Visão macro de carreira — todas as fases e epics |
-| [⚙️ OpsLedger & Sentinel Agent](#-opsledger--sentinel-agent) | Board (Kanban) | `OpsLedger`, `sentinel-agent` | Backend Java/Spring Boot + agente de telemetria em C |
-| [🛒 Vendas3D](#-vendas3d) | Board (Kanban) | `Vendas3D` | E-commerce Python/FastAPI |
-| [🔒 Arthemiz & SystemHealth](#-arthemiz--systemhealth) | Board (Kanban) | `Arthemiz`, `SystemHealth` | Infra Go + monitoramento Docker |
-| [🌐 The Global Resume](#-the-global-resume) | Lista | — | Contribuições Open Source para o portfólio |
+| [Master Roadmap](#-master-roadmap) | Tabela | — | Visão macro de carreira — todas as fases e epics |
+| [OpsLedger & Sentinel Agent](#-opsledger--system-health) | Board (Kanban) | `ops-ledger`, `sentinel-agent` | Backend Java/Spring Boot + monitoramento Docker |
+| [Vendas3D](#-vendas3d) | Board (Kanban) | `shop-ecommerce` | E-commerce Python/FastAPI |
+| [Arthemiz & SystemHealth](#-arthemiz--sentinel-agent) | Board (Kanban) | `system-health` | Infra Go + agente de telemetria em C |
+| [Global Resume](#-global-resume) | Lista | — | Contribuições Open Source para o portfólio |
 
 ---
 
@@ -39,13 +39,13 @@ gh workflow run setup-imigration-projects.yml \
   -f project=master-roadmap
 ```
 
-Ou acesse: `Actions → 🚀 Setup IMIGRATION_2030 GitHub Projects → Run workflow`.
+Ou acesse: `Actions → Setup IMIGRATION_2030 GitHub Projects → Run workflow`.
 
 > **Dica:** Execute com `dry_run=true` primeiro para validar sem criar nada.
 
 ---
 
-## 📊 Master Roadmap 2030
+## Master Roadmap 2030
 
 **Tipo:** Tabela | **Layout:** `TABLE_LAYOUT`
 
@@ -55,22 +55,22 @@ Visão macro centralizada de todo o roadmap. Cada item representa uma tarefa ou 
 
 | Campo | Tipo | Opções |
 |---|---|---|
-| **Fase** | Select | `PHASE_2026` 🟢 · `PHASE_2027` 🔵 · `PHASE_2028` 🟡 · `PHASE_2029` 🔴 |
-| **País Alvo** | Select | `Japão 🇯🇵` · `Canadá 🇨🇦` · `Global 🌍` |
-| **Tipo** | Select | `Certificação 📜` · `Idioma 🗣️` · `Acadêmico 🎓` · `Tech 💻` |
+| **Fase** | Select | `PHASE_2026` · `PHASE_2027` · `PHASE_2028` · `PHASE_2029` |
+| **País Alvo** | Select | `Japão 🇯🇵` · `Canadá 🇨🇦` · `Global` |
+| **Tipo** | Select | `Certificação` · `Idioma` · `Acadêmico` · `Tech` |
 | **Épico** | Select | `TECH_STACK` · `PORTFOLIO` · `LANG_EN` · `LANG_JP` · `CERTIFICATIONS` |
-| **Pilar de Imigração** | Select | `Diploma 🎓` · `Idioma C1/N2 🗣️` · `Portfólio 💼` · `Certificação 📜` |
+| **Pilar de Imigração** | Select | `Diploma` · `Idioma C1/N2` · `Portfólio` · `Certificação` |
 | **DoD** | Texto | Definition of Done — critérios objetivos de conclusão |
 
 ### Views
 
 | View | Layout | Agrupamento/Filtro |
 |---|---|---|
-| 📋 Backlog Completo | Tabela | Todas as tarefas |
-| 📅 Timeline por Fase | Roadmap/Timeline | Agrupado por **Fase** |
-| 🏆 Priority — Certificações & Idiomas | Tabela | Filtrado: `Tipo = Certificação` ou `Tipo = Idioma` |
-| 📊 Kanban por Status | Board | Agrupado por Status |
-| 🗂 Por Épico | Tabela | Agrupado por **Épico** |
+| Backlog Completo | Tabela | Todas as tarefas |
+| Timeline por Fase | Roadmap/Timeline | Agrupado por **Fase** |
+| Priority — Certificações & Idiomas | Tabela | Filtrado: `Tipo = Certificação` ou `Tipo = Idioma` |
+| Kanban por Status | Board | Agrupado por Status |
+| Por Épico | Tabela | Agrupado por **Épico** |
 
 ### Config
 
@@ -78,7 +78,7 @@ Arquivo: [`.github/projects/configs/master-roadmap.json`](./configs/master-roadm
 
 ---
 
-## ⚙️ OpsLedger & Sentinel Agent
+## OpsLedger & Sentinel Agent
 
 **Tipo:** Board (Kanban) | **Repositórios:** `OpsLedger`, `sentinel-agent`
 
@@ -113,9 +113,9 @@ Backlog → Ready to Dev → In Progress → In Review → Done
 
 | View | Layout | Descrição |
 |---|---|---|
-| 🗂 Board Principal | Board | Kanban por Status — execução diária |
-| 📅 Por Fase | Tabela | Agrupado por fase do roadmap |
-| 🔧 Por Componente | Tabela | Separação entre OpsLedger e Sentinel Agent |
+| Board Principal | Board | Kanban por Status — execução diária |
+| Por Fase | Tabela | Agrupado por fase do roadmap |
+| Por Componente | Tabela | Separação entre OpsLedger e Sentinel Agent |
 
 ### Config
 
