@@ -163,48 +163,84 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
-          echo "🔧 Criando campo 'Fase'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2Field(input: {
-                projectId: $projectId
-                dataType: SINGLE_SELECT
-                name: "Fase"
-                singleSelectOptions: [
-                  { name: "PHASE_2026", color: GREEN,  description: "Foundation — Base técnica sólida e primeiros sistemas reais" }
-                  { name: "PHASE_2027", color: BLUE,   description: "Expansion — Cloud, ETL e complexidade real" }
-                  { name: "PHASE_2028", color: YELLOW, description: "Quality & Security — AppSec, CI/CD profissional" }
-                  { name: "PHASE_2029", color: RED,    description: "Mastery — Arquitetura, microserviços e certificações finais" }
-                ]
-              }) {
-                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+          echo "🔍 Verificando se o campo 'Fase' já existe..."
+          if gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 50) {
+                    nodes {
+                      name
+                    }
+                  }
+                }
               }
             }' \
-            -f projectId="$PROJECT_ID"
-          echo "✅ Campo 'Fase' criado"
+            -f projectId="$PROJECT_ID" \
+            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Fase"; then
+            echo "⚠️ Campo 'Fase' já existe, pulando criação."
+          else
+            echo "🔧 Criando campo 'Fase'..."
+            gh api graphql -f query='
+              mutation($projectId: ID!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: SINGLE_SELECT
+                  name: "Fase"
+                  singleSelectOptions: [
+                    { name: "PHASE_2026", color: GREEN,  description: "Foundation — Base técnica sólida e primeiros sistemas reais" }
+                    { name: "PHASE_2027", color: BLUE,   description: "Expansion — Cloud, ETL e complexidade real" }
+                    { name: "PHASE_2028", color: YELLOW, description: "Quality & Security — AppSec, CI/CD profissional" }
+                    { name: "PHASE_2029", color: RED,    description: "Mastery — Arquitetura, microserviços e certificações finais" }
+                  ]
+                }) {
+                  projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID"
+            echo "✅ Campo 'Fase' criado"
+          fi
 
       - name: Add custom fields — País Alvo
         if: env.DRY_RUN != 'true'
         run: |
           PROJECT_ID="${{ steps.create-project.outputs.project_id }}"
-          echo "🔧 Criando campo 'País Alvo'..."
-          gh api graphql -f query='
-            mutation($projectId: ID!) {
-              createProjectV2Field(input: {
-                projectId: $projectId
-                dataType: SINGLE_SELECT
-                name: "País Alvo"
-                singleSelectOptions: [
-                  { name: "Japão 🇯🇵",  color: RED,  description: "Visto HSP — High Skilled Professional" }
-                  { name: "Canadá 🇨🇦", color: RED,  description: "Express Entry — Federal Skilled Worker" }
-                  { name: "Global 🌍",  color: BLUE, description: "Aplicável a múltiplos destinos" }
-                ]
-              }) {
-                projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+          echo "🔍 Verificando se o campo 'País Alvo' já existe..."
+          if gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 50) {
+                    nodes {
+                      name
+                    }
+                  }
+                }
               }
             }' \
-            -f projectId="$PROJECT_ID"
-          echo "✅ Campo 'País Alvo' criado"
+            -f projectId="$PROJECT_ID" \
+            --jq '.data.node.fields.nodes[].name' | grep -Fxq "País Alvo"; then
+            echo "⚠️ Campo 'País Alvo' já existe, pulando criação."
+          else
+            echo "🔧 Criando campo 'País Alvo'..."
+            gh api graphql -f query='
+              mutation($projectId: ID!) {
+                createProjectV2Field(input: {
+                  projectId: $projectId
+                  dataType: SINGLE_SELECT
+                  name: "País Alvo"
+                  singleSelectOptions: [
+                    { name: "Japão 🇯🇵",  color: RED,  description: "Visto HSP — High Skilled Professional" }
+                    { name: "Canadá 🇨🇦", color: RED,  description: "Express Entry — Federal Skilled Worker" }
+                    { name: "Global 🌍",  color: BLUE, description: "Aplicável a múltiplos destinos" }
+                  ]
+                }) {
+                  projectV2Field { ... on ProjectV2SingleSelectField { id name } }
+                }
+              }' \
+              -f projectId="$PROJECT_ID"
+            echo "✅ Campo 'País Alvo' criado"
+          fi
 
       - name: Add custom fields — Tipo
         if: env.DRY_RUN != 'true'
