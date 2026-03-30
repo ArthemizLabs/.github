@@ -131,7 +131,7 @@ jobs:
               }
             }' \
             -f login="ArthemizLabs" | \
-            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Master Roadmap 2030") | .id' 2>/dev/null | head -1 || true)
+            jq -r '.data.organization.projectsV2.nodes[] | select(.title == "Master Roadmap") | .id' 2>/dev/null | head -1 || true)
 
           if [ -n "$EXISTING_ID" ] && [ "$EXISTING_ID" != "null" ]; then
             echo "Projeto 'Master Roadmap' já existe ($EXISTING_ID) — reutilizando."
@@ -150,7 +150,7 @@ jobs:
             PROJECT_URL=$(echo "$CREATE_RESULT" | jq -r '.data.createProjectV2.projectV2.url')
 
             if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
-              echo "Falha ao criar o projeto Master Roadmap 2030"
+              echo "Falha ao criar o projeto Master Roadmap"
               exit 1
             fi
 
@@ -520,7 +520,7 @@ jobs:
                 name: "Componente"
                 singleSelectOptions: [
                   { name: "OpsLedger",      color: BLUE, description: "Plataforma financeira Java/Spring Boot" }
-                  { name: "SystemHealth",   color: RED,  description: "...." }
+                  { name: "SystemHealth",   color: RED,  description: "Dashboard de observabilidade e saude dos sistemas" }
                   { name: "Shared",         color: GRAY, description: "Infraestrutura compartilhada" }
                 ]
               }) {
@@ -610,7 +610,7 @@ jobs:
           if [ "$DRY_RUN" = "true" ]; then
             echo "[DRY-RUN] Criaria projeto: 'Vendas3D' (BOARD_LAYOUT)"
             echo "[DRY-RUN] Campos: Status, Fase, Módulo, DoD, Estimativa (h), PR Link"
-            echo "[DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Modulo"
+            echo "[DRY-RUN] Views: Board Principal (BOARD_LAYOUT), Por Fase, Por Módulo"
             exit 0
           fi
 
@@ -867,7 +867,7 @@ jobs:
                 name: "Sistema"
                 singleSelectOptions: [
                   { name: "Arthemiz",     color: BLUE,  description: "DNS, proxy reverso e segurança de rede em Go" }
-                  { name: "SentinelAgent", color: GREEN, description: "..." }
+                  { name: "SentinelAgent", color: GREEN, description: "Agente de monitoramento e observabilidade" }
                   { name: "Shared",       color: GRAY,  description: "Infra e configurações compartilhadas" }
                 ]
               }) {
@@ -1160,11 +1160,11 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## The Global Resume" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Global Resume" >> "$GITHUB_STEP_SUMMARY"
           if [ "$DRY_RUN" = "true" ]; then
             echo "**Dry-run** — nenhuma alteração foi feita." >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "Lista criada e campos configurados para The Global Resume" >> "$GITHUB_STEP_SUMMARY"
+            echo "Lista criada e campos configurados para Global Resume" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
@@ -1194,7 +1194,7 @@ jobs:
           echo "| Master Roadmap | Tabela | ${{ needs.master-roadmap.result }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| OpsLedger & SystemHealth | Board (Kanban) | ${{ needs.ops-ledger_system-health.result }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Vendas3D | Board (Kanban) | ${{ needs.vendas3d.result }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Arthemiz & Sentinel Agent | Board (Kanban) | ${{ needs.arthemiz_sentinel-agent .result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Arthemiz & Sentinel Agent | Board (Kanban) | ${{ needs.arthemiz_sentinel-agent.result }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Global Resume | Lista | ${{ needs.global-resume.result }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "## Pilares de Imigração" >> "$GITHUB_STEP_SUMMARY"

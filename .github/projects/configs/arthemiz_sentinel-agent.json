@@ -1,8 +1,8 @@
 {
   "project": {
     "title": "Arthemiz & SentinelAgent",
-    "shortDescription": "Infra em Go (Arthemiz — DNS, proxy, TLS) + monitoramento Docker/observabilidade (SystemHealth). Infraestrutura e segurança de rede.",
-    "readme": "## Arthemiz & SystemHealth\n\n### Arthemiz\nCamada central de identidade, faturamento e gerenciamento de tenants. Controla tráfego, DNS e segurança de roteamento dos serviços.\n\n**Stack:** Go, Linux, Nginx (Reverse Proxy, Rate Limiting, TLS)\n\n### SystemHealth\nDashboard de observabilidade de infraestrutura. Agrega uptime, latência, taxas de erro e saúde de deploy de todos os serviços.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker, RabbitMQ\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "shortDescription": "Infra em Go (Arthemiz — DNS, proxy, TLS) + monitoramento Docker/observabilidade (SentinelAgent). Infraestrutura e segurança de rede.",
+    "readme": "## Arthemiz & SentinelAgent\n\n### Arthemiz\nCamada central de identidade, faturamento e gerenciamento de tenants. Controla tráfego, DNS e segurança de roteamento dos serviços.\n\n**Stack:** Go, Linux, Nginx (Reverse Proxy, Rate Limiting, TLS)\n\n### SentinelAgent\nDashboard de observabilidade de infraestrutura. Agrega uptime, latência, taxas de erro e saúde de deploy de todos os serviços.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker, RabbitMQ\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
     "layout": "BOARD_LAYOUT",
     "linkedRepositories": ["Arthemiz", "SystemHealth"],
     "public": false

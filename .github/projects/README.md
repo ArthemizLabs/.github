@@ -45,7 +45,7 @@ Ou acesse: `Actions → Setup IMIGRATION_2030 GitHub Projects → Run workflow`.
 
 ---
 
-## Master Roadmap 2030
+## Master Roadmap
 
 **Tipo:** Tabela | **Layout:** `TABLE_LAYOUT`
 
@@ -119,7 +119,7 @@ Backlog → Ready to Dev → In Progress → In Review → Done
 
 ### Config
 
-Arquivo: [`.github/projects/configs/ops-ledger-sentinel.json`](./configs/ops-ledger-sentinel.json)
+Arquivo: [`.github/projects/configs/ops-ledger_system-health.json`](./configs/ops-ledger_system-health.json)
 
 ---
 
@@ -195,11 +195,11 @@ Backlog → Ready to Dev → In Progress → In Review → Done
 
 ### Config
 
-Arquivo: [`.github/projects/configs/arthemiz-systemhealth.json`](./configs/arthemiz-systemhealth.json)
+Arquivo: [`.github/projects/configs/arthemiz_sentinel-agent.json`](./configs/arthemiz_sentinel-agent.json)
 
 ---
 
-## The Global Resume
+## Global Resume
 
 **Tipo:** Lista | **Layout:** `TABLE_LAYOUT`
 
@@ -251,7 +251,7 @@ Os templates abaixo servem como base para montar ou atualizar arquivos de config
 **Limitação atual do workflow**
 
 O workflow `setup-imigration-projects.yml` **não lê automaticamente** todos os arquivos em `.github/projects/configs/`.  
-Neste momento, ele cria apenas os **5 projetos pré-configurados** descritos na seção de visão geral (Master Roadmap, OpsLedger & Sentinel Agent, Vendas3D, Arthemiz & SystemHealth e The Global Resume).
+Neste momento, ele cria apenas os **5 projetos pré-configurados** descritos na seção de visão geral (Master Roadmap, OpsLedger & Sentinel Agent, Vendas3D, Arthemiz & SystemHealth e Global Resume).
 A lógica de criação desses projetos está atualmente **hardcoded no YAML do workflow**; os arquivos em `.github/projects/configs/` servem como referência/documentação e não são carregados nem aplicados automaticamente pelo workflow.
 
 Isso significa que:
@@ -280,11 +280,11 @@ Portfólio        — SaaS em produção + Open Source + Certificações
 .github/projects/
 ├── README.md                              # Esta documentação
 ├── configs/
-│   ├── master-roadmap.json                # Master Roadmap 2030
-│   ├── ops-ledger-sentinel.json           # OpsLedger & Sentinel Agent
+│   ├── master-roadmap.json                # Master Roadmap
+│   ├── ops-ledger_system-health.json       # OpsLedger & SystemHealth
 │   ├── vendas3d.json                      # Vendas3D
-│   ├── arthemiz-systemhealth.json         # Arthemiz & SystemHealth
-│   └── global-resume.json                 # The Global Resume
+│   ├── arthemiz_sentinel-agent.json        # Arthemiz & SentinelAgent
+│   └── global-resume.json                 # Global Resume
 └── templates/
     ├── technical-board-template.json      # Template para boards técnicos
     └── project-template.json              # Template genérico

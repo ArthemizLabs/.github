@@ -2,7 +2,7 @@
   "project": {
     "title": "OpsLedger & SystemHealth",
     "shortDescription": "Backend Java/Spring Boot (OpsLedger) + SystemHealth. Monitoramento financeiro.",
-    "readme": "## OpsLedger & Sentinel Agent\n\n### OpsLedger\nPlataforma de operações financeiras e ledger de auditoria para PMEs. Double-entry accounting, reconciliação e relatórios de compliance.\n\n**Stack:** Java (Spring Boot), PostgreSQL, RabbitMQ, React/TypeScript\n\n### Sentinel Agent\nAgente de telemetria em C para coleta de métricas de sistema (CPU, memória, disco) via chamadas POSIX/Linux, com envio TCP para OpsLedger.\n\n**Stack:** C, pthreads, TCP Sockets\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
+    "readme": "## OpsLedger & SystemHealth\n\n### OpsLedger\nPlataforma de operações financeiras e ledger de auditoria para PMEs. Double-entry accounting, reconciliação e relatórios de compliance.\n\n**Stack:** Java (Spring Boot), PostgreSQL, RabbitMQ, React/TypeScript\n\n### SystemHealth\nAgente de telemetria em C para coleta de métricas de sistema (CPU, memória, disco) via chamadas POSIX/Linux, com envio TCP para OpsLedger.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
     "layout": "BOARD_LAYOUT",
     "linkedRepositories": ["OpsLedger", "sentinel-agent"],
     "public": false
