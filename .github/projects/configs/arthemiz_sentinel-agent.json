@@ -1,6 +1,6 @@
 {
   "project": {
-    "title": "Arthemiz & SystemHealth",
+    "title": "Arthemiz & SentinelAgent",
     "shortDescription": "Infra em Go (Arthemiz — DNS, proxy, TLS) + monitoramento Docker/observabilidade (SystemHealth). Infraestrutura e segurança de rede.",
     "readme": "## Arthemiz & SystemHealth\n\n### Arthemiz\nCamada central de identidade, faturamento e gerenciamento de tenants. Controla tráfego, DNS e segurança de roteamento dos serviços.\n\n**Stack:** Go, Linux, Nginx (Reverse Proxy, Rate Limiting, TLS)\n\n### SystemHealth\nDashboard de observabilidade de infraestrutura. Agrega uptime, latência, taxas de erro e saúde de deploy de todos os serviços.\n\n**Stack:** Python (worker), React/Next.js (dashboard), Prometheus, Grafana, Docker, RabbitMQ\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
     "layout": "BOARD_LAYOUT",
@@ -34,7 +34,7 @@
       "dataType": "SINGLE_SELECT",
       "options": [
         { "name": "Arthemiz",     "color": "BLUE",   "description": "DNS, proxy reverso e segurança de rede em Go" },
-        { "name": "SystemHealth", "color": "GREEN",  "description": "Observabilidade, Docker e monitoramento" },
+        { "name": "SentinelAgent", "color": "GREEN",  "description": "Observabilidade, Docker e monitoramento" },
         { "name": "Shared",       "color": "GRAY",   "description": "Infra e configurações compartilhadas" }
       ]
     },
@@ -68,25 +68,25 @@
   ],
   "views": [
     {
-      "name": "🗂 Board Principal",
+      "name": "Board Principal",
       "layout": "BOARD_LAYOUT",
       "groupBy": "Status",
       "description": "Board Kanban — visão de execução diária"
     },
     {
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Tabela agrupada por fase do roadmap"
     },
     {
-      "name": "🖥 Por Sistema",
+      "name": "Por Sistema",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Sistema",
       "description": "Separação de tarefas entre Arthemiz e SystemHealth"
     },
     {
-      "name": "🔒 Segurança & Infra",
+      "name": "Segurança & Infra",
       "layout": "TABLE_LAYOUT",
       "filterBy": ["Camada:Security", "Camada:Network", "Camada:Container"],
       "description": "Filtrado para tarefas de segurança e infraestrutura"
