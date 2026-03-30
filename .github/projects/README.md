@@ -235,7 +235,8 @@ Os templates abaixo servem como base para montar ou atualizar arquivos de config
 ⚠️ **Limitação atual do workflow**
 
 O workflow `setup-imigration-projects.yml` **não lê automaticamente** todos os arquivos em `.github/projects/configs/`.  
-Neste momento, ele cria apenas os **5 projetos pré-configurados** descritos na seção de visão geral (Master Roadmap, OpsLedger & Sentinel Agent, Vendas3D, Arthemiz & SystemHealth e The Global Resume), usando arquivos JSON específicos.
+Neste momento, ele cria apenas os **5 projetos pré-configurados** descritos na seção de visão geral (Master Roadmap, OpsLedger & Sentinel Agent, Vendas3D, Arthemiz & SystemHealth e The Global Resume).
+A lógica de criação desses projetos está atualmente **hardcoded no YAML do workflow**; os arquivos em `.github/projects/configs/` servem como referência/documentação e não são carregados nem aplicados automaticamente pelo workflow.
 
 Isso significa que:
 
