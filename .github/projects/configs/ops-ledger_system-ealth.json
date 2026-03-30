@@ -1,7 +1,7 @@
 {
   "project": {
-    "title": "OpsLedger & Sentinel Agent",
-    "shortDescription": "Backend Java/Spring Boot (OpsLedger) + agente de telemetria em C (Sentinel). Monitoramento financeiro e ingestão de métricas.",
+    "title": "OpsLedger & SystemHealth",
+    "shortDescription": "Backend Java/Spring Boot (OpsLedger) + SystemHealth. Monitoramento financeiro.",
     "readme": "## OpsLedger & Sentinel Agent\n\n### OpsLedger\nPlataforma de operações financeiras e ledger de auditoria para PMEs. Double-entry accounting, reconciliação e relatórios de compliance.\n\n**Stack:** Java (Spring Boot), PostgreSQL, RabbitMQ, React/TypeScript\n\n### Sentinel Agent\nAgente de telemetria em C para coleta de métricas de sistema (CPU, memória, disco) via chamadas POSIX/Linux, com envio TCP para OpsLedger.\n\n**Stack:** C, pthreads, TCP Sockets\n\n### Workflow\nEste board segue o workflow padrão sênior com Definition of Done (DoD) explícito em cada issue antes de mover para *Ready to Dev*.",
     "layout": "BOARD_LAYOUT",
     "linkedRepositories": ["OpsLedger", "sentinel-agent"],
@@ -34,7 +34,7 @@
       "dataType": "SINGLE_SELECT",
       "options": [
         { "name": "OpsLedger",      "color": "BLUE",   "description": "Plataforma financeira Java/Spring Boot" },
-        { "name": "Sentinel Agent", "color": "RED",    "description": "Agente de telemetria em C" },
+        { "name": "SystemHealth",   "color": "RED",    "description": "Agente de telemetria em C" },
         { "name": "Shared",         "color": "GRAY",   "description": "Infraestrutura e DevOps compartilhados" }
       ]
     },
@@ -56,19 +56,19 @@
   ],
   "views": [
     {
-      "name": "🗂 Board Principal",
+      "name": "Board Principal",
       "layout": "BOARD_LAYOUT",
       "groupBy": "Status",
       "description": "Board Kanban — visão de execução diária"
     },
     {
-      "name": "📅 Por Fase",
+      "name": "Por Fase",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Fase",
       "description": "Tabela agrupada por fase do roadmap"
     },
     {
-      "name": "🔧 Por Componente",
+      "name": "Por Componente",
       "layout": "TABLE_LAYOUT",
       "groupBy": "Componente",
       "description": "Separação de tarefas por OpsLedger vs Sentinel Agent"
