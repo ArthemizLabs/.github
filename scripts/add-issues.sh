@@ -115,6 +115,11 @@ get_project_node_id() {
     }
   ' --jq '.data.organization.projectV2.id')
 
+  # Treat missing or null project ID as an error
+  if [ -z "$project_id" ] || [ "$project_id" = "null" ]; then
+    echo "Error: Could not find project with number $project_number in organization $ORG (project ID is null)" >&2
+    return 1
+  fi
   echo "$project_id"
 }
 
