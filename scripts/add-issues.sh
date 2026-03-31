@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to add GitHub issues to Projects v2
-# Usage: ./add-issues-to-projects.sh
+# Usage: ./add-issues.sh
 
 set -e
 
@@ -10,7 +10,7 @@ REPO=".github"
 
 # Check if PROJECTS_TOKEN is set
 if [ -z "$PROJECTS_TOKEN" ]; then
-  echo "❌ Error: PROJECTS_TOKEN environment variable is not set"
+  echo "Error: PROJECTS_TOKEN environment variable is not set"
   echo "Please set it with: export PROJECTS_TOKEN=your_token_here"
   exit 1
 fi
@@ -75,7 +75,7 @@ add_issue_to_project() {
     }
   ' --silent
 
-  echo "✅ Added issue #$issue_number to project"
+  echo "Added issue #$issue_number to project"
 }
 
 # Function to add issues by label to a project
@@ -83,13 +83,13 @@ add_issues_by_label() {
   local label="$1"
   local project_title="$2"
 
-  echo "📦 Adding issues with label '$label' to project '$project_title'..."
+  echo "Adding issues with label '$label' to project '$project_title'..."
 
   # Get project number
   local project_number=$(get_project_id "$project_title")
 
   if [ -z "$project_number" ]; then
-    echo "❌ Error: Project '$project_title' not found"
+    echo "Error: Project '$project_title' not found"
     return 1
   fi
 
@@ -99,7 +99,7 @@ add_issues_by_label() {
   local project_id=$(get_project_node_id "$project_number")
 
   if [ -z "$project_id" ]; then
-    echo "❌ Error: Could not get project ID"
+    echo "Error: Could not get project ID"
     return 1
   fi
 
@@ -120,16 +120,16 @@ add_issues_by_label() {
     sleep 0.5  # Rate limiting
   done
 
-  echo "✅ Added $count issues to project '$project_title'"
+  echo "Added $count issues to project '$project_title'"
 }
 
 # Main script
-echo "🚀 GitHub Projects Issue Importer"
+echo "GitHub Projects Issue Importer"
 echo "=================================="
 echo ""
 
 # Add all issues to Master project
-echo "1️⃣ Adding all issues to Master project..."
+echo "1️Adding all issues to Master project..."
 add_issues_by_label "epic:tech-stack" "Master — Master"
 add_issues_by_label "epic:portfolio" "Master — Master"
 add_issues_by_label "epic:lang-en" "Master — Master"
@@ -137,7 +137,7 @@ add_issues_by_label "epic:lang-jp" "Master — Master"
 echo ""
 
 # Add project-specific issues to product projects
-echo "2️⃣ Adding project-specific issues to product projects..."
+echo "2️Adding project-specific issues to product projects..."
 add_issues_by_label "project:arthemiz" "Arthemiz — Project"
 add_issues_by_label "project:opsledger" "OpsLedger — Project"
 add_issues_by_label "project:vendas3d" "Vendas3D — Project"
@@ -146,7 +146,7 @@ add_issues_by_label "project:sentinel-agent" "Sentinel Agent — Project"
 add_issues_by_label "project:open-source" "Open Source — Project"
 echo ""
 
-echo "✨ Done! All issues have been added to their respective projects."
+echo "Done! All issues have been added to their respective projects."
 echo ""
 echo "Next steps:"
 echo "1. Go to each project and configure the custom fields for each issue"
