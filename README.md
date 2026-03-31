@@ -101,6 +101,17 @@ Security vulnerabilities must be reported privately per the [Security Policy](./
 
 ---
 
+## Project Management
+
+ArthemizLabs uses GitHub Projects v2 for tracking work across the organization. See [GitHub Projects Setup Guide](./docs/GITHUB_PROJECTS_SETUP.md) for information on:
+
+- Setting up organization-wide projects
+- Creating and managing issues from the project documentation
+- Configuring custom fields and views
+- Tracking progress across phases and epics
+
+The detailed roadmap and task breakdown is documented in [PROJECT_DOCUMENTATION.md](./PROJECT_DOCUMENTATION.md).
+
 ## Repository Structure
 
 This repository (`.github`) serves as the engineering governance layer for the ArthemizLabs organization. It contains:
@@ -108,6 +119,7 @@ This repository (`.github`) serves as the engineering governance layer for the A
 - Organization-wide GitHub defaults (issue templates, PR templates, CI workflows)
 - Engineering policies (contributing guidelines, security policy, code of conduct)
 - The organization profile (this file)
+- GitHub Projects setup automation and documentation
 
 Repository-specific documentation, architecture decision records, and runbooks live in their respective repositories.
 
