@@ -1,4 +1,4 @@
-name: Create Issues from Documentation
+name: Create Issues
 
 on:
   workflow_dispatch:
