@@ -1,0 +1,347 @@
+name: Create Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      epic_selection:
+        description: 'Select which epic to create issues for'
+        required: true
+        type: choice
+        options:
+          - 'all'
+          - 'TECH_STACK'
+          - 'PORTFOLIO'
+          - 'LANG_EN'
+          - 'LANG_JP'
+          - 'CERTIFICATIONS'
+        default: 'all'
+      dry_run:
+        description: 'Dry run (print issues without creating them)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Bootstrap labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Ensure all required labels exist before creating issues
+          # This prevents errors when applying labels to issues
+
+          # Epic labels
+          gh label create "epic:tech-stack" --color "0052CC" --description "Technical stack evolution tasks" --force
+          gh label create "epic:portfolio" --color "00875A" --description "Portfolio project tasks" --force
+          gh label create "epic:lang-en" --color "FFAB00" --description "English language tasks" --force
+          gh label create "epic:lang-jp" --color "FF5630" --description "Japanese language tasks" --force
+          gh label create "epic:certifications" --color "6554C0" --description "Certification-related tasks" --force
+
+          # Phase labels
+          gh label create "phase-2026" --color "B3D4FF" --description "Foundation phase" --force
+          gh label create "phase-2027" --color "0052CC" --description "Expansion phase" --force
+          gh label create "phase-2028" --color "00875A" --description "Quality & Security phase" --force
+          gh label create "phase-2029" --color "FFAB00" --description "Mastery phase" --force
+
+          # Project labels
+          gh label create "project:arthemiz" --color "0052CC" --force
+          gh label create "project:opsledger" --color "00875A" --force
+          gh label create "project:vendas3d" --color "FFAB00" --force
+          gh label create "project:systemhealth" --color "FF5630" --force
+          gh label create "project:sentinel-agent" --color "6554C0" --force
+          gh label create "project:open-source" --color "172B4D" --force
+
+          echo "All labels bootstrapped successfully"
+
+      - name: Create issues parser script
+        run: |
+          cat > create_issues.py << 'PYTHON_SCRIPT'
+          #!/usr/bin/env python3
+          import os
+          import sys
+          import json
+          import subprocess
+          from typing import List, Dict, Optional
+
+          # Task definitions aligned with PROJECT_DOCUMENTATION.md
+          TASKS = {
+              "TECH_STACK": [
+                  {"id": "TS-01", "title": "Dominar Linguagem Tipada", "description": "Aprofundar em Java (Spring) ou C# (.NET) ou TypeScript (NestJS) com foco em OOP e Design Patterns.", "phase": "PHASE_2026"},
+                  {"id": "TS-02", "title": "SQL Avançado", "description": "Stored Procedures, Triggers, Indexing Strategy e Query Optimization.", "phase": "PHASE_2026"},
+                  {"id": "TS-03", "title": "API Design Patterns", "description": "Implementar padrões RESTful estritos, HATEOAS e conceitos de Idempotência.", "phase": "PHASE_2026"},
+                  {"id": "TS-04", "title": "Docker & Containerization", "description": "Criar Dockerfiles multi-stage otimizados e docker-compose para ambiente dev.", "phase": "PHASE_2027"},
+                  {"id": "TS-05", "title": "Cloud Associate (AWS/Azure)", "description": "Estudo para certificação de arquiteto associado (foco em Compute, Storage, Network).", "phase": "PHASE_2027"},
+                  {"id": "TS-06", "title": "Pipeline ETL com Python", "description": "Scripting em Python (Pandas/Polars) para processar logs brutos e salvar em banco analítico.", "phase": "PHASE_2027"},
+                  {"id": "TS-07", "title": "AppSec & OWASP Top 10", "description": "Implementar correções para XSS, Injection, Broken Auth no projeto principal.", "phase": "PHASE_2028"},
+                  {"id": "TS-08", "title": "CI/CD Pipelines", "description": "Configurar GitHub Actions para testes automáticos, linting e deploy em staging.", "phase": "PHASE_2028"},
+                  {"id": "TS-09", "title": "System Design", "description": "Estudar Caching (Redis), Load Balancers, Sharding e Teorema CAP.", "phase": "PHASE_2029"},
+              ],
+              "PORTFOLIO_Arthemiz": [
+                  {"id": "PRJ-01.1", "title": "MVP Domínios", "description": "Usar CLI em Go para consultar registros (A, CNAME, MX) via Cloudflare API.", "phase": "PHASE_2026", "project": "Arthemiz"},
+                  {"id": "PRJ-01.2", "title": "Proxy Reverse", "description": "Implementar Proxy reverse para logging estruturado.", "phase": "PHASE_2026", "project": "Arthemiz"},
+                  {"id": "PRJ-01.3", "title": "Autenticação", "description": "Auth básica + permissões iniciais.", "phase": "PHASE_2026", "project": "Arthemiz"},
+                  {"id": "PRJ-01.4", "title": "Segurança", "description": "Implementação de Logs de Auditoria (quem alterou o quê e quando).", "phase": "PHASE_2027", "project": "Arthemiz"},
+                  {"id": "PRJ-01.5", "title": "Vercel Edge Functions", "description": "Dashboard para visualizar o status de propagação em diferentes regiões do mundo.", "phase": "PHASE_2027", "project": "Arthemiz"},
+                  {"id": "PRJ-01.6", "title": "Multi-tenant", "description": "Suporte a múltiplos domínios/clientes.", "phase": "PHASE_2028", "project": "Arthemiz"},
+              ],
+              "PORTFOLIO_OpsLedger": [
+                  {"id": "PRJ-02.1", "title": "MVP Monólito", "description": "API REST em Java (Spring Boot) para cadastro de servidores + recebimento de métricas básicas.", "phase": "PHASE_2026", "project": "OpsLedger"},
+                  {"id": "PRJ-02.2", "title": "Dashboard React", "description": "Dashboard em React + TypeScript com WebSockets para métricas em tempo real.", "phase": "PHASE_2026", "project": "OpsLedger"},
+                  {"id": "PRJ-02.3", "title": "Autenticação JWT", "description": "Implementar JWT + RBAC com roles (ADMIN, USER). Auth básica + permissões.", "phase": "PHASE_2026", "project": "OpsLedger"},
+                  {"id": "PRJ-02.4", "title": "Deploy", "description": "Deploy em AWS EC2 com Docker + Nginx configurado manualmente.", "phase": "PHASE_2027", "project": "OpsLedger"},
+                  {"id": "PRJ-02.5", "title": "Ingestão Assíncrona", "description": "Worker Python + RabbitMQ para processamento de logs/métricas pesadas.", "phase": "PHASE_2028", "project": "OpsLedger"},
+                  {"id": "PRJ-02.6", "title": "Observabilidade", "description": "Integração com Prometheus/Grafana.", "phase": "PHASE_2028", "project": "OpsLedger"},
+                  {"id": "PRJ-02.7", "title": "Multi-tenant SaaS", "description": "Implementar isolamento por cliente.", "phase": "PHASE_2029", "project": "OpsLedger"},
+              ],
+              "PORTFOLIO_Vendas3D": [
+                  {"id": "PRJ-03.1", "title": "Core Backend & Catálogo", "description": "Estruturar API RESTful com modelagem de dados para Produtos, Preços, Materiais (Filamentos) e Variantes (Cores/Tamanhos).", "phase": "PHASE_2026", "project": "Vendas3D"},
+                  {"id": "PRJ-03.2", "title": "Fila de Produção", "description": "Sistema de status (Pendente -> Imprimindo -> Acabamento -> Enviado) com notificações e relatórios.", "phase": "PHASE_2026", "project": "Vendas3D"},
+                  {"id": "PRJ-03.3", "title": "Business Logic", "description": "Algoritmo para calcular preço baseado em (gramas de filamento * custo) + (horas de impressão * custo_energia) + margem de lucro.", "phase": "PHASE_2027", "project": "Vendas3D"},
+                  {"id": "PRJ-03.4", "title": "Gestão de Inventário & Pedidos", "description": "Controle de estoque de filamento. Deduzir gramas do rolo virtual automaticamente após cada pedido confirmado (evitar Race Conditions). Fluxo completo de pedidos.", "phase": "PHASE_2027", "project": "Vendas3D"},
+                  {"id": "PRJ-03.5", "title": "PCI Compliance e Webhooks", "description": "Integração segura com Stripe/Paypal API. Criar endpoint seguro (assinatura HMAC) para receber confirmação de pagamento e liberar pedido na fila.", "phase": "PHASE_2027", "project": "Vendas3D"},
+                  {"id": "PRJ-03.6", "title": "Hardening de Segurança", "description": "Rate limiting, validação de inputs, logs estruturados.", "phase": "PHASE_2028", "project": "Vendas3D"},
+                  {"id": "PRJ-03.7", "title": "API Pública", "description": "Endpoints documentados para parceiros e revendedores.", "phase": "PHASE_2029", "project": "Vendas3D"},
+                  {"id": "PRJ-03.8", "title": "White-label", "description": "Permitir que outros lojistas usem a plataforma.", "phase": "PHASE_2029", "project": "Vendas3D"},
+              ],
+              "PORTFOLIO_SystemHealth": [
+                  {"id": "PRJ-04.1", "title": "MVP Monólito", "description": "API CRUD para cadastrar servidores e receber heartbeats (sinais de vida). Auth simples.", "phase": "PHASE_2026", "project": "SystemHealth"},
+                  {"id": "PRJ-04.2", "title": "Front-end Dashboard", "description": "Interface em React/Next.js para visualizar status dos servidores em tempo real.", "phase": "PHASE_2026", "project": "SystemHealth"},
+                  {"id": "PRJ-04.3", "title": "Módulo de Ingestão de Dados", "description": "Worker em Python que recebe logs via fila (RabbitMQ) e processa assincronamente.", "phase": "PHASE_2027", "project": "SystemHealth"},
+                  {"id": "PRJ-04.4", "title": "Deploy Cloud (IaaS)", "description": "Subir o projeto em uma VPS (EC2/DigitalOcean) configurando Nginx e firewall Linux manualmente.", "phase": "PHASE_2027", "project": "SystemHealth"},
+                  {"id": "PRJ-04.5", "title": "Hardening de Segurança", "description": "Implementar OAuth2/OIDC, Rate Limiting, rotação de logs e auditoria.", "phase": "PHASE_2028", "project": "SystemHealth"},
+                  {"id": "PRJ-04.6", "title": "Refatoração Microserviços", "description": "Separar o serviço de Auth e o de Ingestão do monólito principal.", "phase": "PHASE_2028", "project": "SystemHealth"},
+              ],
+              "PORTFOLIO_Sentinel": [
+                  {"id": "PRJ-05.1", "title": "Coleta Local", "description": "Coletar CPU, memória e disco via chamadas POSIX/Linux.", "phase": "PHASE_2027", "project": "Sentinel Agent"},
+                  {"id": "PRJ-05.2", "title": "Comunicação Socket", "description": "Enviar dados via TCP para OpsLedger.", "phase": "PHASE_2028", "project": "Sentinel Agent"},
+                  {"id": "PRJ-05.3", "title": "Serialização", "description": "Implementar JSON leve ou protocolo binário próprio.", "phase": "PHASE_2028", "project": "Sentinel Agent"},
+                  {"id": "PRJ-05.4", "title": "Threads & Concorrência", "description": "Coleta paralela de métricas com pthreads.", "phase": "PHASE_2029", "project": "Sentinel Agent"},
+                  {"id": "PRJ-05.5", "title": "Hardening & Performance", "description": "Otimização de memória + testes de carga + criptografia TLS.", "phase": "PHASE_2029", "project": "Sentinel Agent"},
+              ],
+              "PORTFOLIO_OpenSource": [
+                  {"id": "PRJ-06.1", "title": "Hunting", "description": "Identificar 3 projetos (ex: NestJS, Spring Security ou Terraform Providers) com a tag good-first-issue ou help-wanted. Resolver Issues Simples.", "phase": "PHASE_2026", "project": "Open Source"},
+                  {"id": "PRJ-06.2", "title": "Reprodução", "description": "Clonar, configurar (Docker) e reproduzir o bug na issue.", "phase": "PHASE_2027", "project": "Open Source"},
+                  {"id": "PRJ-06.3", "title": "Code", "description": "Submeter um Pull Request que resolva um bug ou melhore a documentação técnica.", "phase": "PHASE_2028", "project": "Open Source"},
+                  {"id": "PRJ-06.4", "title": "Community", "description": "Participar de discussões em Issues ou no Discord oficial do projeto.", "phase": "PHASE_2028", "project": "Open Source"},
+                  {"id": "PRJ-06.5", "title": "Manutenção", "description": "Participar de módulos relevantes.", "phase": "PHASE_2029", "project": "Open Source"},
+              ],
+              "LANG_EN": [
+                  {"id": "EN-01", "title": "Grammar Core", "description": "Focar em Cambridge Grammar in Use para base.", "phase": "PHASE_2026"},
+                  {"id": "EN-02", "title": "Writing Task", "description": "Criar textos/redações.", "phase": "PHASE_2026"},
+                  {"id": "EN-03", "title": "Listening/Reading", "description": "Shadowing technique com podcasts como Syntax.fm para pegar gírias de dev. Ler 1 livro técnico (ex: Clean Code) em inglês por semestre.", "phase": "PHASE_2026"},
+                  {"id": "EN-04", "title": "Simulados", "description": "Realizar testes de nível.", "phase": "PHASE_2027"},
+                  {"id": "EN-05", "title": "Writing Task 2", "description": "Criar documentações técnicas específicas.", "phase": "PHASE_2027"},
+                  {"id": "EN-06", "title": "Diagnóstico IELTS", "description": "Aumentar nível.", "phase": "PHASE_2027"},
+                  {"id": "EN-07", "title": "Speaking B2", "description": "Ter fluência da fala.", "phase": "PHASE_2027"},
+                  {"id": "EN-08", "title": "Certificação IELTS (Treino)", "description": "Simulados focados nas bandas 7.5+.", "phase": "PHASE_2028"},
+                  {"id": "EN-09", "title": "Conversação C1/C2", "description": "Aulas de conversação ou prática semanal focada em explicar códigos em inglês.", "phase": "PHASE_2028"},
+                  {"id": "EN-10", "title": "IELTS Oficial", "description": "Realizar a prova.", "phase": "PHASE_2029"},
+              ],
+              "LANG_JP": [
+                  {"id": "JP-01", "title": "Hiragana/Katakana", "description": "Memorização completa dos alfabetos fonéticos.", "phase": "PHASE_2026"},
+                  {"id": "JP-02", "title": "Listening", "description": "Método AJATT (All Japanese All The Time) para acostumar o ouvido aos fonemas.", "phase": "PHASE_2026"},
+                  {"id": "JP-03", "title": "Kanji Core", "description": "Memorização de 500 kanjis via Anki.", "phase": "PHASE_2026"},
+                  {"id": "JP-04", "title": "Genki I", "description": "Gramática básica e vocabulário de sobrevivência.", "phase": "PHASE_2027"},
+                  {"id": "JP-05", "title": "Genki II", "description": "Gramática avançada e vocabulário técnico.", "phase": "PHASE_2027"},
+                  {"id": "JP-06", "title": "Reading", "description": "Acostumar com a leitura técnica.", "phase": "PHASE_2027"},
+                  {"id": "JP-07", "title": "Simulados JLPT", "description": "Realizar testes de nível.", "phase": "PHASE_2027"},
+                  {"id": "JP-08", "title": "JLPT N4 (Básico Sólido)", "description": "Conjugações verbais e partículas complexas. Meta: passar na prova oficial.", "phase": "PHASE_2027"},
+                  {"id": "JP-09", "title": "Grammar N3", "description": "Domínio gramatical completo.", "phase": "PHASE_2028"},
+                  {"id": "JP-10", "title": "JLPT N3 (Intermediário)", "description": "Leitura de textos técnicos simples e conversação do dia a dia.", "phase": "PHASE_2028"},
+                  {"id": "JP-11", "title": "JLPT Oficial", "description": "Realizar a prova.", "phase": "PHASE_2029"},
+              ],
+              "CERTIFICATIONS": [
+                  # Infra/Cloud
+                  {"id": "CERT-01", "title": "AWS Certified Cloud Practitioner", "description": "Fácil, para ter o selo inicial e base de conhecimento AWS. Tópicos: EC2, S3, IAM, preços e fundamentos de nuvem.", "phase": "PHASE_2026"},
+                  {"id": "CERT-02", "title": "AWS Solutions Architect Associate", "description": "Arquitetura resiliente e altamente disponível. Tópicos: EC2, Load Balancer, Auto Scaling, VPC, Subnets, IAM e Storage (S3, EBS).", "phase": "PHASE_2027"},
+                  {"id": "CERT-03", "title": "Azure Fundamentals (AZ-900)", "description": "Fundamentos de nuvem Microsoft. Tópicos: serviços principais Azure, segurança, privacidade, compliance e preços.", "phase": "PHASE_2027"},
+                  {"id": "CERT-04", "title": "HashiCorp Terraform Associate", "description": "Infraestrutura como Código (IaC). Tópicos: Workflow, Modules, State Management e Providers.", "phase": "PHASE_2027"},
+                  # Segurança/Ágil
+                  {"id": "CERT-05", "title": "CertiProf Scrum Foundation", "description": "Vitória rápida (Quick Win) em Metodologias Ágeis. Tópicos: Papéis, Artefatos e Cerimônias do Scrum.", "phase": "PHASE_2026"},
+                  {"id": "CERT-06", "title": "CompTIA Security+", "description": "Base defensiva de cibersegurança reconhecida globalmente. Tópicos: Ameaças, ataques, vulnerabilidades, criptografia, PKI, e Segurança de Rede.", "phase": "PHASE_2028"},
+                  {"id": "CERT-07", "title": "CKAD – Certified Kubernetes Application Developer", "description": "Deploy e manutenção de aplicações cloud-native em Kubernetes. Tópicos: Pods, Deployments, ReplicaSets.", "phase": "PHASE_2029"},
+                  # Banco de Dados / Java
+                  {"id": "CERT-08", "title": "Oracle Database SQL (1Z0-071)", "description": "Domínio absoluto de consultas relacionais. Tópicos: Junções complexas, subqueries, modelagem de dados, DDL/DML, e controle de transações.", "phase": "PHASE_2026"},
+                  {"id": "CERT-09", "title": "Oracle Certified Associate – Java (1Z0-808)", "description": "Valida a base da Linguagem Tipada. Tópicos: OOP avançado, Java Core, Collections, Exceptions e Streams.", "phase": "PHASE_2026"},
+                  {"id": "CERT-10", "title": "Oracle Certified Professional – Java SE 11/17 Developer", "description": "Padrão ouro corporativo para desenvolvedores Java. Tópicos: Concorrência, Módulos, I/O, NIO.2, JDBC e Design Patterns aplicados.", "phase": "PHASE_2027"},
+                  {"id": "CERT-11", "title": "VMware Certified Spring Professional", "description": "Domínio do framework mais usado no mundo corporativo Java. Tópicos: Injeção de Dependência, Spring MVC, Spring Security, Spring Data JPA e Spring Boot Actuator.", "phase": "PHASE_2028"},
+                  # Imigração
+                  {"id": "CERT-12", "title": "FE – Fundamental IT Engineer Examination", "description": "Prova nacional de TI do Japão. Facilita o visto HSP. Exige N2 de leitura. Engloba Arquitetura de Computadores, Algoritmos, Estrutura de Dados e Estratégia de Negócios.", "phase": "PHASE_2029"},
+              ],
+          }
+
+          def get_epic_label(epic: str) -> str:
+              """Get the epic label."""
+              epic_map = {
+                  "TECH_STACK": "epic:tech-stack",
+                  "PORTFOLIO_Arthemiz": "epic:portfolio",
+                  "PORTFOLIO_OpsLedger": "epic:portfolio",
+                  "PORTFOLIO_Vendas3D": "epic:portfolio",
+                  "PORTFOLIO_SystemHealth": "epic:portfolio",
+                  "PORTFOLIO_Sentinel": "epic:portfolio",
+                  "PORTFOLIO_OpenSource": "epic:portfolio",
+                  "LANG_EN": "epic:lang-en",
+                  "LANG_JP": "epic:lang-jp",
+                  "CERTIFICATIONS": "epic:certifications",
+              }
+              return epic_map.get(epic, "epic:other")
+
+          def get_phase_label(phase: str) -> str:
+              """Get the phase label."""
+              return phase.lower().replace("_", "-")
+
+          def get_project_label(project: Optional[str]) -> Optional[str]:
+              """Get the project label."""
+              if not project:
+                  return None
+              return f"project:{project.lower().replace(' ', '-')}"
+
+          def issue_exists(title: str) -> bool:
+              """Check if an issue with the given title already exists."""
+              cmd = [
+                  "gh", "issue", "list",
+                  "--search", f'"{title}" in:title',
+                  "--state", "all",
+                  "--json", "title",
+                  "--limit", "5",
+              ]
+              try:
+                  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                  issues = json.loads(result.stdout)
+                  return any(i["title"] == title for i in issues)
+              except (subprocess.CalledProcessError, json.JSONDecodeError):
+                  return False
+
+          def create_issue(task: Dict, epic: str, dry_run: bool = False) -> None:
+              """Create a GitHub issue from a task."""
+              task_id = task["id"]
+              title = f"[{task_id}] {task['title']}"
+
+              # Build description
+              description = f"**ID:** {task_id}\\n"
+              description += f"**Fase:** {task['phase']}\\n"
+              if 'project' in task:
+                  description += f"**Projeto:** {task['project']}\\n"
+              description += f"\\n{task['description']}"
+
+              # Build labels
+              labels = [get_epic_label(epic), get_phase_label(task['phase'])]
+              if 'project' in task:
+                  project_label = get_project_label(task['project'])
+                  if project_label:
+                      labels.append(project_label)
+
+              labels_str = ",".join(labels)
+
+              if dry_run:
+                  print(f"[DRY RUN] Would create issue:")
+                  print(f"  Title: {title}")
+                  print(f"  Labels: {labels_str}")
+                  print(f"  Description: {description[:100]}...")
+                  print()
+              else:
+                  # Skip if issue already exists (idempotent)
+                  if issue_exists(title):
+                      print(f"Skipped (already exists): {title}")
+                      return
+
+                  # Create the issue using gh CLI
+                  cmd = [
+                      "gh", "issue", "create",
+                      "--title", title,
+                      "--body", description,
+                      "--label", labels_str
+                  ]
+
+                  try:
+                      result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                      print(f"Created issue: {title}")
+                      print(f"URL: {result.stdout.strip()}")
+                  except subprocess.CalledProcessError as e:
+                      print(f"Failed to create issue: {title}")
+                      print(f"Error: {e.stderr}")
+
+          def main():
+              epic_selection = os.environ.get("EPIC_SELECTION", "all")
+              dry_run = os.environ.get("DRY_RUN", "false").lower() == "true"
+
+              print(f"Epic selection: {epic_selection}")
+              print(f"Dry run: {dry_run}")
+              print()
+
+              epics_to_process = []
+
+              if epic_selection == "all":
+                  epics_to_process = list(TASKS.keys())
+              elif epic_selection == "PORTFOLIO":
+                  epics_to_process = [k for k in TASKS.keys() if k.startswith("PORTFOLIO_")]
+              else:
+                  # Find matching epic
+                  for key in TASKS.keys():
+                      if key == epic_selection or key.startswith(f"{epic_selection}_"):
+                          epics_to_process.append(key)
+
+              if not epics_to_process:
+                  print(f"No epics found for selection: {epic_selection}")
+                  sys.exit(1)
+
+              print(f"Processing epics: {epics_to_process}")
+              print()
+
+              total_tasks = 0
+              for epic in epics_to_process:
+                  tasks = TASKS[epic]
+                  print(f"Processing {epic}: {len(tasks)} tasks")
+                  for task in tasks:
+                      create_issue(task, epic, dry_run)
+                      total_tasks += 1
+
+              print()
+              print(f"{'[DRY RUN] Would process' if dry_run else 'Processed'} {total_tasks} tasks")
+
+          if __name__ == "__main__":
+              main()
+          PYTHON_SCRIPT
+
+          chmod +x create_issues.py
+
+      - name: Create issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EPIC_SELECTION: ${{ github.event.inputs.epic_selection }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          python3 create_issues.py
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## GitHub Issues Creation Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "**Dry run mode:** No issues were actually created." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Run the workflow again with 'dry_run' set to 'false' to create the issues." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Issues have been created from the predefined task list." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+            echo "1. Navigate to the Issues tab to view all created issues" >> $GITHUB_STEP_SUMMARY
+            echo "2. Add issues to the appropriate GitHub Projects" >> $GITHUB_STEP_SUMMARY
+            echo "3. Configure the custom fields for each issue in the Projects" >> $GITHUB_STEP_SUMMARY
+          fi
