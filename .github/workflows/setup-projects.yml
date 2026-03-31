@@ -151,11 +151,11 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Épico"
                   singleSelectOptions: [
-                    {name: "TECH_STACK", color: BLUE},
-                    {name: "PORTFOLIO", color: GREEN},
-                    {name: "LANG_EN", color: YELLOW},
-                    {name: "LANG_JP", color: PINK},
-                    {name: "CERTIFICATIONS", color: PURPLE}
+                    {name: "TECH_STACK", color: BLUE, description: “Evolução técnica (linguagens, arquitetura, DevOps e fundamentos).”},
+                    {name: "PORTFOLIO", color: GREEN, description: “Entrega e evolução dos projetos.”},
+                    {name: "LANG_EN", color: YELLOW, “Evolução do inglês técnico e certificação (IELTS).”},
+                    {name: "LANG_JP", color: PINK, description: “Evolução do japonês e certificação (FE).”},
+                    {name: "CERTIFICATIONS", color: PURPLE, description: “Trilha de certificações (cloud, segurança, banco, Java e imigração).”}
                   ]
                 }) {
                   projectV2Field {
@@ -180,10 +180,10 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Fase"
                   singleSelectOptions: [
-                    {name: "PHASE_2026", color: GRAY},
-                    {name: "PHASE_2027", color: BLUE},
-                    {name: "PHASE_2028", color: GREEN},
-                    {name: "PHASE_2029", color: YELLOW}
+                    {name: "PHASE_2026", color: GRAY, description: “Fundação: base técnica + primeiros sistemas reais.”},
+                    {name: "PHASE_2027", color: BLUE, description: “Expansão: cloud, dados/ETL, RBAC e japonês N5/N4.”},
+                    {name: "PHASE_2028", color: GREEN, description: “Qualidade & Segurança: AppSec, CI/CD e hardening.”},
+                    {name: "PHASE_2029", color: YELLOW, description: “Maestria: system design, microserviços e metas finais.”}
                   ]
                 }) {
                   projectV2Field {
@@ -208,13 +208,13 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Projeto"
                   singleSelectOptions: [
-                    {name: "Arthemiz", color: BLUE},
-                    {name: "OpsLedger", color: GREEN},
-                    {name: "Vendas3D", color: YELLOW},
-                    {name: "SystemHealth", color: ORANGE},
-                    {name: "Sentinel Agent", color: PINK},
-                    {name: "Open Source", color: PURPLE},
-                    {name: "Geral", color: GRAY}
+                    {name: "Arthemiz", color: BLUE, description: “Infra/DNS e segurança de rede para suportar o ecossistema.”},
+                    {name: "OpsLedger", color: GREEN, description: “SaaS principal de monitoring B2B (métricas, auth e dashboard).”},
+                    {name: "Vendas3D", color: YELLOW, description: “E-commerce 3D com catálogo, produção e pagamentos.”},
+                    {name: "SystemHealth", color: ORANGE, description: “Extensão técnica focada em Linux/containers e métricas profundas.”},
+                    {name: "Sentinel Agent", color: PINK, description: “Agente em C de telemetria leve para coleta e envio de métricas.”},
+                    {name: "Open Source", color: PURPLE, description: “Contribuições open source (issues, PRs e comunidade).”},
+                    {name: "Geral", color: GRAY, description: “Tarefas transversais sem um projeto específico.”}
                   ]
                 }) {
                   projectV2Field {
@@ -327,13 +327,13 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Tipo"
                   singleSelectOptions: [
-                    {name: "Study", color: BLUE},
-                    {name: "Feature", color: GREEN},
-                    {name: "Infra", color: GRAY},
-                    {name: "Security", color: RED},
-                    {name: "Certification", color: YELLOW},
-                    {name: "Docs", color: PURPLE},
-                    {name: "Bug", color: ORANGE}
+                    {name: "Study", color: BLUE, description: “Estudo estruturado (teoria, leitura, prática guiada).”},
+                    {name: "Feature", color: GREEN, description: “Implementação de funcionalidade em projeto.”},
+                    {name: "Infra", color: GRAY, description: “Infra/DevOps (deploy, cloud, redes, pipelines).”},
+                    {name: "Security", color: RED, description: “Segurança (AppSec, hardening, OWASP, auditoria).”},
+                    {name: "Certification", color: YELLOW, description: “Preparação/execução de certificação.”},
+                    {name: "Docs", color: PURPLE, description: “Documentação, guias e padronização.”},
+                    {name: "Bug", color: ORANGE, description: “Correção de defeito com validação.”}
                   ]
                 }) {
                   projectV2Field {
@@ -515,10 +515,10 @@ jobs:
                     dataType: SINGLE_SELECT
                     name: "Prioridade"
                     singleSelectOptions: [
-                      {name: "P0", color: RED},
-                      {name: "P1", color: ORANGE},
-                      {name: "P2", color: YELLOW},
-                      {name: "P3", color: GRAY}
+                      {name: "P0", color: RED, description: “Bloqueador: impede avanço ou quebra fluxo principal.”},
+                      {name: "P1", color: ORANGE, description: “Alta: entrega importante no trimestre atual.”},
+                      {name: "P2", color: YELLOW, description: “Média: melhora relevante, mas não crítica.”},
+                      {name: "P3", color: GRAY, description: “Baixa: item oportunista/qualidade incremental.”}
                     ]
                   }) {
                     projectV2Field {
@@ -542,7 +542,7 @@ jobs:
                   if [ "$YEAR" -eq 2026 ] && [ "$Q" = "Q1" ]; then
                     continue
                   fi
-                  QUARTERS+="{name: \"$YEAR-$Q\", color: BLUE},"
+                  QUARTERS+="{name: \"$YEAR-$Q\", color: BLUE, description: \"Janela de execução planejada no trimestre.\"},"
                 done
               done
               QUARTERS="${QUARTERS%,}]"
@@ -708,10 +708,10 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Fase"
                   singleSelectOptions: [
-                    {name: "PHASE_2026", color: GRAY},
-                    {name: "PHASE_2027", color: BLUE},
-                    {name: "PHASE_2028", color: GREEN},
-                    {name: "PHASE_2029", color: YELLOW}
+                    {name: "PHASE_2026", color: GRAY, description: ""},
+                    {name: "PHASE_2027", color: BLUE, description: ""},
+                    {name: "PHASE_2028", color: GREEN, description: ""},
+                    {name: "PHASE_2029", color: YELLOW, description: ""}
                   ]
                 }) {
                   projectV2Field {
@@ -780,11 +780,11 @@ jobs:
                   dataType: SINGLE_SELECT
                   name: "Área"
                   singleSelectOptions: [
-                    {name: "Carreira", color: BLUE},
-                    {name: "Idiomas", color: GREEN},
-                    {name: "Certificações", color: YELLOW},
-                    {name: "Portfólio", color: PURPLE},
-                    {name: "Segurança/Qualidade", color: RED}
+                    {name: "Carreira", color: BLUE, description: ""},
+                    {name: "Idiomas", color: GREEN, description: ""},
+                    {name: "Certificações", color: YELLOW, description: ""},
+                    {name: "Portfólio", color: PURPLE, description: ""},
+                    {name: "Segurança/Qualidade", color: RED, description: ""}
                   ]
                 }) {
                   projectV2Field {
