@@ -46,8 +46,8 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 **Workflow:** `.github/workflows/create-issues-from-documentation.yml`
 
 **What it does:**
-- Parses PROJECT_DOCUMENTATION.md
-- Creates GitHub issues for all tasks
+- Uses a predefined list of tasks embedded in the workflow configuration
+- Creates GitHub issues for those tasks
 - Adds appropriate labels (epic, phase, project)
 
 **How to run:**

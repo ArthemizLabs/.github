@@ -20,21 +20,83 @@ export GH_TOKEN="$PROJECTS_TOKEN"
 # Function to get project ID by title
 get_project_id() {
   local project_title="$1"
-  local project_number=$(gh api graphql -f query='
-    query {
-      organization(login: "'"$ORG"'") {
-        projectsV2(first: 20) {
-          nodes {
-            id
-            title
-            number
+
+  # Paginate through all Projects v2 to find matching title(s)
+  local cursor=""
+  local has_next_page=true
+  local matching_numbers=()
+
+  while [ "$has_next_page" = true ]; do
+    local query
+    if [ -z "$cursor" ]; then
+      # First page: no "after" cursor
+      query='
+        query {
+          organization(login: "'"$ORG"'") {
+            projectsV2(first: 100) {
+              nodes {
+                title
+                number
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
           }
         }
-      }
-    }
-  ' --jq '.data.organization.projectsV2.nodes[] | select(.title == "'"$project_title"'") | .number')
+      '
+    else
+      # Subsequent pages: include "after" cursor
+      query='
+        query {
+          organization(login: "'"$ORG"'") {
+            projectsV2(first: 100, after: "'"$cursor"'") {
+              nodes {
+                title
+                number
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
+          }
+        }
+      '
+    fi
 
-  echo "$project_number"
+    local page_json
+    page_json=$(gh api graphql -f query="$query")
+
+    # Collect project numbers whose title matches the requested title
+    while IFS= read -r number; do
+      [ -n "$number" ] && matching_numbers+=("$number")
+    done < <(echo "$page_json" | jq -r --arg title "$project_title" '
+      .data.organization.projectsV2.nodes[]
+      | select(.title == $title)
+      | .number
+    ')
+
+    # Read pagination info
+    has_next_page=$(echo "$page_json" | jq -r '.data.organization.projectsV2.pageInfo.hasNextPage')
+    cursor=$(echo "$page_json" | jq -r '.data.organization.projectsV2.pageInfo.endCursor')
+  done
+
+  if [ "${#matching_numbers[@]}" -eq 0 ]; then
+    echo "❌ Error: No Project v2 found with title \"$project_title\" in organization \"$ORG\"." >&2
+    exit 1
+  fi
+
+  if [ "${#matching_numbers[@]}" -gt 1 ]; then
+    echo "❌ Error: Multiple Projects v2 found with title \"$project_title\" in organization \"$ORG\"." >&2
+    echo "   Matching project numbers: ${matching_numbers[*]}" >&2
+    echo "   Please ensure project titles are unique." >&2
+    exit 1
+  fi
+
+  # Exactly one matching project; return its number
+  echo "${matching_numbers[0]}"
 }
 
 # Function to get project node ID by number
