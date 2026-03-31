@@ -315,19 +315,16 @@ jobs:
 
           echo "Status Field ID: $STATUS_FIELD"
 
-          # Update Status field to add BLOCKED option
-          # First, get existing options
-          EXISTING_OPTIONS=$(gh api graphql -f query='
+          # Add BLOCKED option to Status field if it doesn't already exist
+          EXISTING_OPTION_NAMES=$(gh api graphql -f query='
             query {
               node(id: "'"$PROJECT_ID"'") {
                 ... on ProjectV2 {
                   fields(first: 20) {
                     nodes {
                       ... on ProjectV2SingleSelectField {
-                        id
                         name
                         options {
-                          id
                           name
                         }
                       }
@@ -336,24 +333,27 @@ jobs:
                 }
               }
             }
-          ' --jq '.data.node.fields.nodes[] | select(.name == "Status") | .options')
+          ' --jq '.data.node.fields.nodes[] | select(.name == "Status") | .options[].name')
 
-          # Add BLOCKED option if it doesn't exist
-          gh api graphql -f query='
-            mutation {
-              updateProjectV2Field(input: {
-                fieldId: "'"$STATUS_FIELD"'"
-                name: "Status"
-              }) {
-                projectV2Field {
-                  ... on ProjectV2SingleSelectField {
+          if echo "$EXISTING_OPTION_NAMES" | grep -qx "BLOCKED"; then
+            echo "BLOCKED option already exists, skipping"
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2SingleSelectFieldOption(input: {
+                  fieldId: "'"$STATUS_FIELD"'"
+                  name: "BLOCKED"
+                  color: RED
+                  description: "Task is blocked by an external dependency"
+                }) {
+                  option {
                     id
                     name
                   }
                 }
               }
-            }
-          ' || true
+            ' || echo "⚠️  Could not add BLOCKED option via API — add it manually in the project settings"
+          fi
 
           echo "Status field updated"
 

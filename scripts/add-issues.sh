@@ -212,6 +212,7 @@ add_issues_by_label "epic:tech-stack" "Master — Master"
 add_issues_by_label "epic:portfolio" "Master — Master"
 add_issues_by_label "epic:lang-en" "Master — Master"
 add_issues_by_label "epic:lang-jp" "Master — Master"
+add_issues_by_label "epic:certifications" "Master — Master"
 echo ""
 
 # Add project-specific issues to product projects
