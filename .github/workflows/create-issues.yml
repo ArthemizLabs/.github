@@ -302,16 +302,16 @@ jobs:
               print(f"Processing epics: {epics_to_process}")
               print()
 
-              total_issues = 0
+              total_tasks = 0
               for epic in epics_to_process:
                   tasks = TASKS[epic]
                   print(f"Processing {epic}: {len(tasks)} tasks")
                   for task in tasks:
                       create_issue(task, epic, dry_run)
-                      total_issues += 1
+                      total_tasks += 1
 
               print()
-              print(f"{'[DRY RUN] Would create' if dry_run else 'Created'} {total_issues} issues")
+              print(f"{'[DRY RUN] Would process' if dry_run else 'Processed'} {total_tasks} tasks")
 
           if __name__ == "__main__":
               main()

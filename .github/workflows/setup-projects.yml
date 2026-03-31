@@ -389,22 +389,15 @@ jobs:
           # Add BLOCKED option to Status field if it doesn't already exist
           EXISTING_OPTION_NAMES=$(gh api graphql -f query='
             query {
-              node(id: "'"$PROJECT_ID"'") {
-                ... on ProjectV2 {
-                  fields(first: 20) {
-                    nodes {
-                      ... on ProjectV2SingleSelectField {
-                        name
-                        options {
-                          name
-                        }
-                      }
-                    }
+              node(id: "'"$STATUS_FIELD"'") {
+                ... on ProjectV2SingleSelectField {
+                  options {
+                    name
                   }
                 }
               }
             }
-          ' --jq '.data.node.fields.nodes[] | select(.name == "Status") | .options[].name')
+          ' --jq '.data.node.options[].name')
 
           if echo "$EXISTING_OPTION_NAMES" | grep -qx "BLOCKED"; then
             echo "BLOCKED option already exists, skipping"
@@ -440,8 +433,6 @@ jobs:
         run: |
           # Array of product project names
           PRODUCTS=("Arthemiz — Project" "OpsLedger — Project" "Vendas3D — Project" "SystemHealth — Project" "Sentinel Agent — Project" "Open Source — Project")
-
-          declare -A PROJECT_IDS
 
           for PRODUCT in "${PRODUCTS[@]}"; do
             echo "Processing project: $PRODUCT"

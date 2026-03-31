@@ -100,6 +100,7 @@ Run the "Create Issues" workflow:
    - `all` - Create all issues (recommended)
    - `TECH_STACK` - Only tech stack tasks (TS-01 to TS-09)
    - `PORTFOLIO` - Only portfolio tasks (all project tasks)
+   - `CERTIFICATIONS` - Only certification-related tasks
    - `LANG_EN` - Only English language tasks (EN-01 to EN-10)
    - `LANG_JP` - Only Japanese language tasks (JP-01 to JP-11)
    - `CERTIFICATIONS` - Only certification-related tasks (CERT-01 to CERT-12)
@@ -122,6 +123,7 @@ Issues are automatically labeled with:
   - `epic:portfolio` - Portfolio project tasks
   - `epic:lang-en` - English language tasks
   - `epic:lang-jp` - Japanese language tasks
+  - `epic:certifications` - Certification-related tasks
   - `epic:certifications` - Certification-related tasks
 
 - **Phase labels:**

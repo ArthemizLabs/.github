@@ -16,6 +16,14 @@ for cmd in gh jq; do
     exit 1
   fi
 done
+# Preflight checks for required external tools
+for cmd in gh jq; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Error: Required command '$cmd' is not installed or not in PATH." >&2
+    echo "Please install '$cmd' and try again." >&2
+    exit 1
+  fi
+done
 
 # Check if PROJECTS_TOKEN is set
 if [ -z "$PROJECTS_TOKEN" ]; then
@@ -108,8 +116,8 @@ get_project_number_by_title() {
   echo "${matching_numbers[0]}"
 }
 
-# Alias for backwards compatibility
-get_project_id() { get_project_number_by_title "$@"; }
+# Alias for backwards compatibility (returns project number by title)
+get_project_number() { get_project_number_by_title "$@"; }
 
 # Function to get project node ID by number
 get_project_node_id() {
