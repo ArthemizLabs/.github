@@ -199,11 +199,11 @@ jobs:
 
                   try:
                       result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-                      print(f"✅ Created issue: {title}")
-                      print(f"   URL: {result.stdout.strip()}")
+                      print(f"Created issue: {title}")
+                      print(f"URL: {result.stdout.strip()}")
                   except subprocess.CalledProcessError as e:
-                      print(f"❌ Failed to create issue: {title}")
-                      print(f"   Error: {e.stderr}")
+                      print(f"Failed to create issue: {title}")
+                      print(f"Error: {e.stderr}")
 
           def main():
               epic_selection = os.environ.get("EPIC_SELECTION", "all")
@@ -226,7 +226,7 @@ jobs:
                           epics_to_process.append(key)
 
               if not epics_to_process:
-                  print(f"❌ No epics found for selection: {epic_selection}")
+                  print(f"No epics found for selection: {epic_selection}")
                   sys.exit(1)
 
               print(f"Processing epics: {epics_to_process}")
@@ -260,7 +260,7 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          echo "## GitHub Issues Creation Complete! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "## GitHub Issues Creation Complete!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
