@@ -17,8 +17,8 @@ fi
 
 export GH_TOKEN="$PROJECTS_TOKEN"
 
-# Function to get project ID by title
-get_project_id() {
+# Function to get project number by title
+get_project_number_by_title() {
   local project_title="$1"
 
   # Paginate through all Projects v2 to find matching title(s)
@@ -99,6 +99,9 @@ get_project_id() {
   echo "${matching_numbers[0]}"
 }
 
+# Alias for backwards compatibility
+get_project_id() { get_project_number_by_title "$@"; }
+
 # Function to get project node ID by number
 get_project_node_id() {
   local project_number="$1"
@@ -123,8 +126,9 @@ add_issue_to_project() {
   # Get issue node ID
   local issue_id=$(gh api repos/"$ORG"/"$REPO"/issues/"$issue_number" --jq '.node_id')
 
-  # Add issue to project
-  gh api graphql -f query='
+  # Add issue to project (idempotent - skip if already added)
+  local result
+  if result=$(gh api graphql -f query='
     mutation {
       addProjectV2ItemById(input: {
         projectId: "'"$project_id"'"
@@ -135,9 +139,16 @@ add_issue_to_project() {
         }
       }
     }
-  ' --silent
-
-  echo "Added issue #$issue_number to project"
+  ' 2>&1); then
+    echo "Added issue #$issue_number to project"
+  else
+    if echo "$result" | grep -qi "already\|exists\|duplicate"; then
+      echo "Issue #$issue_number already in project, skipping"
+    else
+      echo "Error adding issue #$issue_number: $result" >&2
+      return 1
+    fi
+  fi
 }
 
 # Function to add issues by label to a project
@@ -148,7 +159,7 @@ add_issues_by_label() {
   echo "Adding issues with label '$label' to project '$project_title'..."
 
   # Get project number
-  local project_number=$(get_project_id "$project_title")
+  local project_number=$(get_project_number_by_title "$project_title")
 
   if [ -z "$project_number" ]; then
     echo "Error: Project '$project_title' not found"

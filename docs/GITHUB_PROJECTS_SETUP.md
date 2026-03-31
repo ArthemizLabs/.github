@@ -17,7 +17,7 @@ The setup includes:
    - Roadmap — Roadmap (executive dashboard)
 
 2. **Custom Fields** for each project
-3. **GitHub Issues** generated from PROJECT_DOCUMENTATION.md
+3. **GitHub Issues** created from a predefined list of tasks embedded in the workflow configuration
 4. **Views** (must be created manually)
 
 ## Prerequisites
@@ -62,7 +62,7 @@ The Master project includes these custom fields:
 - **Épico** (single select) - TECH_STACK, PORTFOLIO, LANG_EN, LANG_JP, CERTIFICATIONS
 - **Fase** (single select) - PHASE_2026, PHASE_2027, PHASE_2028, PHASE_2029
 - **Projeto** (single select) - Arthemiz, OpsLedger, Vendas3D, SystemHealth, Sentinel Agent, Open Source, Geral
-- **Status** (native field) - TODO, DOING, DONE, BLOCKED
+- **Status** (native field) - TODO, DOING, DONE, BLOCKED *(Note: GitHub auto-creates a Status field with its own default options. Configure these options manually in the project settings after creation.)*
 - **Start** (date) - Start date
 - **End** (date) - End date
 - **DoD** (text) - Definition of Done
