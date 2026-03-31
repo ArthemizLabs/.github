@@ -131,8 +131,8 @@ jobs:
                   {"id": "JP-07", "title": "Simulados JLPT", "description": "Realizar testes de nível.", "phase": "PHASE_2027"},
                   {"id": "JP-08", "title": "JLPT N4 (Básico Sólido)", "description": "Conjugações verbais e partículas complexas. Meta: passar na prova oficial.", "phase": "PHASE_2027"},
                   {"id": "JP-09", "title": "Grammar N3", "description": "Domínio gramatical completo.", "phase": "PHASE_2028"},
-                  {"id": "JP-10", "title": "JLPT N3 (Intermediário)", "description": "Leitura de textos técnicos simples e conversação do dia a dia.", "phase": "PHASE_2028-29"},
-                  {"id": "JP-11", "title": "JLPT Oficial", "description": "Realizar a prova.", "phase": "PHASE_2028"},
+                  {"id": "JP-10", "title": "JLPT N3 (Intermediário)", "description": "Leitura de textos técnicos simples e conversação do dia a dia.", "phase": "PHASE_2028"},
+                  {"id": "JP-11", "title": "JLPT Oficial", "description": "Realizar a prova.", "phase": "PHASE_2029"},
               ],
           }
 
