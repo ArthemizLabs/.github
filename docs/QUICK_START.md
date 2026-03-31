@@ -27,7 +27,7 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 - Sets up field options (epic types, phases, priorities, etc.)
 
 **How to run:**
-1. Go to Actions → "Setup GitHub Projects v2"
+1. Go to Actions → "Setup Projects"
 2. Click "Run workflow"
 3. Select "all" to create all projects
 4. Click "Run workflow"
@@ -51,7 +51,7 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 - Adds appropriate labels (epic, phase, project)
 
 **How to run:**
-1. Go to Actions → "Create Issues from Documentation"
+1. Go to Actions → "Create Issues"
 2. Click "Run workflow"
 3. Select "all" to create all issues
 4. Set "dry_run" to "false"
@@ -62,7 +62,8 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 - PRJ-01.1 to PRJ-06.5 (Portfolio project tasks)
 - EN-01 to EN-10 (English language tasks)
 - JP-01 to JP-11 (Japanese language tasks)
-- Total: ~80 issues
+- CERT-01 to CERT-12 (Certification tasks)
+- Total: ~93 issues
 
 **Duration:** ~3-5 minutes
 
@@ -163,7 +164,7 @@ After completing all steps, verify:
 - [ ] Master project has 10 custom fields
 - [ ] Product projects have 4 custom fields each
 - [ ] Roadmap project has 4 custom fields
-- [ ] ~80 issues have been created
+- [ ] ~93 issues have been created
 - [ ] Issues have appropriate labels (epic, phase, project)
 - [ ] Issues are added to their respective projects
 - [ ] All views are created and configured

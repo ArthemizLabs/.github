@@ -8,6 +8,15 @@ set -e
 ORG="ArthemizLabs"
 REPO=".github"
 
+# Preflight checks for required external tools
+for cmd in gh jq; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Error: Required command '$cmd' is not installed or not in PATH." >&2
+    echo "Please install '$cmd' and try again." >&2
+    exit 1
+  fi
+done
+
 # Check if PROJECTS_TOKEN is set
 if [ -z "$PROJECTS_TOKEN" ]; then
   echo "Error: PROJECTS_TOKEN environment variable is not set"

@@ -102,6 +102,7 @@ Run the "Create Issues" workflow:
    - `PORTFOLIO` - Only portfolio tasks (all project tasks)
    - `LANG_EN` - Only English language tasks (EN-01 to EN-10)
    - `LANG_JP` - Only Japanese language tasks (JP-01 to JP-11)
+   - `CERTIFICATIONS` - Only certification-related tasks (CERT-01 to CERT-12)
 5. Set `dry_run` to:
    - `true` - Preview what would be created without actually creating issues
    - `false` - Actually create the issues
@@ -121,6 +122,7 @@ Issues are automatically labeled with:
   - `epic:portfolio` - Portfolio project tasks
   - `epic:lang-en` - English language tasks
   - `epic:lang-jp` - Japanese language tasks
+  - `epic:certifications` - Certification-related tasks
 
 - **Phase labels:**
   - `phase-2026` - Foundation phase

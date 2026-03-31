@@ -37,6 +37,36 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Bootstrap labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Ensure all required labels exist before creating issues
+          # This prevents errors when applying labels to issues
+
+          # Epic labels
+          gh label create "epic:tech-stack" --color "0052CC" --description "Technical stack evolution tasks" --force
+          gh label create "epic:portfolio" --color "00875A" --description "Portfolio project tasks" --force
+          gh label create "epic:lang-en" --color "FFAB00" --description "English language tasks" --force
+          gh label create "epic:lang-jp" --color "FF5630" --description "Japanese language tasks" --force
+          gh label create "epic:certifications" --color "6554C0" --description "Certification-related tasks" --force
+
+          # Phase labels
+          gh label create "phase-2026" --color "B3D4FF" --description "Foundation phase" --force
+          gh label create "phase-2027" --color "0052CC" --description "Expansion phase" --force
+          gh label create "phase-2028" --color "00875A" --description "Quality & Security phase" --force
+          gh label create "phase-2029" --color "FFAB00" --description "Mastery phase" --force
+
+          # Project labels
+          gh label create "project:arthemiz" --color "0052CC" --force
+          gh label create "project:opsledger" --color "00875A" --force
+          gh label create "project:vendas3d" --color "FFAB00" --force
+          gh label create "project:systemhealth" --color "FF5630" --force
+          gh label create "project:sentinel-agent" --color "6554C0" --force
+          gh label create "project:open-source" --color "172B4D" --force
+
+          echo "All labels bootstrapped successfully"
+
       - name: Create issues parser script
         run: |
           cat > create_issues.py << 'PYTHON_SCRIPT'
