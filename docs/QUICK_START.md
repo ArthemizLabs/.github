@@ -19,7 +19,7 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 
 ### 1. Setup GitHub Projects (Run First)
 
-**Workflow:** `.github/workflows/setup-github-projects.yml`
+**Workflow:** `.github/workflows/setup-projects.yml`
 
 **What it does:**
 - Creates 8 GitHub Projects in the organization
@@ -43,7 +43,7 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 
 ### 2. Create Issues from Documentation (Run Second)
 
-**Workflow:** `.github/workflows/create-issues-from-documentation.yml`
+**Workflow:** `.github/workflows/create-issues.yml`
 
 **What it does:**
 - Uses a predefined list of tasks embedded in the workflow configuration
@@ -79,13 +79,13 @@ This guide provides a quick reference for setting up GitHub Projects v2 for the 
 **Option B: Automated (via Script)**
 ```bash
 # Make the script executable
-chmod +x scripts/add-issues-to-projects.sh
+chmod +x scripts/add-issues.sh
 
 # Set your token
 export PROJECTS_TOKEN=your_token_here
 
 # Run the script
-./scripts/add-issues-to-projects.sh
+./scripts/add-issues.sh
 ```
 
 **What the script does:**
