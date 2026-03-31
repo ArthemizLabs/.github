@@ -1,4 +1,4 @@
-name: Setup GitHub Projects v2
+name: Setup Projects
 
 on:
   workflow_dispatch:
