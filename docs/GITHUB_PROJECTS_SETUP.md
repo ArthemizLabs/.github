@@ -37,10 +37,10 @@ Before running the workflows, you need to:
 
 ## Step 1: Create GitHub Projects
 
-Run the "Setup GitHub Projects v2" workflow:
+Run the "Setup Projects" workflow:
 
 1. Go to **Actions** tab
-2. Select **Setup GitHub Projects v2** workflow
+2. Select **Setup Projects** workflow
 3. Click **Run workflow**
 4. Select which projects to create:
    - `all` - Create all 8 projects (recommended for first run)
@@ -91,10 +91,10 @@ The Roadmap project includes:
 
 ## Step 2: Create GitHub Issues
 
-Run the "Create Issues from Documentation" workflow:
+Run the "Create Issues" workflow:
 
 1. Go to **Actions** tab
-2. Select **Create Issues from Documentation** workflow
+2. Select **Create Issues** workflow
 3. Click **Run workflow**
 4. Select which epic to create issues for:
    - `all` - Create all issues (recommended)
