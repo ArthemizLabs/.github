@@ -351,7 +351,7 @@ jobs:
             echo "Projeto criado com sucesso." >> "$GITHUB_STEP_SUMMARY"
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "**Campos criados:** Fase, País Alvo, Tipo, Épico, Pilar de Imigração, DoD" >> "$GITHUB_STEP_SUMMARY"
-            echo "**Views criadas:** Backlog Completo, Timeline por Fase, Priority — Certificações & Idiomas, Kanban por Status, Por Épico" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Views (criar manualmente na UI):** Backlog Completo, Timeline por Fase, Priority — Certificações & Idiomas, Kanban por Status, Por Épico" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
@@ -411,40 +411,51 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Verificando se o campo 'Status' já existe..."
-          if gh api graphql -f query='
+          echo "Configurando campo 'Status' com opções customizadas..."
+          STATUS_FIELD_ID=$(gh api graphql -f query='
             query($projectId: ID!) {
               node(id: $projectId) {
                 ... on ProjectV2 {
-                  fields(first: 50) { nodes { name } }
+                  fields(first: 50) {
+                    nodes { ... on ProjectV2SingleSelectField { id name } }
+                  }
                 }
               }
             }' \
             -f projectId="$PROJECT_ID" \
-            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
-            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
-          else
-            echo "Criando campo 'Status'..."
+            --jq '.data.node.fields.nodes[] | select(.name == "Status") | .id // empty' 2>/dev/null || true)
+
+          if [ -n "$STATUS_FIELD_ID" ]; then
+            echo "Removendo campo 'Status' padrão ($STATUS_FIELD_ID) para recriar com opções customizadas..."
             gh api graphql -f query='
-              mutation($projectId: ID!) {
-                createProjectV2Field(input: {
-                  projectId: $projectId
-                  dataType: SINGLE_SELECT
-                  name: "Status"
-                  singleSelectOptions: [
-                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro — pronta para dev" }
-                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo — branch criada" }
-                    { name: "In Review",    color: PURPLE, description: "Código aguardando revisão de PR" }
-                    { name: "Done",         color: GREEN,  description: "Finalizado, aprovado e deployed" }
-                  ]
-                }) {
+              mutation($fieldId: ID!) {
+                deleteProjectV2Field(input: { fieldId: $fieldId }) {
                   projectV2Field { ... on ProjectV2SingleSelectField { id } }
                 }
               }' \
-              -f projectId="$PROJECT_ID"
-            echo "Campo 'Status' criado"
+              -f fieldId="$STATUS_FIELD_ID"
           fi
+
+          echo "Criando campo 'Status' com opções customizadas..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro — pronta para dev" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo — branch criada" }
+                  { name: "In Review",    color: PURPLE, description: "Código aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado, aprovado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "Campo 'Status' criado com opções customizadas"
 
           echo "Criando campo 'Fase'..."
           gh api graphql -f query='
@@ -586,40 +597,51 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Verificando se o campo 'Status' já existe..."
-          if gh api graphql -f query='
+          echo "Configurando campo 'Status' com opções customizadas..."
+          STATUS_FIELD_ID=$(gh api graphql -f query='
             query($projectId: ID!) {
               node(id: $projectId) {
                 ... on ProjectV2 {
-                  fields(first: 50) { nodes { name } }
+                  fields(first: 50) {
+                    nodes { ... on ProjectV2SingleSelectField { id name } }
+                  }
                 }
               }
             }' \
             -f projectId="$PROJECT_ID" \
-            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
-            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
-          else
-            echo "Criando campo 'Status'..."
+            --jq '.data.node.fields.nodes[] | select(.name == "Status") | .id // empty' 2>/dev/null || true)
+
+          if [ -n "$STATUS_FIELD_ID" ]; then
+            echo "Removendo campo 'Status' padrão ($STATUS_FIELD_ID) para recriar com opções customizadas..."
             gh api graphql -f query='
-              mutation($projectId: ID!) {
-                createProjectV2Field(input: {
-                  projectId: $projectId
-                  dataType: SINGLE_SELECT
-                  name: "Status"
-                  singleSelectOptions: [
-                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
-                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
-                    { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
-                    { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
-                  ]
-                }) {
+              mutation($fieldId: ID!) {
+                deleteProjectV2Field(input: { fieldId: $fieldId }) {
                   projectV2Field { ... on ProjectV2SingleSelectField { id } }
                 }
               }' \
-              -f projectId="$PROJECT_ID"
-            echo "Campo 'Status' criado"
+              -f fieldId="$STATUS_FIELD_ID"
           fi
+
+          echo "Criando campo 'Status' com opções customizadas..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "Campo 'Status' criado com opções customizadas"
 
           echo "Criando campo 'Fase'..."
           gh api graphql -f query='
@@ -764,40 +786,51 @@ jobs:
             echo "Projeto criado: $PROJECT_ID"
           fi
 
-          echo "Verificando se o campo 'Status' já existe..."
-          if gh api graphql -f query='
+          echo "Configurando campo 'Status' com opções customizadas..."
+          STATUS_FIELD_ID=$(gh api graphql -f query='
             query($projectId: ID!) {
               node(id: $projectId) {
                 ... on ProjectV2 {
-                  fields(first: 50) { nodes { name } }
+                  fields(first: 50) {
+                    nodes { ... on ProjectV2SingleSelectField { id name } }
+                  }
                 }
               }
             }' \
             -f projectId="$PROJECT_ID" \
-            --jq '.data.node.fields.nodes[].name' | grep -Fxq "Status"; then
-            echo "Campo 'Status' já existe (criado automaticamente pelo GitHub), pulando criação."
-          else
-            echo "Criando campo 'Status'..."
+            --jq '.data.node.fields.nodes[] | select(.name == "Status") | .id // empty' 2>/dev/null || true)
+
+          if [ -n "$STATUS_FIELD_ID" ]; then
+            echo "Removendo campo 'Status' padrão ($STATUS_FIELD_ID) para recriar com opções customizadas..."
             gh api graphql -f query='
-              mutation($projectId: ID!) {
-                createProjectV2Field(input: {
-                  projectId: $projectId
-                  dataType: SINGLE_SELECT
-                  name: "Status"
-                  singleSelectOptions: [
-                    { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
-                    { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
-                    { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
-                    { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
-                    { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
-                  ]
-                }) {
+              mutation($fieldId: ID!) {
+                deleteProjectV2Field(input: { fieldId: $fieldId }) {
                   projectV2Field { ... on ProjectV2SingleSelectField { id } }
                 }
               }' \
-              -f projectId="$PROJECT_ID"
-            echo "Campo 'Status' criado"
+              -f fieldId="$STATUS_FIELD_ID"
           fi
+
+          echo "Criando campo 'Status' com opções customizadas..."
+          gh api graphql -f query='
+            mutation($projectId: ID!) {
+              createProjectV2Field(input: {
+                projectId: $projectId
+                dataType: SINGLE_SELECT
+                name: "Status"
+                singleSelectOptions: [
+                  { name: "Backlog",      color: GRAY,   description: "Ideias e requisitos brutos" }
+                  { name: "Ready to Dev", color: BLUE,   description: "Issue com DoD claro" }
+                  { name: "In Progress",  color: YELLOW, description: "Trabalho ativo" }
+                  { name: "In Review",    color: PURPLE, description: "Aguardando revisão de PR" }
+                  { name: "Done",         color: GREEN,  description: "Finalizado e deployed" }
+                ]
+              }) {
+                projectV2Field { ... on ProjectV2SingleSelectField { id } }
+              }
+            }' \
+            -f projectId="$PROJECT_ID"
+          echo "Campo 'Status' criado com opções customizadas"
 
           echo "Criando campos 'Fase', 'Sistema' e 'Camada'..."
           gh api graphql -f query='
