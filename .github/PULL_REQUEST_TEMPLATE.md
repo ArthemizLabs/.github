@@ -1,6 +1,7 @@
 ## Summary
 
-<!-- If the section is not used it can be erased, make a quick overview for the PR. The title shoul have the conventions for 'fix:', 'chore:', 'feature:', etc. -->
+<!-- If the section is not used it can be erased, make a quick overview for the PR. The title should have the conventions for 'fix:', 'chore:', 'feature:', etc. and be short descriptive -->
+Follow the [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) and what is set in [CONTRIBUTING archive](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md)
 
 ### What was implemented?
 
