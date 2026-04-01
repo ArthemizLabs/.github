@@ -1,13 +1,19 @@
 # Quick Start Guide: GitHub Projects Setup
 
-This guide provides a quick reference for setting up GitHub Projects v2 for the IMIGRATION_2030 project.
+This guide provides a quick reference for setting up GitHub Projects v2 for the IMMIGRATION_2030 project.
 
 ## Prerequisites
 
 1. Create a Personal Access Token (PAT) with these scopes:
-   - `project` (full access)
-   - `read:org`
-   - `write:org`
+   - **If using a classic PAT:**
+     - `project` (full access)
+     - `read:org`
+     - `write:org`
+     - `repo` (required for the issue APIs used later in this guide)
+   - **If using a fine-grained PAT:**
+     - Access to the relevant repositories with:
+       - Read and write access to Issues
+       - Read and write access to Projects
 
 2. Add the PAT as a repository secret named `PROJECTS_TOKEN`:
    - Go to Settings → Secrets and variables → Actions

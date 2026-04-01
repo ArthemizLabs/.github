@@ -16,14 +16,6 @@ for cmd in gh jq; do
     exit 1
   fi
 done
-# Preflight checks for required external tools
-for cmd in gh jq; do
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "Error: Required command '$cmd' is not installed or not in PATH." >&2
-    echo "Please install '$cmd' and try again." >&2
-    exit 1
-  fi
-done
 
 # Check if PROJECTS_TOKEN is set
 if [ -z "$PROJECTS_TOKEN" ]; then
@@ -224,7 +216,7 @@ echo "=================================="
 echo ""
 
 # Add all issues to Master project
-echo "1️Adding all issues to Master project..."
+echo "1) Adding all issues to Master project..."
 add_issues_by_label "epic:tech-stack" "Master — Master"
 add_issues_by_label "epic:portfolio" "Master — Master"
 add_issues_by_label "epic:lang-en" "Master — Master"
@@ -233,7 +225,7 @@ add_issues_by_label "epic:certifications" "Master — Master"
 echo ""
 
 # Add project-specific issues to product projects
-echo "2️Adding project-specific issues to product projects..."
+echo "2) Adding project-specific issues to product projects..."
 add_issues_by_label "project:arthemiz" "Arthemiz — Project"
 add_issues_by_label "project:opsledger" "OpsLedger — Project"
 add_issues_by_label "project:vendas3d" "Vendas3D — Project"

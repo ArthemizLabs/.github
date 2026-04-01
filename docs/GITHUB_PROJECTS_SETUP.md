@@ -1,6 +1,6 @@
 # GitHub Projects Setup Guide
 
-This guide explains how to set up GitHub Projects v2 for the IMIGRATION_2030 project based on the PROJECT_DOCUMENTATION.md.
+This guide explains how to set up GitHub Projects v2 for the IMMIGRATION_2030 project based on the PROJECT_DOCUMENTATION.md.
 
 ## Overview
 
@@ -25,9 +25,20 @@ The setup includes:
 Before running the workflows, you need to:
 
 1. **Create a Personal Access Token (PAT)** with the following scopes:
-   - `project` (full access)
-   - `read:org`
-   - `write:org`
+
+   - **If you use a classic PAT:**
+     - `repo` (required for `gh issue list` and other repo/Issues APIs)
+     - `project` (full access)
+     - `read:org`
+     - `write:org`
+
+   - **If you use a fine-grained PAT:**
+     - Repository access: grant access to the target repository/repositories
+     - Repository permissions:
+       - Issues: `Read and write`
+     - Organization permissions:
+       - Projects: `Read and write`
+       - Members: `Read` (covers `read:org`-equivalent access)
 
 2. **Add the PAT as a repository secret:**
    - Go to Settings → Secrets and variables → Actions
@@ -100,7 +111,6 @@ Run the "Create Issues" workflow:
    - `all` - Create all issues (recommended)
    - `TECH_STACK` - Only tech stack tasks (TS-01 to TS-09)
    - `PORTFOLIO` - Only portfolio tasks (all project tasks)
-   - `CERTIFICATIONS` - Only certification-related tasks
    - `LANG_EN` - Only English language tasks (EN-01 to EN-10)
    - `LANG_JP` - Only Japanese language tasks (JP-01 to JP-11)
    - `CERTIFICATIONS` - Only certification-related tasks (CERT-01 to CERT-12)
@@ -123,7 +133,6 @@ Issues are automatically labeled with:
   - `epic:portfolio` - Portfolio project tasks
   - `epic:lang-en` - English language tasks
   - `epic:lang-jp` - Japanese language tasks
-  - `epic:certifications` - Certification-related tasks
   - `epic:certifications` - Certification-related tasks
 
 - **Phase labels:**

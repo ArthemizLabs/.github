@@ -217,7 +217,7 @@ jobs:
                   "--search", f'"{title}" in:title',
                   "--state", "all",
                   "--json", "title",
-                  "--limit", "5",
+                  "--limit", "100",
               ]
               try:
                   result = subprocess.run(cmd, capture_output=True, text=True, check=True)
