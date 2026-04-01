@@ -1,4 +1,4 @@
-# 🚀 IMIGRATION_2030 — Documentação do Projeto
+# IMMIGRATION_2030 — Documentação do Projeto
 
 ## Visão Geral
 
@@ -10,7 +10,7 @@
 
 **Metodologia:** Planejamento de longo prazo com fases anuais e projetos.
 
-## 🧰 Ferramentas e Tecnologias
+## Ferramentas e Tecnologias
 
 *️⃣ -> **EM ESTUDO**
 
@@ -256,10 +256,10 @@ Permitir que pequenas e médias empresas monitorem infraestrutura sem depender d
 ### Vendas3D — E-commerce Enterprise
 
 **Objetivo:**
-Loja online rópria para venda de serviços e produtos e serviços de impressão 3D, com personalização de atributos técnicos e automação de orçamento.
+Loja online própria para venda de produtos e serviços de impressão 3D, com personalização de atributos técnicos e automação de orçamento.
 
 **Proposta de Valor:**
-Sistema flexível para cadastro de produtos e com controle de pedidos com múltiplos parâmetros técnicos (material, volume, tempo estimado, acabamento) e geração automatizada de orçamento.
+Sistema flexível para cadastro de produtos com controle de pedidos com múltiplos parâmetros técnicos (material, volume, tempo estimado, acabamento) e geração automatizada de orçamento.
 
 **Stack:**
 
@@ -460,7 +460,7 @@ Depende do projeto escolhido, mas obrigatoriamente:
 | --- | --- | --- | --- |
 | PRJ-03.1 | Core Backend & Catálogo | Estruturar API RESTful com modelagem de dados para Produtos, Preços, Materiais (Filamentos) e Variantes (Cores/Tamanhos). | PHASE_2026 |
 | PRJ-03.2 | Fila de Produção | Sistema de status `(Pendente -> Imprimindo -> Acabamento -> Enviado)` com notificações e relatórios. | PHASE_2026 |
-| PRJ-03.3 | Business Logic | Algoritmo para calcular preço baseado em `(gramas de filamento * custo)` + `(horas  de impressão * custo_energia)` + `margem de lucro`. | PHASE_2027 |
+| PRJ-03.3 | Business Logic | Algoritmo para calcular preço baseado em `(gramas de filamento * custo)` + `(horas de impressão * custo_energia)` + `margem de lucro`. | PHASE_2027 |
 | PRJ-03.4 | Gestão de Inventário & Pedidos | Controle de estoque de filamento. Deduzir gramas do rolo virtual automaticamente após cada pedido confirmado (evitar Race Conditions). Fluxo completo de pedidos. | PHASE_2027 |
 | PRJ-03.5 | PCI Compliance e Webhooks | Integração segura com Stripe/Paypal API. Criar endpoint seguro (assinatura HMAC) para receber confirmação de pagamento e liberar pedido na fila. | PHASE_2027 |
 | PRJ-03.6 | Hardening de Segurança | Rate limiting, validação de inputs, logs estruturados | PHASE_2028 |
@@ -516,7 +516,7 @@ Depende do projeto escolhido, mas obrigatoriamente:
 | EN-04 | Simulados | Realizar testes de nível. | PHASE_2027 |
 | EN-05 | Writing Task 2 | Criar documentações técnicas especificas. | PHASE_2027 |
 | EN-06 | Diagnóstico IELTS | Aumentar nível. | PHASE_2027 |
-| EN-07 | Speaking B2 | Ter fluencia da fala. | PHASE_2027 |
+| EN-07 | Speaking B2 | Ter fluência da fala. | PHASE_2027 |
 | EN-08 | Certificação IELTS (Treino) | Simulados focados nas bandas 7.5+. | PHASE_2028 |
 | EN-09 | Conversação C1/C2 | Aulas de conversação ou prática semanal focada em explicar códigos em inglês. | PHASE_2028 |
 | EN-10 | IELTS Oficial | realizar a prova. | PHASE_2029 |
@@ -618,7 +618,7 @@ Depende do projeto escolhido, mas obrigatoriamente:
 - **Foco:** Prova nacional de TI do Japão. Facilita imensamente o visto (HSP).
 - **Tópicos:** Exige N2 de leitura (prova em japonês). Engloba Arquitetura de Computadores, Algoritmos, Estrutura de Dados e Estratégia de Negócios.
 
-## ⏰ Rotina Semanal
+## Rotina Semanal
 
 Conciliando Faculdade + Trabalho. A chave é **consistência**, não intensidade maluca.
 
@@ -636,7 +636,7 @@ Conciliando Faculdade + Trabalho. A chave é **consistência**, não intensidade
 - **Tempo morto** (transporte, almoço) para Anki e Podcasts (Syntax/Rebuild).fm
 - **Domingo** para descanso real e planejamento da próxima semana
 
-## 🧠 Metodologia de Trabalho
+## Metodologia de Trabalho
 
 ### Princípios
 
@@ -660,7 +660,7 @@ Conciliando Faculdade + Trabalho. A chave é **consistência**, não intensidade
 - `ID` (Text) — Identificador único
 - `Tarefa` (Title) — Nome da tarefa
 - `Descrição` (Text) — Detalhamento
-- `Status` (Select) — ⬜ TODO | 🔄 DOING | ✅ DONE
+- `Status` (Select) — TODO | DOING | DONE
 - `Épico` (Select) — TECH_STACK | PORTFOLIO | LANG_EN | LANG_JP | CERTIFICATIONS
 - `Fase` (Select) — PHASE_2026 | PHASE_2027 | PHASE_2028 | PHASE_2029
 - `Start` (Date) — Data de início
@@ -670,12 +670,12 @@ Conciliando Faculdade + Trabalho. A chave é **consistência**, não intensidade
 
 ### Views Disponíveis
 
-- **📋 Backlog Completo** — Tabela com todas as tarefas
-- **📊 Kanban por Status** — Board por Status (workflow diário)
-- **🗂 Por Épico** — Tabela agrupada por épico
-- **📅 Por Fase** — Board por Fase (visão de longo prazo)
+- **Backlog Completo** — Tabela com todas as tarefas
+- **Kanban por Status** — Board por Status (workflow diário)
+- **Por Épico** — Tabela agrupada por épico
+- **Por Fase** — Board por Fase (visão de longo prazo)
 
-## 📈 Métricas de Sucesso Final (2030)
+## Métricas de Sucesso Final (2030)
 
 ✅ **Diploma de Ciência da Computação**
 
@@ -705,7 +705,7 @@ Conciliando Faculdade + Trabalho. A chave é **consistência**, não intensidade
 - Portfólio sólido
 - Idiomas certificados
 
-## 📎 Links
+## Links
 
 [Kanban](https://www.notion.so/2a8347c6df184054bd0f48ce82d9eb1e?pvs=21)
 
