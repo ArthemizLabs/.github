@@ -2,237 +2,285 @@ name: validar-tokens-escrita
 
 on:
   workflow_dispatch:
+    inputs:
+      issue_url:
+        description: "URL do issue/PR (ex.: https://github.com/ArthemizLabs/.github/issues/91)"
+        required: true
+        default: "https://github.com/ArthemizLabs/.github/issues/91"
+      trimestre:
+        description: "Valor do Sprint/Trimestre (ex.: 2026-Q3)"
+        required: true
+        default: "2026-Q3"
 
 permissions:
   contents: read
 
 jobs:
-  validar_escrita:
+  testar_sincronizacao:
     runs-on: ubuntu-latest
     env:
       ORGANIZATION: ArthemizLabs
-      PROJECT_NUMBER: "30" # Languages
-      ISSUE_URL: https://github.com/ArthemizLabs/.github/issues/91
-      FIELD_NAME: End
-      DATA_TESTE: "2026-12-31"
+      PROJECT_LANGUAGES: "30"
+      PROJECT_MASTER: "16"
+      PROJECT_ROADMAP: "23"
+      FIELD_START: Start
+      FIELD_END: End
     steps:
-      - name: Validar se o secret PROJECTS_TOKEN existe
+      - name: Validar secret PROJECTS_TOKEN
         shell: bash
         run: |
           if [ -z "${PROJECTS_TOKEN}" ]; then
-            echo "Secret PROJECTS_TOKEN não está configurado neste repositório."
+            echo "Secret PROJECTS_TOKEN não está configurado."
             exit 1
           fi
           echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
         env:
           PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
 
-      - name: Resolver owner/repo e issue number a partir da URL
+      - name: Instalar jq (garantia)
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Calcular datas do trimestre
+        id: datas
+        shell: bash
+        run: |
+          set -euo pipefail
+          trimestre="${{ inputs.trimestre }}"
+
+          if ! echo "$trimestre" | grep -Eq '^[0-9]{4}-Q[1-4]$'; then
+            echo "Trimestre inválido: '$trimestre'. Use o formato YYYY-Qn (ex.: 2026-Q3)."
+            exit 1
+          fi
+
+          ano="${trimestre%-Q*}"
+          quarter="${trimestre#*-Q}"
+
+          case "$quarter" in
+            1) start="${ano}-01-01"; end="${ano}-03-31" ;;
+            2) start="${ano}-04-01"; end="${ano}-06-30" ;;
+            3) start="${ano}-07-01"; end="${ano}-09-30" ;;
+            4) start="${ano}-10-01"; end="${ano}-12-31" ;;
+          esac
+
+          echo "start=$start" >> "$GITHUB_OUTPUT"
+          echo "end=$end" >> "$GITHUB_OUTPUT"
+
+          echo "Trimestre: $trimestre"
+          echo "Start: $start"
+          echo "End:   $end"
+
+      - name: Resolver owner/repo e número do issue a partir da URL
         id: issue
         shell: bash
         run: |
           set -euo pipefail
+          url="${{ inputs.issue_url }}"
 
-          url="${ISSUE_URL}"
-          owner_repo=$(echo "$url" | sed -E 's#https://github.com/([^/]+/[^/]+)/issues/([0-9]+).*#\1#')
-          issue_number=$(echo "$url" | sed -E 's#https://github.com/([^/]+/[^/]+)/issues/([0-9]+).*#\2#')
+          owner_repo=$(echo "$url" | sed -E 's#https://github.com/([^/]+/[^/]+)/(issues|pull)/([0-9]+).*#\1#')
+          kind=$(echo "$url" | sed -E 's#https://github.com/([^/]+/[^/]+)/(issues|pull)/([0-9]+).*#\2#')
+          number=$(echo "$url" | sed -E 's#https://github.com/([^/]+/[^/]+)/(issues|pull)/([0-9]+).*#\3#')
 
-          if [ -z "$owner_repo" ] || [ -z "$issue_number" ]; then
-            echo "Não foi possível extrair owner/repo e número do issue da URL: ${ISSUE_URL}"
+          if [ -z "$owner_repo" ] || [ -z "$kind" ] || [ -z "$number" ]; then
+            echo "URL inválida: $url"
             exit 1
           fi
 
           echo "owner_repo=$owner_repo" >> "$GITHUB_OUTPUT"
-          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
+          echo "kind=$kind" >> "$GITHUB_OUTPUT"
+          echo "number=$number" >> "$GITHUB_OUTPUT"
 
-          echo "Issue: ${owner_repo} #${issue_number}"
+          echo "Item: ${owner_repo} (${kind} #${number})"
 
-      - name: Testar escrita no Project (atualiza e reverte campo End)
+      - name: Sincronizar Start/End nos 3 projects (Languages, Master, Roadmap)
         shell: bash
         env:
           PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
           OWNER_REPO: ${{ steps.issue.outputs.owner_repo }}
-          ISSUE_NUMBER: ${{ steps.issue.outputs.issue_number }}
+          ITEM_KIND: ${{ steps.issue.outputs.kind }}
+          ITEM_NUMBER: ${{ steps.issue.outputs.number }}
+          START_DATE: ${{ steps.datas.outputs.start }}
+          END_DATE: ${{ steps.datas.outputs.end }}
         run: |
           set -euo pipefail
 
-          echo "Buscando node_id do issue..."
-          query_issue='query($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { issue(number: $number) { id } } }'
           owner=$(echo "$OWNER_REPO" | cut -d/ -f1)
           repo=$(echo "$OWNER_REPO" | cut -d/ -f2)
 
-          payload_issue=$(jq -n \
-            --arg q "$query_issue" \
+          echo "Obtendo content id via GraphQL..."
+          if [ "$ITEM_KIND" = "issues" ]; then
+            query_content='query($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { issue(number: $number) { id } } }'
+            content_path='.data.repository.issue.id'
+          else
+            query_content='query($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { pullRequest(number: $number) { id } } }'
+            content_path='.data.repository.pullRequest.id'
+          fi
+
+          payload_content=$(jq -n \
+            --arg q "$query_content" \
             --arg owner "$owner" \
             --arg repo "$repo" \
-            --argjson number "$ISSUE_NUMBER" \
+            --argjson number "$ITEM_NUMBER" \
             '{query: $q, variables: {owner: $owner, repo: $repo, number: $number}}')
 
-          issue_response=$(curl -sS \
+          content_response=$(curl -sS \
             -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
             -H "Content-Type: application/json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d "$payload_issue" \
+            -d "$payload_content" \
             https://api.github.com/graphql)
 
-          echo "$issue_response" | jq
-
-          issue_id=$(echo "$issue_response" | jq -r '.data.repository.issue.id // empty')
-          if [ -z "$issue_id" ]; then
-            echo "Não foi possível obter o id do issue. Verifique se é um issue (não PR) e se existe."
+          content_id=$(echo "$content_response" | jq -r "$content_path // empty")
+          if [ -z "$content_id" ]; then
+            echo "Não foi possível obter o id do item. Resposta:"
+            echo "$content_response" | jq
             exit 1
           fi
+          echo "Content id: $content_id"
 
-          echo "Issue id: $issue_id"
-          echo "Buscando project id e field id..."
+          atualizar_project() {
+            local project_number="$1"
 
-          query_project='
-          query($org: String!, $number: Int!) {
-            organization(login: $org) {
-              projectV2(number: $number) {
-                id
-                title
-                fields(first: 100) {
-                  nodes {
-                    __typename
-                    ... on ProjectV2Field { id name dataType }
-                    ... on ProjectV2SingleSelectField { id name }
-                    ... on ProjectV2IterationField { id name }
-                  }
-                }
-                items(first: 100) {
-                  nodes {
-                    id
-                    content {
+            echo ""
+            echo "---- Project #${project_number} ----"
+
+            query_project='
+            query($org: String!, $number: Int!) {
+              organization(login: $org) {
+                projectV2(number: $number) {
+                  id
+                  title
+                  fields(first: 100) {
+                    nodes {
                       __typename
-                      ... on Issue { id }
-                      ... on PullRequest { id }
+                      ... on ProjectV2Field { id name dataType }
+                      ... on ProjectV2SingleSelectField { id name }
+                      ... on ProjectV2IterationField { id name }
                     }
-                    fieldValues(first: 100) {
-                      nodes {
+                  }
+                  items(first: 100) {
+                    nodes {
+                      id
+                      content {
                         __typename
-                        ... on ProjectV2ItemFieldDateValue { date field { ... on ProjectV2FieldCommon { name } } }
+                        ... on Issue { id }
+                        ... on PullRequest { id }
                       }
                     }
                   }
                 }
               }
-            }
-          }'
+            }'
 
-          payload_project=$(jq -n \
-            --arg q "$query_project" \
-            --arg org "$ORGANIZATION" \
-            --argjson number "$PROJECT_NUMBER" \
-            '{query: $q, variables: {org: $org, number: $number}}')
+            payload_project=$(jq -n \
+              --arg q "$query_project" \
+              --arg org "$ORGANIZATION" \
+              --argjson number "$project_number" \
+              '{query: $q, variables: {org: $org, number: $number}}')
 
-          project_response=$(curl -sS \
-            -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d "$payload_project" \
-            https://api.github.com/graphql)
-
-          echo "$project_response" | jq
-
-          project_id=$(echo "$project_response" | jq -r '.data.organization.projectV2.id // empty')
-          if [ -z "$project_id" ]; then
-            echo "Não foi possível obter project id. Verifique ORGANIZATION e PROJECT_NUMBER."
-            exit 1
-          fi
-
-          field_id=$(echo "$project_response" | jq -r --arg name "$FIELD_NAME" '
-            .data.organization.projectV2.fields.nodes[]
-            | select(.name == $name)
-            | .id' | head -n 1)
-
-          if [ -z "$field_id" ]; then
-            echo "Não encontrei o field '${FIELD_NAME}' no Project #${PROJECT_NUMBER}."
-            exit 1
-          fi
-
-          echo "Project id: $project_id"
-          echo "Field '${FIELD_NAME}' id: $field_id"
-
-          item_id=$(echo "$project_response" | jq -r --arg issueId "$issue_id" '
-            .data.organization.projectV2.items.nodes[]
-            | select(.content != null and .content.id == $issueId)
-            | .id' | head -n 1)
-
-          if [ -z "$item_id" ]; then
-            echo "O issue não está adicionado ao Project #${PROJECT_NUMBER}. Adicione-o ao Languages e rode novamente."
-            exit 1
-          fi
-
-          valor_original=$(echo "$project_response" | jq -r --arg name "$FIELD_NAME" --arg issueId "$issue_id" '
-            .data.organization.projectV2.items.nodes[]
-            | select(.content != null and .content.id == $issueId)
-            | .fieldValues.nodes[]
-            | select(.field.name == $name)
-            | .date // empty' | head -n 1)
-
-          echo "Item id no Project: $item_id"
-          echo "Valor original de '${FIELD_NAME}': ${valor_original:-<vazio>}"
-
-          mutation_update='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
-            updateProjectV2ItemFieldValue(
-              input: { projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: { date: $date } }
-            ) { projectV2Item { id } }
-          }'
-
-          echo "Atualizando '${FIELD_NAME}' para ${DATA_TESTE}..."
-          payload_update=$(jq -n \
-            --arg q "$mutation_update" \
-            --arg projectId "$project_id" \
-            --arg itemId "$item_id" \
-            --arg fieldId "$field_id" \
-            --arg date "$DATA_TESTE" \
-            '{query: $q, variables: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, date: $date}}')
-
-          update_response=$(curl -sS \
-            -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d "$payload_update" \
-            https://api.github.com/graphql)
-
-          echo "$update_response" | jq
-
-          errors_count=$(echo "$update_response" | jq '.errors | length // 0')
-          if [ "$errors_count" -gt 0 ]; then
-            echo "Falha ao atualizar campo. Provavelmente falta permissão de escrita em Projects."
-            exit 1
-          fi
-
-          echo "Atualização OK. Agora revertendo..."
-
-          if [ -n "${valor_original:-}" ]; then
-            data_reverter="$valor_original"
-          else
-            # Se estava vazio, define um valor neutro (mantém a data de teste para não quebrar mutation).
-            # Se você preferir, posso trocar para limpar o campo usando null, mas depende do tipo/GraphQL suportado.
-            data_reverter="$DATA_TESTE"
-            echo "Campo estava vazio; não é possível 'limpar' com segurança neste teste. Mantendo data de teste."
-          fi
-
-          if [ "$data_reverter" != "$DATA_TESTE" ]; then
-            payload_revert=$(jq -n \
-              --arg q "$mutation_update" \
-              --arg projectId "$project_id" \
-              --arg itemId "$item_id" \
-              --arg fieldId "$field_id" \
-              --arg date "$data_reverter" \
-              '{query: $q, variables: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, date: $date}}')
-
-            revert_response=$(curl -sS \
+            project_response=$(curl -sS \
               -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
               -H "Content-Type: application/json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              -d "$payload_revert" \
+              -d "$payload_project" \
               https://api.github.com/graphql)
 
-            echo "$revert_response" | jq
-            echo "Reversão OK."
-          fi
+            project_id=$(echo "$project_response" | jq -r '.data.organization.projectV2.id // empty')
+            project_title=$(echo "$project_response" | jq -r '.data.organization.projectV2.title // empty')
+            if [ -z "$project_id" ]; then
+              echo "Não consegui obter project id (Project #${project_number})."
+              echo "$project_response" | jq
+              return 1
+            fi
 
-          echo "Teste de escrita concluído."
+            echo "Project: ${project_title} (#${project_number})"
+
+            start_field_id=$(echo "$project_response" | jq -r --arg name "$FIELD_START" '
+              .data.organization.projectV2.fields.nodes[]
+              | select(.name == $name)
+              | .id' | head -n 1)
+
+            end_field_id=$(echo "$project_response" | jq -r --arg name "$FIELD_END" '
+              .data.organization.projectV2.fields.nodes[]
+              | select(.name == $name)
+              | .id' | head -n 1)
+
+            if [ -z "$start_field_id" ] || [ -z "$end_field_id" ]; then
+              echo "Não encontrei fields Start/End neste project."
+              return 1
+            fi
+
+            item_id=$(echo "$project_response" | jq -r --arg contentId "$content_id" '
+              .data.organization.projectV2.items.nodes[]
+              | select(.content != null and .content.id == $contentId)
+              | .id' | head -n 1)
+
+            if [ -z "$item_id" ]; then
+              echo "Item não está adicionado ao Project #${project_number}. Ignorando."
+              return 0
+            fi
+
+            mutation_update='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+              updateProjectV2ItemFieldValue(
+                input: { projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: { date: $date } }
+              ) { projectV2Item { id } }
+            }'
+
+            echo "Atualizando Start=${START_DATE}..."
+            payload_start=$(jq -n \
+              --arg q "$mutation_update" \
+              --arg projectId "$project_id" \
+              --arg itemId "$item_id" \
+              --arg fieldId "$start_field_id" \
+              --arg date "$START_DATE" \
+              '{query: $q, variables: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, date: $date}}')
+
+            response_start=$(curl -sS \
+              -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -d "$payload_start" \
+              https://api.github.com/graphql)
+
+            errors_start=$(echo "$response_start" | jq '.errors | length // 0')
+            if [ "$errors_start" -gt 0 ]; then
+              echo "Falha ao atualizar Start:"
+              echo "$response_start" | jq
+              return 1
+            fi
+
+            echo "Atualizando End=${END_DATE}..."
+            payload_end=$(jq -n \
+              --arg q "$mutation_update" \
+              --arg projectId "$project_id" \
+              --arg itemId "$item_id" \
+              --arg fieldId "$end_field_id" \
+              --arg date "$END_DATE" \
+              '{query: $q, variables: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, date: $date}}')
+
+            response_end=$(curl -sS \
+              -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -d "$payload_end" \
+              https://api.github.com/graphql)
+
+            errors_end=$(echo "$response_end" | jq '.errors | length // 0')
+            if [ "$errors_end" -gt 0 ]; then
+              echo "Falha ao atualizar End:"
+              echo "$response_end" | jq
+              return 1
+            fi
+
+            echo "OK: Start/End atualizados no Project #${project_number}."
+          }
+
+          # Atualiza project próprio (Languages) + Master + Roadmap
+          atualizar_project "$PROJECT_LANGUAGES"
+          atualizar_project "$PROJECT_MASTER"
+          atualizar_project "$PROJECT_ROADMAP"
+
+          echo ""
+          echo "Teste concluído."
