@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   auto_assign:
-    uses: ArthemizLabs/.github/.github/workflows/auto-assign.yml@main
+    uses: ./.github/workflows/auto-assign.yml
     with:
       assignees: A4thu4
       max_assignees: 1

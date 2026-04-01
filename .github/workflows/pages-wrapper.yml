@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   deploy:
-    uses: ArthemizLabs/.github/.github/workflows/pages.yml@main
+    uses: ./.github/workflows/pages.yml
     with:
       artifact_path: "./docs"
       build_command: ""

@@ -45,7 +45,7 @@ permissions:
 
 jobs:
   testar_sincronizacao:
-    uses: ArthemizLabs/.github/.github/workflows/validar-tokens-escrita.yml@main
+    uses: ./.github/workflows/validar-tokens-escrita.yml
     with:
       issue_url: ${{ inputs.issue_url }}
       trimestre: ${{ inputs.trimestre }}

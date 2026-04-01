@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ci:
-    uses: ArthemizLabs/.github/.github/workflows/ci.yml@main
+    uses: ./.github/workflows/ci.yml
     with:
       workdir: "."
       node-version: "20"

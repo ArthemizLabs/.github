@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   validar:
-    uses: ArthemizLabs/.github/.github/workflows/validade-tokens.yml@main
+    uses: ./.github/workflows/validade-tokens.yml
     with:
       organization: ${{ inputs.organization }}
       project_number: ${{ inputs.project_number }}
