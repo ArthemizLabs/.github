@@ -1,0 +1,79 @@
+name: validate-tokens
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validar se o secret PROJECTS_TOKEN existe
+        shell: bash
+        run: |
+          if [ -z "${PROJECTS_TOKEN}" ]; then
+            echo "Secret PROJECTS_TOKEN não está configurado neste repositório."
+            exit 1
+          fi
+          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+
+      - name: Consultar Project v2 da organização (Master #16)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          query='query($org: String!, $number: Int!) { organization(login: $org) { projectV2(number: $number) { id title } } }'
+          variables=$(printf '{"org":"%s","number":%s}' "$ORGANIZATION" "$PROJECT_NUMBER")
+
+          payload=$(jq -n --arg q "$query" --argjson v "$variables" '{query: $q, variables: $v}')
+
+          echo "Executando consulta GraphQL no Project #${PROJECT_NUMBER} da org ${ORGANIZATION}..."
+
+          response_file="$(mktemp)"
+          http_code=$(
+            curl -sS -o "$response_file" -w "%{http_code}" \
+              -H "Authorization: Bearer ${PROJECTS_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -d "$payload" \
+              https://api.github.com/graphql
+          )
+
+          echo "HTTP status: ${http_code}"
+          cat "$response_file" | jq
+
+          if [ "${http_code}" -eq 401 ]; then
+            echo "Token inválido, expirado ou revogado (401)."
+            exit 1
+          fi
+
+          if [ "${http_code}" -eq 403 ]; then
+            echo "Token válido, porém sem permissão para acessar Projects v2 da org (403)."
+            exit 1
+          fi
+
+          if [ "${http_code}" -lt 200 ] || [ "${http_code}" -ge 300 ]; then
+            echo "Falha inesperada ao chamar GraphQL."
+            exit 1
+          fi
+
+          errors_count=$(cat "$response_file" | jq '.errors | length // 0')
+          if [ "$errors_count" -gt 0 ]; then
+            echo "A API retornou erros GraphQL. Verifique permissões e se o Project number existe."
+            exit 1
+          fi
+
+          echo "Consulta OK. Token consegue ler o Project."
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          ORGANIZATION: ArthemizLabs
+          PROJECT_NUMBER: "16"
+
+      - name: Próximos passos
+        run: |
+          echo "Se esta validação passou, o token consegue LER o Project #16."
+          echo "Para validar ESCRITA, o próximo teste é fazer uma mutation updateProjectV2ItemFieldValue (vamos criar depois)."
