@@ -1,3 +1,5 @@
+name: validar-tokens-escrita
+
 on:
   workflow_dispatch:
 
