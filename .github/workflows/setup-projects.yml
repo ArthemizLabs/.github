@@ -1,0 +1,833 @@
+name: Setup Projects
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_selection:
+        description: 'Select which projects to create'
+        required: true
+        type: choice
+        options:
+          - 'all'
+          - 'master-only'
+          - 'products-only'
+          - 'roadmap-only'
+        default: 'all'
+
+jobs:
+  setup-projects:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Organization ID
+        id: get-org
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        run: |
+          ORG_ID=$(gh api graphql -f query='
+            query {
+              organization(login: "ArthemizLabs") {
+                id
+              }
+            }
+          ' --jq '.data.organization.id')
+          echo "org_id=$ORG_ID" >> $GITHUB_OUTPUT
+          echo "Organization ID: $ORG_ID"
+
+      # =====================================================
+      # MASTER PROJECT
+      # =====================================================
+
+      - name: Create Master Project
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'master-only' }}
+        id: master-project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        run: |
+          # Try to find an existing project with the title "Master — Master"
+          # Using query parameter to filter and avoid missing projects in orgs with >100 projects
+          EXISTING_PROJECT_ID=$(gh api graphql -f query='
+            query {
+              organization(login: "ArthemizLabs") {
+                projectsV2(first: 20, query: "Master — Master") {
+                  nodes {
+                    id
+                    title
+                  }
+                }
+              }
+            }
+          ' --jq '.data.organization.projectsV2.nodes[] | select(.title == "Master — Master") | .id' | head -n 1)
+
+          if [ -n "$EXISTING_PROJECT_ID" ]; then
+            PROJECT_ID="$EXISTING_PROJECT_ID"
+            echo "Reusing existing Master project with ID: $PROJECT_ID"
+          else
+            echo "No existing Master project found. Creating a new one."
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation {
+                createProjectV2(input: {
+                  ownerId: "${{ steps.get-org.outputs.org_id }}"
+                  title: "Master — Master"
+                }) {
+                  projectV2 {
+                    id
+                  }
+                }
+              }
+            ' --jq '.data.createProjectV2.projectV2.id')
+          fi
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "Master Project ID: $PROJECT_ID"
+
+      - name: Configure Master Project Fields
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'master-only' }}
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECT_ID: ${{ steps.master-project.outputs.project_id }}
+        run: |
+          set -euo pipefail
+
+          # Fetch existing fields for the project to make field creation idempotent
+          existing_fields_json="$(gh api graphql -f query='
+            query {
+              node(id: "'"$PROJECT_ID"'") {
+                ... on ProjectV2 {
+                  fields(first: 100) {
+                    nodes {
+                      ... on ProjectV2FieldCommon {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ')"
+
+          field_exists() {
+            local field_name="$1"
+            echo "$existing_fields_json" | jq -e --arg NAME "$field_name" '
+              .data.node.fields.nodes[]? | select(.name == $NAME)
+            ' > /dev/null 2>&1
+          }
+
+          # Create ID field (text) if it does not already exist
+          if field_exists "ID"; then
+            echo 'Project field "ID" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: TEXT
+                  name: "ID"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Épico field (single select) if it does not already exist
+          if field_exists "Épico"; then
+            echo 'Project field "Épico" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Épico"
+                  singleSelectOptions: [
+                    {name: "TECH_STACK", color: BLUE, description: "Evolução técnica (linguagens, arquitetura, DevOps e fundamentos)."},
+                    {name: "PORTFOLIO", color: GREEN, description: "Entrega e evolução dos projetos."},
+                    {name: "LANG_EN", color: YELLOW, description: "Evolução do inglês técnico e certificação (IELTS)."},
+                    {name: "LANG_JP", color: PINK, description: "Evolução do japonês e certificação (FE)."},
+                    {name: "CERTIFICATIONS", color: PURPLE, description: "Trilha de certificações (cloud, segurança, banco, Java e imigração)."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Fase field (single select) if it does not already exist
+          if field_exists "Fase"; then
+            echo 'Project field "Fase" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Fase"
+                  singleSelectOptions: [
+                    {name: "PHASE_2026", color: GRAY, description: "Fundação: base técnica + primeiros sistemas reais."},
+                    {name: "PHASE_2027", color: BLUE, description: "Expansão: cloud, dados/ETL, RBAC e japonês N5/N4."},
+                    {name: "PHASE_2028", color: GREEN, description: "Qualidade & Segurança: AppSec, CI/CD e hardening."},
+                    {name: "PHASE_2029", color: YELLOW, description: "Maestria: system design, microserviços e metas finais."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Projeto field (single select) if it does not already exist
+          if field_exists "Projeto"; then
+            echo 'Project field "Projeto" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Projeto"
+                  singleSelectOptions: [
+                    {name: "Arthemiz", color: BLUE, description: "Infra/DNS e segurança de rede para suportar o ecossistema."},
+                    {name: "OpsLedger", color: GREEN, description: "SaaS principal de monitoring B2B (métricas, auth e dashboard)."},
+                    {name: "Vendas3D", color: YELLOW, description: "E-commerce 3D com catálogo, produção e pagamentos."},
+                    {name: "SystemHealth", color: ORANGE, description: "Extensão técnica focada em Linux/containers e métricas profundas."},
+                    {name: "Sentinel Agent", color: PINK, description: "Agente em C de telemetria leve para coleta e envio de métricas."},
+                    {name: "Open Source", color: PURPLE, description: "Contribuições open source (issues, PRs e comunidade)."},
+                    {name: "Geral", color: GRAY, description: "Tarefas transversais sem um projeto específico."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Start field (date) if it does not already exist
+          if field_exists "Start"; then
+            echo 'Project field "Start" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: DATE
+                  name: "Start"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create End field (date) if it does not already exist
+          if field_exists "End"; then
+            echo 'Project field "End" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: DATE
+                  name: "End"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create DoD field (text) if it does not already exist
+          if field_exists "DoD"; then
+            echo 'Project field "DoD" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: TEXT
+                  name: "DoD"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Obs field (text) if it does not already exist
+          if field_exists "Obs"; then
+            echo 'Project field "Obs" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: TEXT
+                  name: "Obs"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Tipo field (single select) if it does not already exist
+          if field_exists "Tipo"; then
+            echo 'Project field "Tipo" already exists; skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Tipo"
+                  singleSelectOptions: [
+                    {name: "Study", color: BLUE, description: "Estudo estruturado (teoria, leitura, prática guiada)."},
+                    {name: "Feature", color: GREEN, description: "Implementação de funcionalidade em projeto."},
+                    {name: "Infra", color: GRAY, description: "Infra/DevOps (deploy, cloud, redes, pipelines)."},
+                    {name: "Security", color: RED, description: "Segurança (AppSec, hardening, OWASP, auditoria)."},
+                    {name: "Certification", color: YELLOW, description: "Preparação/execução de certificação."},
+                    {name: "Docs", color: PURPLE, description: "Documentação, guias e padronização."},
+                    {name: "Bug", color: ORANGE, description: "Correção de defeito com validação."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          echo "Master project fields configured successfully"
+
+      - name: Update Master Project Status Field
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'master-only' }}
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECT_ID: ${{ steps.master-project.outputs.project_id }}
+        run: |
+          # Get the Status field ID (increased to first: 100 to reduce chance of missing it)
+          STATUS_FIELD=$(gh api graphql -f query='
+            query {
+              node(id: "'"$PROJECT_ID"'") {
+                ... on ProjectV2 {
+                  fields(first: 100) {
+                    nodes {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ' --jq '.data.node.fields.nodes[] | select(.name == "Status") | .id')
+
+          # Check that STATUS_FIELD is non-empty
+          if [ -z "$STATUS_FIELD" ]; then
+            echo "⚠️  Warning: Could not find Status field in project. The Status field may not exist or may be named differently."
+            echo "   Skipping BLOCKED option creation."
+            exit 0
+          fi
+
+          echo "Status Field ID: $STATUS_FIELD"
+
+          # Add BLOCKED option to Status field if it doesn't already exist
+          EXISTING_OPTION_NAMES=$(gh api graphql -f query='
+            query {
+              node(id: "'"$STATUS_FIELD"'") {
+                ... on ProjectV2SingleSelectField {
+                  options {
+                    name
+                  }
+                }
+              }
+            }
+          ' --jq '.data.node.options[].name')
+
+          if echo "$EXISTING_OPTION_NAMES" | grep -qx "BLOCKED"; then
+            echo "BLOCKED option already exists, skipping"
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2SingleSelectFieldOption(input: {
+                  fieldId: "'"$STATUS_FIELD"'"
+                  name: "BLOCKED"
+                  color: RED
+                  description: "Task is blocked by an external dependency"
+                }) {
+                  option {
+                    id
+                    name
+                  }
+                }
+              }
+            ' || echo "⚠️  Could not add BLOCKED option via API — add it manually in the project settings"
+          fi
+
+          echo "Status field updated"
+
+      # =====================================================
+      # PRODUCT PROJECTS (Arthemiz, OpsLedger, Vendas3D, SystemHealth, Sentinel Agent, Open Source)
+      # =====================================================
+
+      - name: Create Product Projects
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'products-only' }}
+        id: product-projects
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        run: |
+          # Array of product project names
+          PRODUCTS=("Arthemiz — Project" "OpsLedger — Project" "Vendas3D — Project" "SystemHealth — Project" "Sentinel Agent — Project" "Open Source — Project")
+
+          for PRODUCT in "${PRODUCTS[@]}"; do
+            echo "Processing project: $PRODUCT"
+
+            # Try to find an existing project with the same title
+            PROJECT_ID=$(gh api graphql -f query='
+              query {
+                node(id: "${{ steps.get-org.outputs.org_id }}") {
+                  ... on Organization {
+                    projectsV2(first: 100, query: "'"$PRODUCT"'") {
+                      nodes {
+                        id
+                        title
+                      }
+                    }
+                  }
+                }
+              }
+            ' --jq '.data.node.projectsV2.nodes[]? | select(.title=="'"$PRODUCT"'") | .id' | head -n 1)
+
+            if [ -n "$PROJECT_ID" ]; then
+              echo "Found existing project $PRODUCT with ID: $PROJECT_ID"
+            else
+              echo "Creating project: $PRODUCT"
+              PROJECT_ID=$(gh api graphql -f query='
+                mutation {
+                  createProjectV2(input: {
+                    ownerId: "${{ steps.get-org.outputs.org_id }}"
+                    title: "'"$PRODUCT"'"
+                  }) {
+                    projectV2 {
+                      id
+                    }
+                  }
+                }
+              ' --jq '.data.createProjectV2.projectV2.id')
+
+              echo "Project $PRODUCT created with ID: $PROJECT_ID"
+            fi
+            # Store project ID for later use (use sed for robust slugification)
+            SAFE_NAME=$(printf '%s' "$PRODUCT" | sed 's/[^A-Za-z0-9]/_/g')
+            echo "${SAFE_NAME}_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+
+            # Configure product project fields
+            echo "Configuring fields for $PRODUCT"
+
+            # Fetch existing fields for this product project to make creation idempotent
+            existing_prod_fields_json="$(gh api graphql -f query='
+              query {
+                node(id: "'"$PROJECT_ID"'") {
+                  ... on ProjectV2 {
+                    fields(first: 100) {
+                      nodes {
+                        ... on ProjectV2FieldCommon {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ')"
+
+            prod_field_exists() {
+              local field_name="$1"
+              echo "$existing_prod_fields_json" | jq -e --arg NAME "$field_name" '
+                .data.node.fields.nodes[]? | select(.name == $NAME)
+              ' > /dev/null 2>&1
+            }
+
+            # Create Prioridade field (single select) if it doesn't already exist
+            if prod_field_exists "Prioridade"; then
+              echo 'Field "Prioridade" already exists on project '"$PRODUCT"', skipping creation.'
+            else
+              gh api graphql -f query='
+                mutation {
+                  createProjectV2Field(input: {
+                    projectId: "'"$PROJECT_ID"'"
+                    dataType: SINGLE_SELECT
+                    name: "Prioridade"
+                    singleSelectOptions: [
+                      {name: "P0", color: RED, description: "Bloqueador: impede avanço ou quebra fluxo principal."},
+                      {name: "P1", color: ORANGE, description: "Alta: entrega importante no trimestre atual."},
+                      {name: "P2", color: YELLOW, description: "Média: melhora relevante, mas não crítica."},
+                      {name: "P3", color: GRAY, description: "Baixa: item oportunista/qualidade incremental."}
+                    ]
+                  }) {
+                    projectV2Field {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              '
+            fi
+
+            # Create Sprint/Trimestre field (single select) with quarters from 2026-Q2 to 2029-Q4
+            if prod_field_exists "Sprint/Trimestre"; then
+              echo 'Field "Sprint/Trimestre" already exists on project '"$PRODUCT"', skipping creation.'
+            else
+              QUARTERS='['
+              for YEAR in 2026 2027 2028 2029; do
+                for Q in Q1 Q2 Q3 Q4; do
+                  if [ "$YEAR" -eq 2026 ] && [ "$Q" = "Q1" ]; then
+                    continue
+                  fi
+                  QUARTERS+="{name: \"$YEAR-$Q\", color: BLUE, description: \"Janela de execução planejada no trimestre.\"},"
+                done
+              done
+              QUARTERS="${QUARTERS%,}]"
+
+              gh api graphql -f query='
+                mutation {
+                  createProjectV2Field(input: {
+                    projectId: "'"$PROJECT_ID"'"
+                    dataType: SINGLE_SELECT
+                    name: "Sprint/Trimestre"
+                    singleSelectOptions: '"$QUARTERS"'
+                  }) {
+                    projectV2Field {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              '
+            fi
+
+            # Create Start field (date) if it doesn't already exist
+            if prod_field_exists "Start"; then
+              echo 'Field "Start" already exists on project '"$PRODUCT"', skipping creation.'
+            else
+              gh api graphql -f query='
+                mutation {
+                  createProjectV2Field(input: {
+                    projectId: "'"$PROJECT_ID"'"
+                    dataType: DATE
+                    name: "Start"
+                  }) {
+                    projectV2Field {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              '
+            fi
+
+            # Create End field (date) if it doesn't already exist
+            if prod_field_exists "End"; then
+              echo 'Field "End" already exists on project '"$PRODUCT"', skipping creation.'
+            else
+              gh api graphql -f query='
+                mutation {
+                  createProjectV2Field(input: {
+                    projectId: "'"$PROJECT_ID"'"
+                    dataType: DATE
+                    name: "End"
+                  }) {
+                    projectV2Field {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              '
+            fi
+
+            echo "Fields configured for $PRODUCT"
+          done
+
+          echo "All product projects created and configured"
+
+      # =====================================================
+      # ROADMAP PROJECT
+      # =====================================================
+
+      - name: Create Roadmap Project
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'roadmap-only' }}
+        id: roadmap-project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        run: |
+          # Try to find an existing project with the same title first
+          PROJECT_ID=$(gh api graphql -f query='
+            query($ownerId: ID!, $title: String!) {
+              node(id: $ownerId) {
+                ... on Organization {
+                  projectsV2(first: 20, query: $title) {
+                    nodes {
+                      id
+                      title
+                    }
+                  }
+                }
+                ... on User {
+                  projectsV2(first: 20, query: $title) {
+                    nodes {
+                      id
+                      title
+                    }
+                  }
+                }
+              }
+            }
+          ' -f ownerId="${{ steps.get-org.outputs.org_id }}" -f title="Roadmap — Roadmap" --jq '.data.node.projectsV2.nodes[] | select(.title=="Roadmap — Roadmap") | .id' 2>/dev/null || true)
+
+          # If no existing project was found, create a new one
+          if [ -z "$PROJECT_ID" ]; then
+            PROJECT_ID=$(gh api graphql -f query='
+              mutation {
+                createProjectV2(input: {
+                  ownerId: "${{ steps.get-org.outputs.org_id }}"
+                  title: "Roadmap — Roadmap"
+                }) {
+                  projectV2 {
+                    id
+                  }
+                }
+              }
+            ' --jq '.data.createProjectV2.projectV2.id')
+            echo "Created new Roadmap project."
+          else
+            echo "Reusing existing Roadmap project."
+          fi
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "Roadmap Project ID: $PROJECT_ID"
+
+      - name: Configure Roadmap Project Fields
+        if: ${{ github.event.inputs.project_selection == 'all' || github.event.inputs.project_selection == 'roadmap-only' }}
+        env:
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECT_ID: ${{ steps.roadmap-project.outputs.project_id }}
+        run: |
+          # Fetch existing field names for the roadmap project
+          EXISTING_FIELDS=$(gh api graphql -f query='
+            query {
+              node(id: "'"$PROJECT_ID"'") {
+                ... on ProjectV2 {
+                  fields(first: 100) {
+                    nodes {
+                      ... on ProjectV2FieldCommon {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ' --jq '.data.node.fields.nodes[].name')
+
+          roadmap_field_exists() {
+            echo "$EXISTING_FIELDS" | grep -Fxq "$1"
+          }
+
+          # Create Fase field (single select) if it does not already exist
+          if roadmap_field_exists "Fase"; then
+            echo 'Field "Fase" already exists, skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Fase"
+                  singleSelectOptions: [
+                    {name: "PHASE_2026", color: GRAY, description: "Fundação."},
+                    {name: "PHASE_2027", color: BLUE, description: "Expansão."},
+                    {name: "PHASE_2028", color: GREEN, description: "Qualidade & Segurança."},
+                    {name: "PHASE_2029", color: YELLOW, description: "Maestria."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Start field (date) if it does not already exist
+          if roadmap_field_exists "Start"; then
+            echo 'Field "Start" already exists, skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: DATE
+                  name: "Start"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create End field (date) if it does not already exist
+          if roadmap_field_exists "End"; then
+            echo 'Field "End" already exists, skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: DATE
+                  name: "End"
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          # Create Área field (single select) if it does not already exist
+          if roadmap_field_exists "Área"; then
+            echo 'Field "Área" already exists, skipping creation.'
+          else
+            gh api graphql -f query='
+              mutation {
+                createProjectV2Field(input: {
+                  projectId: "'"$PROJECT_ID"'"
+                  dataType: SINGLE_SELECT
+                  name: "Área"
+                  singleSelectOptions: [
+                    {name: "Carreira", color: BLUE, description: "Evolução profissional e entregas técnicas do plano 2030."},
+                    {name: "Idiomas", color: GREEN, description: "Inglês/Japonês (rotina e certificações IELTS/JLPT)."},
+                    {name: "Certificações", color: YELLOW, description: "Certificações cloud, segurança, banco, Java e imigração."},
+                    {name: "Portfólio", color: PURPLE, description: "Entrega e evolução dos projetos do portfólio."},
+                    {name: "Segurança/Qualidade", color: RED, description: "Hardening, AppSec, CI/CD e padrões de qualidade."}
+                  ]
+                }) {
+                  projectV2Field {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            '
+          fi
+
+          echo "Roadmap project fields configured successfully"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## GitHub Projects Setup Complete! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following projects have been configured:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ github.event.inputs.project_selection }}" = "all" ] || [ "${{ github.event.inputs.project_selection }}" = "master-only" ]; then
+            echo "✅ Master — Master (with custom fields: ID, Épico, Fase, Projeto, Status, Start, End, DoD, Obs, Tipo)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ github.event.inputs.project_selection }}" = "all" ] || [ "${{ github.event.inputs.project_selection }}" = "products-only" ]; then
+            echo "✅ Arthemiz — Project" >> $GITHUB_STEP_SUMMARY
+            echo "✅ OpsLedger — Project" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Vendas3D — Project" >> $GITHUB_STEP_SUMMARY
+            echo "✅ SystemHealth — Project" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Sentinel Agent — Project" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Open Source — Project" >> $GITHUB_STEP_SUMMARY
+            echo "   (Each with custom fields: Status, Prioridade, Sprint/Trimestre, Start, End)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ github.event.inputs.project_selection }}" = "all" ] || [ "${{ github.event.inputs.project_selection }}" = "roadmap-only" ]; then
+            echo "✅ Roadmap — Roadmap (with custom fields: Status, Fase, Start, End, Área)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Navigate to your organization's Projects page to view the projects" >> $GITHUB_STEP_SUMMARY
+          echo "2. Run the 'Create Issues from Documentation' workflow to populate the projects" >> $GITHUB_STEP_SUMMARY
+          echo "3. Note: Views must be created manually in the GitHub UI as the API doesn't support view creation" >> $GITHUB_STEP_SUMMARY
