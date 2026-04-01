@@ -1,5 +1,7 @@
 ## Summary
 
+<!-- If the section is not used it can be erased, make a quick overview for the PR. The title shoul have the conventions for 'fix:', 'chore:', 'feature:', etc. -->
+
 ### What was implemented?
 
 <!-- Describe the changes introduced by this pull request. Be specific but quick. Theres no need to make it complex Reference the issue or ticket if applicable (e.g., Closes #123). -->
