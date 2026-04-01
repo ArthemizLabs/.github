@@ -23,10 +23,15 @@ concurrency:
   group: sync-quarter-dates
   cancel-in-progress: true
 
+concurrency:
+  group: sync-quarter-dates
+  cancel-in-progress: true
+
 jobs:
   sincronizar_datas:
     name: Sincronizar Start/End com base em Sprint/Trimestre
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     timeout-minutes: 15
     env:
       ORGANIZATION: ArthemizLabs

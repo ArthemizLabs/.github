@@ -377,6 +377,9 @@ for numero_projeto in "${PROJECTS_PROPRIOS[@]}"; do
   numero_itens=$(echo "$dados_projeto" | jq '.items | length')
   echo "  ${numero_itens} item(s) encontrado(s)."
 
+  if [ "$numero_itens" -eq 0 ]; then
+    continue
+  fi
   for i in $(seq 0 $((numero_itens - 1))); do
     item=$(echo "$dados_projeto" | jq ".items[$i]")
     item_id_proprio=$(echo "$item" | jq -r '.id')
