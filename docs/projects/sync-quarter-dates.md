@@ -8,7 +8,7 @@ O workflow `sync-quarter-dates` varre automaticamente os **8 projects próprios*
 2. O **Master** (Project #16)
 3. O **Roadmap** (Project #23)
 
-O script é **idempotente**: se Start e End já estiverem corretos, nenhuma atualização é feita.
+O script é **idempotente** em todos os destinos: antes de executar cada mutation, verifica se os valores de **Start** e **End** já coincidem com os calculados — tanto no project próprio quanto no **Master** (#16) e no **Roadmap** (#23). Mutations desnecessárias são puladas.
 
 ### Exemplo
 
@@ -25,8 +25,10 @@ O script é **idempotente**: se Start e End já estiverem corretos, nenhuma atua
 
 O workflow é acionado:
 
-- **Automaticamente** a cada 15 minutos (`schedule: cron: "*/15 * * * *"`)
-- **Manualmente** via interface do GitHub Actions (`workflow_dispatch`)
+- **Automaticamente** a cada 15 minutos (`schedule: cron: "*/15 * * * *"`)  
+  Somente itens atualizados nos últimos 20 minutos são processados (modo incremental).
+- **Manualmente** via interface do GitHub Actions (`workflow_dispatch`)  
+  Aceita o parâmetro `full_scan` (`true`/`false`). Com `full_scan=true`, todos os itens são varridos independentemente da data de atualização (útil para reconciliação completa).
 
 ---
 
@@ -73,7 +75,7 @@ O workflow é acionado:
 
 ### 3. Validar o token
 
-Execute o workflow `validate-tokens` (já existente no repositório) para confirmar que o token consegue ler e escrever nos Projects v2.
+Execute o workflow `validate-tokens` (já existente no repositório) para confirmar que o token consegue **ler** os Projects v2. Para validar **escrita**, utilize o workflow `validar-tokens-escrita`.
 
 ---
 
@@ -87,12 +89,13 @@ Execute o workflow `validate-tokens` (já existente no repositório) para confir
 
 | Mensagem                                              | Significado                                                    |
 |-------------------------------------------------------|----------------------------------------------------------------|
-| `Item <id>: já sincronizado (...). Ignorando.`        | Item já está correto; nenhuma ação necessária                  |
-| `Item <id>: Sprint/Trimestre=2026-Q3`                 | Item será sincronizado                                         |
+| `Item <id>: já sincronizado em todos os destinos (...). Ignorando.` | Start/End corretos nos 3 destinos; nenhuma mutation executada |
+| `Item <id>: Sprint/Trimestre=2026-Q3 → Start=..., End=...` | Item será sincronizado em um ou mais destinos            |
 | `OK: <NomeProjeto>.`                                  | Start/End atualizados com sucesso naquele project              |
 | `INFO: Item não encontrado no Master (#16). Ignorando.` | Item não está adicionado ao Master; não é um erro             |
 | `INFO: Item não encontrado no Roadmap (#23). Ignorando.` | Item não está adicionado ao Roadmap; não é um erro           |
 | `AVISO: Campos Start, End ou Sprint/Trimestre não encontrados neste project. Ignorando.` | Project não tem os campos esperados |
+| `ERRO: Chamada GraphQL falhou com status HTTP <N>.`   | Falha na API (401 = token inválido, 403 = sem permissão)       |
 | `ERRO: Variável de ambiente PROJECTS_TOKEN não está configurada.` | Secret não configurado; veja a seção de pré-requisitos |
 
 ### Contadores ao final da execução
