@@ -11,8 +11,8 @@ on:
       project_number:
         description: "Número do Project v2 que será lido."
         required: false
-        default: "16"
-        type: string
+        default: 16
+        type: number
     secrets:
       projects_token:
         description: "Token com acesso ao Project v2."
@@ -25,14 +25,14 @@ jobs:
   validar:
     runs-on: ubuntu-latest
     steps:
-      - name: Validar se o secret PROJECTS_TOKEN existe
+      - name: Validar se o secret projects_token existe
         shell: bash
         run: |
           if [ -z "${PROJECTS_TOKEN}" ]; then
-            echo "Secret PROJECTS_TOKEN não está configurado neste repositório."
+            echo "Secret projects_token não está configurado neste repositório."
             exit 1
           fi
-          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+          echo "Secret projects_token encontrado (valor oculto)."
         env:
           PROJECTS_TOKEN: ${{ secrets.projects_token }}
 

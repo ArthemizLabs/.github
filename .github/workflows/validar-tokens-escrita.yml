@@ -6,7 +6,6 @@ on:
       issue_url:
         description: "URL do issue/PR (ex.: https://github.com/ArthemizLabs/.github/issues/91)"
         required: true
-        default: "https://github.com/ArthemizLabs/.github/issues/91"
         type: string
       trimestre:
         description: "Valor do Sprint/Trimestre (ex.: 2026-Q3)"
@@ -21,18 +20,18 @@ on:
       project_languages:
         description: "Número do Project v2 (Languages)."
         required: false
-        default: "30"
-        type: string
+        default: 30
+        type: number
       project_master:
         description: "Número do Project v2 (Master)."
         required: false
-        default: "16"
-        type: string
+        default: 16
+        type: number
       project_roadmap:
         description: "Número do Project v2 (Roadmap)."
         required: false
-        default: "23"
-        type: string
+        default: 23
+        type: number
       field_start:
         description: "Nome do campo de data inicial."
         required: false
@@ -68,14 +67,14 @@ jobs:
       FIELD_END: ${{ inputs.field_end }}
       FIELD_TRIMESTRE: ${{ inputs.field_trimestre }}
     steps:
-      - name: Validar secret PROJECTS_TOKEN
+      - name: Validar secret projects_token
         shell: bash
         run: |
           if [ -z "${PROJECTS_TOKEN}" ]; then
-            echo "Secret PROJECTS_TOKEN não está configurado."
+            echo "Secret projects_token não está configurado."
             exit 1
           fi
-          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+          echo "Secret projects_token encontrado (valor oculto)."
         env:
           PROJECTS_TOKEN: ${{ secrets.projects_token }}
 
