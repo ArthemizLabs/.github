@@ -1,9 +1,27 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      artifact_path:
+        description: "Caminho do diretório ou artefato a publicar."
+        required: false
+        default: "./docs"
+        type: string
+      build_command:
+        description: "Comando de build opcional antes do deploy (ex.: npm run build)."
+        required: false
+        default: ""
+        type: string
+      build_workdir:
+        description: "Diretório onde o comando de build será executado."
+        required: false
+        default: "."
+        type: string
+    secrets:
+      github_token:
+        description: "Token utilizado para checkout. Usa GITHUB_TOKEN por padrão."
+        required: false
 
 permissions:
   contents: read
@@ -20,17 +38,26 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.build_workdir }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.github_token || secrets.GITHUB_TOKEN }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Build (opcional)
+        if: inputs.build_command != ''
+        run: ${{ inputs.build_command }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs'
+          path: ${{ inputs.artifact_path }}
 
       - name: Deploy to GitHub Pages
         id: deployment

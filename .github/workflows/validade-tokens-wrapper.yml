@@ -1,0 +1,25 @@
+name: validate-tokens (Wrapper)
+
+on:
+  workflow_dispatch:
+    inputs:
+      organization:
+        description: "Organização alvo."
+        required: false
+        default: "ArthemizLabs"
+      project_number:
+        description: "Número do Project v2 para leitura."
+        required: false
+        default: "16"
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    uses: ArthemizLabs/.github/.github/workflows/validade-tokens.yml@main
+    with:
+      organization: ${{ inputs.organization }}
+      project_number: ${{ inputs.project_number }}
+    secrets:
+      projects_token: ${{ secrets.PROJECTS_TOKEN }}

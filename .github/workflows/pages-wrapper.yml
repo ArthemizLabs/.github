@@ -1,0 +1,20 @@
+name: Deploy to GitHub Pages (Wrapper)
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: ArthemizLabs/.github/.github/workflows/pages.yml@main
+    with:
+      artifact_path: "./docs"
+      build_command: ""
+      build_workdir: "."
+    secrets: inherit

@@ -3,18 +3,53 @@ permissions:
   contents: read
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      workdir:
+        description: "Diretório onde os comandos serão executados."
+        required: false
+        default: "."
+        type: string
+      node-version:
+        description: "Versão do Node.js a ser utilizada."
+        required: false
+        default: "20"
+        type: string
+      python-version:
+        description: "Versão do Python a ser utilizada."
+        required: false
+        default: "3.12"
+        type: string
+      go-version:
+        description: "Versão do Go a ser utilizada (fallback quando não houver go.mod)."
+        required: false
+        default: "1.22"
+        type: string
+    secrets:
+      github_token:
+        description: "Token para operações do checkout. Usa o GITHUB_TOKEN do repositório por padrão."
+        required: false
 
 jobs:
   build:
     name: Lint, Test, and Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.workdir }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.github_token || secrets.GITHUB_TOKEN }}
+
+      - name: Validar diretório de trabalho
+        run: |
+          if [ ! -d "${{ inputs.workdir }}" ]; then
+            echo "Diretório de trabalho não encontrado: ${{ inputs.workdir }}"
+            exit 1
+          fi
 
       - name: Detect runtime
         id: detect
@@ -34,27 +69,34 @@ jobs:
         if: steps.detect.outputs.runtime == 'node'
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ inputs['node-version'] }}
           cache: "npm"
+          cache-dependency-path: ${{ inputs.workdir }}/package-lock.json
 
       - name: Install Node.js dependencies
         if: steps.detect.outputs.runtime == 'node'
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Lint (Node.js)
         if: steps.detect.outputs.runtime == 'node'
-        run: npm run lint
+        run: npm run lint --if-present
 
       - name: Run tests (Node.js)
         if: steps.detect.outputs.runtime == 'node'
-        run: npm test
+        run: npm test --if-present
 
       # Go setup
       - name: Set up Go
         if: steps.detect.outputs.runtime == 'go'
         uses: actions/setup-go@v5
         with:
-          go-version-file: "go.mod"
+          go-version-file: "${{ inputs.workdir }}/go.mod"
+          go-version: ${{ inputs['go-version'] }}
           cache: true
 
       - name: Install Go dependencies
@@ -76,7 +118,7 @@ jobs:
         if: steps.detect.outputs.runtime == 'python'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ inputs['python-version'] }}
           cache: "pip"
 
       - name: Install Python dependencies

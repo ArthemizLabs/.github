@@ -1,0 +1,19 @@
+name: CI (Consumidor Exemplo)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ArthemizLabs/.github/.github/workflows/ci.yml@main
+    with:
+      workdir: "."
+      node-version: "20"
+      python-version: "3.12"
+      go-version: "1.22"
+    secrets: inherit

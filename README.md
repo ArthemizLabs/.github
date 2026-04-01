@@ -134,6 +134,26 @@ The public-facing website is located in the [`docs/`](./docs/) directory. It con
 
 GitHub Pages is configured to deploy from the `docs/` directory on the `main` branch.
 
+### Workflows Reutilizáveis
+
+Os workflows em `.github/workflows` estão prontos para reuso via `workflow_call`:
+
+- `ci.yml`: detecção automática de Node.js, Go ou Python, rodando lint e testes no diretório informado.
+- `auto-assign.yml`: atribui responsáveis em issues e pull requests recebidos.
+- `pages.yml`: publica artefatos no GitHub Pages, com build opcional.
+- `validade-tokens.yml` e `validar-tokens-escrita.yml`: validam leitura e escrita em Projects v2 usando `PROJECTS_TOKEN`.
+
+Exemplo de consumo (veja `examples/ci-consumer.yml`):
+
+```yaml
+name: CI
+on: { pull_request: { branches: [main] } }
+jobs:
+  ci:
+    uses: ArthemizLabs/.github/.github/workflows/ci.yml@main
+    secrets: inherit
+```
+
 ---
 
 *ArthemizLabs — Engineering-driven SaaS.*

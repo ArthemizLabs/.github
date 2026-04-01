@@ -1,0 +1,60 @@
+name: validar-tokens-escrita (Wrapper)
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_url:
+        description: "URL do issue/PR (ex.: https://github.com/ArthemizLabs/.github/issues/91)"
+        required: true
+        default: "https://github.com/ArthemizLabs/.github/issues/91"
+      trimestre:
+        description: "Valor do Sprint/Trimestre (ex.: 2026-Q3)"
+        required: true
+        default: "2026-Q3"
+      organization:
+        description: "Organização onde os Projects estão configurados."
+        required: false
+        default: "ArthemizLabs"
+      project_languages:
+        description: "Número do Project Languages."
+        required: false
+        default: "30"
+      project_master:
+        description: "Número do Project Master."
+        required: false
+        default: "16"
+      project_roadmap:
+        description: "Número do Project Roadmap."
+        required: false
+        default: "23"
+      field_start:
+        description: "Campo de data inicial."
+        required: false
+        default: "Start"
+      field_end:
+        description: "Campo de data final."
+        required: false
+        default: "End"
+      field_trimestre:
+        description: "Campo Sprint/Trimestre."
+        required: false
+        default: "Sprint/Trimestre"
+
+permissions:
+  contents: read
+
+jobs:
+  testar_sincronizacao:
+    uses: ArthemizLabs/.github/.github/workflows/validar-tokens-escrita.yml@main
+    with:
+      issue_url: ${{ inputs.issue_url }}
+      trimestre: ${{ inputs.trimestre }}
+      organization: ${{ inputs.organization }}
+      project_languages: ${{ inputs.project_languages }}
+      project_master: ${{ inputs.project_master }}
+      project_roadmap: ${{ inputs.project_roadmap }}
+      field_start: ${{ inputs.field_start }}
+      field_end: ${{ inputs.field_end }}
+      field_trimestre: ${{ inputs.field_trimestre }}
+    secrets:
+      projects_token: ${{ secrets.PROJECTS_TOKEN }}
