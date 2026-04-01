@@ -1,0 +1,44 @@
+name: sync-quarter-dates
+
+on:
+  schedule:
+    # Executa a cada 15 minutos
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sincronizar_datas:
+    name: Sincronizar Start/End com base em Sprint/Trimestre
+    runs-on: ubuntu-latest
+    env:
+      ORGANIZATION: ArthemizLabs
+
+    steps:
+      - name: Verificar se o secret PROJECTS_TOKEN está configurado
+        shell: bash
+        run: |
+          if [ -z "${PROJECTS_TOKEN}" ]; then
+            echo "ERRO: O secret PROJECTS_TOKEN não está configurado neste repositório."
+            echo "Acesse: Repositório → Settings → Secrets and variables → Actions → New repository secret"
+            echo "Nome: PROJECTS_TOKEN"
+            echo "Valor: Personal Access Token (classic) com escopos: read:org, project"
+            exit 1
+          fi
+          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Sincronizar Sprint/Trimestre → Start/End nos Projects v2
+        shell: bash
+        env:
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          ORGANIZATION: ${{ env.ORGANIZATION }}
+        run: |
+          chmod +x scripts/sync-quarter-dates.sh
+          bash scripts/sync-quarter-dates.sh
