@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Restringir execução a um usuário autorizado
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           if [ "${GITHUB_ACTOR}" != "${GITHUB_REPOSITORY_OWNER}" ]; then
