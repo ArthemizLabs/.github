@@ -27,6 +27,6 @@ jobs:
       - name: Definir responsáveis automaticamente
         uses: pozil/auto-assign-issue@v1
         with:
-          repo-token: ${{ secrets.github_token || secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           assignees: ${{ inputs.assignees }}
           numOfAssignee: ${{ inputs.max_assignees }}
