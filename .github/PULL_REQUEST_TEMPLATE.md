@@ -8,7 +8,7 @@ Be short and descriptive following the [CONTRIBUTING rules](https://github.com/A
 
 ## What was implemented?
 
-<!-- Insert the changes introduced by this pull request. Theres no need to make it complex. -->
+<!-- Insert the changes introduced by this pull request. There's no need to make it complex. -->
 
 Added: <!-- Can be removed if no files were added -->
 
