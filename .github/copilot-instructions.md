@@ -7,7 +7,7 @@ When suggesting or generating commit messages, always follow the Conventional Co
 - Use a valid type such as `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, or `revert`.
 - Include a scope when it adds clarity, for example `feat(auth): ...`.
 - Description should be concise and short.
-- Keep the summary short, imperative, and lowercase unless a proper noun requires otherwise.
+- Keep the summary EXTRA short, imperative, and lowercase unless a proper noun requires otherwise, reference only the main changes.
 - Use `!` and a `BREAKING CHANGE:` footer when the change is breaking.
 
 ## Pull Requests
