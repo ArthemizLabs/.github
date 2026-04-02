@@ -17,4 +17,3 @@ jobs:
       artifact_path: "./site"
       build_command: ""
       build_workdir: "."
-    secrets: inherit

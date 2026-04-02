@@ -21,6 +21,15 @@ jobs:
       contents: read
 
     steps:
+      - name: Restringir execução a um usuário autorizado
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_ACTOR}" != "A4thu4" ]; then
+            echo "ERRO: este workflow só pode ser executado pelo OWNER da ORGANIZATION. Ator atual: ${GITHUB_ACTOR}"
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
 

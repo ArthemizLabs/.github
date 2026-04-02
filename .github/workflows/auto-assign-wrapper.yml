@@ -16,4 +16,3 @@ jobs:
     with:
       assignees: A4thu4
       max_assignees: 1
-    secrets: inherit
