@@ -43,9 +43,11 @@ jobs:
 
       - name: Validar diretório de trabalho
         working-directory: .
+        env:
+          WORKDIR: ${{ inputs.workdir }}
         run: |
-          if [ ! -d "${{ inputs.workdir }}" ]; then
-            echo "Diretório de trabalho não encontrado: ${{ inputs.workdir }}"
+          if [ ! -d "$WORKDIR" ]; then
+            echo "Diretório de trabalho não encontrado: $WORKDIR"
             exit 1
           fi
 
