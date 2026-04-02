@@ -13,6 +13,9 @@ When suggesting or generating commit messages, always follow the Conventional Co
 
 When generating a pull request title and description, use the repository's PR template and keep the text concise and specific.
 
-- Title should be short and descriptive, preferably aligned with the same Conventional Commits style used for commits, shuch as `feat:`, `fix:`, etc.
-- Description should summarize what changed, why it changed, any security or breaking impact, and what tests were added or updated, following the template specified in [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md).
-- If the change is small, prefer a compact description that fills the template sections without unnecessary detail.
+- Title must follow this format: `<type>(<scope>): <short description>`.
+- Title type must be one of: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `revert`.
+- Title should be short, imperative, and lowercase unless a proper noun requires otherwise.
+- Description must follow [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md).
+- Description must include, in order: `Summary`, `What was implemented?`, `Security Impact`, `Breaking Changes`, and `Tests Added`.
+- If the change is small, keep the text compact, but do not omit required template sections.
