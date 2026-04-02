@@ -35,7 +35,7 @@ Closes: <!-- Can be removed if not applicable  -->
 
 ---
 
-### Breaking Changes <!-- Can be removed if no braking changes were executed -->
+### Breaking Changes <!-- Can be removed if no breaking changes were executed -->
 
 <!-- List any breaking changes introduced by this pull request. -->
 <!-- Breaking changes include: API contract changes, database schema migrations requiring downtime, removed or renamed configuration keys. -->
@@ -47,16 +47,16 @@ Closes: <!-- Can be removed if not applicable  -->
 <!-- Describe the tests added or updated to cover this change. -->
 <!-- If no tests were included, mark the last one. -->
 
-* [] Unit tests added / updated
-* [] Integration tests added / updated
-* [] No tests required
+* [ ] Unit tests added / updated
+* [ ] Integration tests added / updated
+* [ ] No tests required
 
 ---
 
 ### Checklist
 
-* [] All existing tests pass locally <!-- Can be removed if no tests were executed -->
-* [] New tests have been added for changed functionality <!-- Can be removed if no tests were executed -->
-* [] Documentation has been updated (README, ADRs, API contracts, inline comments) <!-- Can be removed if no documentation were updated or added -->
-* [] No secrets, credentials, or sensitive data are included in this PR <!-- OBRIGATORY -->
-* [] Dependent changes in other repositories are documented and tracked <!-- OBRIGATORY -->
+* [ ] All existing tests pass locally <!-- Can be removed if no tests were executed -->
+* [ ] New tests have been added for changed functionality <!-- Can be removed if no tests were executed -->
+* [ ] Documentation has been updated (README, ADRs, API contracts, inline comments) <!-- Can be removed if no documentation were updated or added -->
+* [ ] No secrets, credentials, or sensitive data are included in this PR <!-- MANDATORY -->
+* [ ] Dependent changes in other repositories are documented and tracked <!-- MANDATORY -->

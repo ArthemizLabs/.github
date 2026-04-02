@@ -21,6 +21,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: number,
-                title: `${prefix}${title.replace(/^Merge #\d+: /, '')}`
+                title: `${prefix}${title.replace(/^Merge \(#\d+\) - /, '')}`
               });
             }
