@@ -1,5 +1,7 @@
 name: Security Issue (Non-Sensitive)
 description: Report a non-sensitive security concern such as a configuration hardening request or a dependency advisory.
+title: "[Security] "
+type: "Security"
 labels: ["security", "triage"]
 body:
   - type: markdown
