@@ -1,0 +1,19 @@
+name: Auto Assign (Wrapper)
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto_assign:
+    uses: ./.github/workflows/auto-assign.yml
+    with:
+      assignees: A4thu4
+      max_assignees: 1
+    secrets: inherit

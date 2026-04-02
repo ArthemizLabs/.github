@@ -1,7 +1,22 @@
 name: validate-tokens
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      organization:
+        description: "Organização a ser consultada."
+        required: false
+        default: "ArthemizLabs"
+        type: string
+      project_number:
+        description: "Número do Project v2 que será lido."
+        required: false
+        default: 16
+        type: number
+    secrets:
+      projects_token:
+        description: "Token com acesso ao Project v2."
+        required: true
 
 permissions:
   contents: read
@@ -10,18 +25,18 @@ jobs:
   validar:
     runs-on: ubuntu-latest
     steps:
-      - name: Validar se o secret PROJECTS_TOKEN existe
+      - name: Validar se o secret projects_token existe
         shell: bash
         run: |
           if [ -z "${PROJECTS_TOKEN}" ]; then
-            echo "Secret PROJECTS_TOKEN não está configurado neste repositório."
+            echo "Secret projects_token não está configurado neste repositório."
             exit 1
           fi
-          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+          echo "Secret projects_token encontrado (valor oculto)."
         env:
-          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECTS_TOKEN: ${{ secrets.projects_token }}
 
-      - name: Consultar Project v2 da organização (Master #16)
+      - name: Consultar Project v2 da organização
         shell: bash
         run: |
           set -euo pipefail
@@ -69,11 +84,11 @@ jobs:
 
           echo "Consulta OK. Token consegue ler o Project."
         env:
-          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
-          ORGANIZATION: ArthemizLabs
-          PROJECT_NUMBER: "16"
+          PROJECTS_TOKEN: ${{ secrets.projects_token }}
+          ORGANIZATION: ${{ inputs.organization }}
+          PROJECT_NUMBER: ${{ inputs.project_number }}
 
       - name: Próximos passos
         run: |
-          echo "Se esta validação passou, o token consegue LER o Project #16."
+          echo "Se esta validação passou, o token consegue LER o Project #${{ inputs.project_number }}."
           echo "Para validar ESCRITA, o próximo teste é fazer uma mutation updateProjectV2ItemFieldValue (vamos criar depois)."

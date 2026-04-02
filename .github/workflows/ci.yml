@@ -3,9 +3,32 @@ permissions:
   contents: read
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      workdir:
+        description: "Diretório onde os comandos serão executados."
+        required: false
+        default: "."
+        type: string
+      node-version:
+        description: "Versão do Node.js a ser utilizada."
+        required: false
+        default: "20"
+        type: string
+      python-version:
+        description: "Versão do Python a ser utilizada."
+        required: false
+        default: "3.12"
+        type: string
+      go-version:
+        description: "Versão do Go a ser utilizada (usada junto ao go.mod)."
+        required: false
+        default: "1.22"
+        type: string
+    secrets:
+      github_token:
+        description: "Token para operações do checkout. Usa o GITHUB_TOKEN do repositório por padrão."
+        required: false
 
 jobs:
   build:
@@ -15,9 +38,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.github_token || secrets.GITHUB_TOKEN }}
+
+      - name: Validar diretório de trabalho
+        working-directory: .
+        env:
+          WORKDIR: ${{ inputs.workdir }}
+        run: |
+          if [ ! -d "$WORKDIR" ]; then
+            echo "Diretório de trabalho não encontrado: $WORKDIR"
+            exit 1
+          fi
 
       - name: Detect runtime
         id: detect
+        working-directory: ${{ inputs.workdir }}
         run: |
           if [ -f "package.json" ]; then
             echo "runtime=node" >> "$GITHUB_OUTPUT"
@@ -34,31 +70,48 @@ jobs:
         if: steps.detect.outputs.runtime == 'node'
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ inputs['node-version'] }}
           cache: "npm"
+          cache-dependency-path: ${{ inputs.workdir }}/package-lock.json
 
       - name: Install Node.js dependencies
         if: steps.detect.outputs.runtime == 'node'
-        run: npm ci
+        working-directory: ${{ inputs.workdir }}
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "Erro: package-lock.json não encontrado. Crie e versione um lockfile para builds determinísticos no CI."
+            exit 1
+          fi
 
       - name: Lint (Node.js)
         if: steps.detect.outputs.runtime == 'node'
-        run: npm run lint
+        working-directory: ${{ inputs.workdir }}
+        run: |
+          node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json'));if(!pkg.scripts||!pkg.scripts.lint){console.error('Erro: script \"lint\" não definido em package.json. Configure scripts.lint para habilitar lint no CI.');process.exit(1);}"
+          npm run lint
 
       - name: Run tests (Node.js)
         if: steps.detect.outputs.runtime == 'node'
-        run: npm test
+        working-directory: ${{ inputs.workdir }}
+        run: |
+          node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json'));if(!pkg.scripts||!pkg.scripts.test){console.error('Erro: script \"test\" não definido em package.json. Configure scripts.test para habilitar testes no CI.');process.exit(1);}"
+          npm test
 
       # Go setup
       - name: Set up Go
         if: steps.detect.outputs.runtime == 'go'
         uses: actions/setup-go@v5
         with:
-          go-version-file: "go.mod"
+          go-version: ${{ inputs['go-version'] }}
+          go-version-file: ${{ inputs.workdir }}/go.mod
           cache: true
+          cache-dependency-path: ${{ inputs.workdir }}/go.sum
 
       - name: Install Go dependencies
         if: steps.detect.outputs.runtime == 'go'
+        working-directory: ${{ inputs.workdir }}
         run: go mod download
 
       - name: Lint (Go)
@@ -66,9 +119,11 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
+          working-directory: ${{ inputs.workdir }}
 
       - name: Run tests (Go)
         if: steps.detect.outputs.runtime == 'go'
+        working-directory: ${{ inputs.workdir }}
         run: go test ./... -race -coverprofile=coverage.out
 
       # Python setup
@@ -76,11 +131,15 @@ jobs:
         if: steps.detect.outputs.runtime == 'python'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ inputs['python-version'] }}
           cache: "pip"
+          cache-dependency-path: |
+            ${{ inputs.workdir }}/requirements*.txt
+            ${{ inputs.workdir }}/pyproject.toml
 
       - name: Install Python dependencies
         if: steps.detect.outputs.runtime == 'python'
+        working-directory: ${{ inputs.workdir }}
         run: |
           pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -89,12 +148,14 @@ jobs:
 
       - name: Lint (Python)
         if: steps.detect.outputs.runtime == 'python'
+        working-directory: ${{ inputs.workdir }}
         run: |
           pip install ruff
           ruff check .
 
       - name: Run tests (Python)
         if: steps.detect.outputs.runtime == 'python'
+        working-directory: ${{ inputs.workdir }}
         run: |
           pip install pytest
           pytest --tb=short

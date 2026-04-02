@@ -1,16 +1,56 @@
 name: validar-tokens-escrita
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       issue_url:
         description: "URL do issue/PR (ex.: https://github.com/ArthemizLabs/.github/issues/91)"
         required: true
-        default: "https://github.com/ArthemizLabs/.github/issues/91"
+        type: string
       trimestre:
         description: "Valor do Sprint/Trimestre (ex.: 2026-Q3)"
         required: true
         default: "2026-Q3"
+        type: string
+      organization:
+        description: "Organização onde o Project v2 está configurado."
+        required: false
+        default: "ArthemizLabs"
+        type: string
+      project_languages:
+        description: "Número do Project v2 (Languages)."
+        required: false
+        default: 30
+        type: number
+      project_master:
+        description: "Número do Project v2 (Master)."
+        required: false
+        default: 16
+        type: number
+      project_roadmap:
+        description: "Número do Project v2 (Roadmap)."
+        required: false
+        default: 23
+        type: number
+      field_start:
+        description: "Nome do campo de data inicial."
+        required: false
+        default: "Start"
+        type: string
+      field_end:
+        description: "Nome do campo de data final."
+        required: false
+        default: "End"
+        type: string
+      field_trimestre:
+        description: "Nome do campo de Sprint/Trimestre."
+        required: false
+        default: "Sprint/Trimestre"
+        type: string
+    secrets:
+      projects_token:
+        description: "Token com acesso aos Projects v2."
+        required: true
 
 permissions:
   contents: read
@@ -19,24 +59,24 @@ jobs:
   testar_sincronizacao:
     runs-on: ubuntu-latest
     env:
-      ORGANIZATION: ArthemizLabs
-      PROJECT_LANGUAGES: "30"
-      PROJECT_MASTER: "16"
-      PROJECT_ROADMAP: "23"
-      FIELD_START: Start
-      FIELD_END: End
-      FIELD_TRIMESTRE: Sprint/Trimestre
+      ORGANIZATION: ${{ inputs.organization }}
+      PROJECT_LANGUAGES: ${{ inputs.project_languages }}
+      PROJECT_MASTER: ${{ inputs.project_master }}
+      PROJECT_ROADMAP: ${{ inputs.project_roadmap }}
+      FIELD_START: ${{ inputs.field_start }}
+      FIELD_END: ${{ inputs.field_end }}
+      FIELD_TRIMESTRE: ${{ inputs.field_trimestre }}
     steps:
-      - name: Validar secret PROJECTS_TOKEN
+      - name: Validar secret projects_token
         shell: bash
         run: |
           if [ -z "${PROJECTS_TOKEN}" ]; then
-            echo "Secret PROJECTS_TOKEN não está configurado."
+            echo "Secret projects_token não está configurado."
             exit 1
           fi
-          echo "Secret PROJECTS_TOKEN encontrado (valor oculto)."
+          echo "Secret projects_token encontrado (valor oculto)."
         env:
-          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECTS_TOKEN: ${{ secrets.projects_token }}
 
       - name: Calcular datas do trimestre
         id: datas
@@ -92,7 +132,7 @@ jobs:
       - name: Sincronizar Sprint/Trimestre (Languages) + Start/End (3 projects)
         shell: bash
         env:
-          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+          PROJECTS_TOKEN: ${{ secrets.projects_token }}
           OWNER_REPO: ${{ steps.issue.outputs.owner_repo }}
           ITEM_KIND: ${{ steps.issue.outputs.kind }}
           ITEM_NUMBER: ${{ steps.issue.outputs.number }}
