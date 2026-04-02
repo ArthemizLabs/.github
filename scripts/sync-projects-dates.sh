@@ -2,7 +2,7 @@
 # Sincroniza os campos Start e End nos Projects v2 com base no campo
 # "Sprint/Trimestre" (formato YYYY-Qn) dos 8 projects próprios.
 #
-# Uso: PROJECTS_TOKEN=<token> [ORGANIZATION=ArthemizLabs] [FULL_SCAN=false] bash sync-quarter-dates.sh
+# Uso: PROJECTS_TOKEN=<token> [ORGANIZATION=ArthemizLabs] [FULL_SCAN=false] [DEBUG=false] bash sync-projects-dates.sh
 #
 # Para cada item dos projects próprios que tiver Sprint/Trimestre definido e
 # Start/End divergentes do trimestre calculado, o script atualiza:
@@ -15,6 +15,8 @@
 # calculados já coincidem com os atuais.
 
 set -euo pipefail
+
+DEBUG="${DEBUG:-false}"
 
 # ─── Validação do token ───────────────────────────────────────────────────────
 if [ -z "${PROJECTS_TOKEN:-}" ]; then
@@ -60,8 +62,19 @@ graphql() {
   if [[ ! "$status" =~ ^2[0-9][0-9]$ ]]; then
     {
       echo "ERRO: Chamada GraphQL falhou com status HTTP ${status}."
-      echo "Resposta da API:"
-      echo "$body"
+
+      # Evita despejar o body completo por padrão (pode conter detalhes demais).
+      if command -v jq >/dev/null 2>&1; then
+        echo "Resumo do erro (campo .errors, se existir):"
+        echo "$body" | jq -c '.errors // empty' || true
+      else
+        echo "Instale 'jq' para visualizar o resumo do erro."
+      fi
+
+      if [ "$DEBUG" = "true" ]; then
+        echo "DEBUG=true: Corpo completo da resposta:"
+        echo "$body"
+      fi
     } >&2
     exit 1
   fi
@@ -347,7 +360,6 @@ else
   echo "Modo FULL_SCAN: processando todos os itens independentemente de data de atualização."
 fi
 
-# ─── Loop principal: varrer os 8 projects próprios ────────────────────────────
 total_sincronizados=0
 total_ignorados=0
 total_fora_da_janela=0
