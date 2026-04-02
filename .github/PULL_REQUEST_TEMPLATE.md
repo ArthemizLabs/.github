@@ -1,7 +1,7 @@
 # Summary
 
 <!-- 
-The title should have the conventions for 'fix:', 'chore:', 'feature:', etc.
+The title should have the conventions for 'feat:', 'fix:', 'chore:', etc.
 In here make a quick overview for the PR, describing the changes.
 Be short and descriptive following the [CONTRIBUTING rules](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md) 
 -->
@@ -12,15 +12,15 @@ Be short and descriptive following the [CONTRIBUTING rules](https://github.com/A
 
 Added: <!-- Can be removed if no files were added -->
 
-* `archive.md`
+* `<file>`
 
 Deleted: <!-- Can be removed if no files were deleted -->
 
-* `archive.md`
+* `<file>`
 
 Changed: <!-- Can be removed if no files were changed -->
 
-* `archive.md`
+* `<file>`
 
 Closes: <!-- Can be removed if not applicable  -->
 
