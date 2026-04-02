@@ -25,10 +25,6 @@ on:
         required: false
         default: "1.22"
         type: string
-    secrets:
-      github_token:
-        description: "Token para operações do checkout. Usa o GITHUB_TOKEN do repositório por padrão."
-        required: false
 
 jobs:
   build:
