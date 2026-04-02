@@ -1,5 +1,7 @@
 name: Architecture Discussion
 description: Propose or discuss a significant architectural decision or cross-cutting concern.
+title: "[Architecture] "
+type: "Architecture"
 labels: ["architecture", "discussion"]
 body:
   - type: markdown
