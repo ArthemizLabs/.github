@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "${GITHUB_ACTOR}" != "${GITHUB_REPOSITORY_OWNER}" ]; then
-            echo "ERRO: este workflow só pode ser executado pelo OWNER da ORGANIZATION. Ator atual: ${GITHUB_ACTOR}"
+            echo "ERRO: este workflow só pode ser executado pelo OWNER da ORGANIZATION/REPOSITORY. Ator atual: ${GITHUB_ACTOR}"
             exit 1
           fi
 
@@ -141,10 +141,7 @@ jobs:
               description = f"**ID:** {task_id}\n"
               description += f"**Fase:** {task['phase']}\n"
               description += f"\n{task['description']}"
-              description += (
-                  "\n\n_Note: Legacy issues may still include project-based labels. "
-                  "New issues created by this workflow only use epic and phase labels._"
-              )
+
 
               labels = [get_epic_label(epic), get_phase_label(task['phase'])]
               labels_str = ",".join(labels)

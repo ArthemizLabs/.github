@@ -18,4 +18,4 @@ When generating a pull request title and description, use the repository's PR te
 - Title type must be one of: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `revert`.
 - Title should be short, imperative, and lowercase unless a proper noun requires otherwise.
 - Description must include, in order: `Summary`, `What was implemented?`, `Security Impact`, `Breaking Changes`, and `Tests Added`.
-- If the change is small, keep the text compact, omit required template sections when appropriate, in cases theres no use for them.
+- If the change is small, keep the text compact, omit required template sections when appropriate, in cases there's no use for them.
