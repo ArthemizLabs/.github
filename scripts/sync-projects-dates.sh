@@ -2,7 +2,7 @@
 # Sincroniza os campos Start e End nos Projects v2 com base no campo
 # "Sprint/Trimestre" (formato YYYY-Qn) dos 8 projects próprios.
 #
-# Uso: PROJECTS_TOKEN=<token> [ORGANIZATION=ArthemizLabs] [FULL_SCAN=false] [DEBUG=false] bash sync-quarter-dates.sh
+# Uso: PROJECTS_TOKEN=<token> [ORGANIZATION=ArthemizLabs] [FULL_SCAN=false] [DEBUG=false] bash sync-projects-dates.sh
 #
 # Para cada item dos projects próprios que tiver Sprint/Trimestre definido e
 # Start/End divergentes do trimestre calculado, o script atualiza:
