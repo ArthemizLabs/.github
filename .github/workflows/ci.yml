@@ -102,7 +102,7 @@ jobs:
         if: steps.detect.outputs.runtime == 'go'
         uses: actions/setup-go@v5
         with:
-          go-version-file: "${{ inputs.workdir }}/go.mod"
+          go-version: ${{ inputs['go-version'] }}
           cache: true
 
       - name: Install Go dependencies

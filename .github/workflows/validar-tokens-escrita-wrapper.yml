@@ -18,15 +18,15 @@ on:
       project_languages:
         description: "Número do Project Languages."
         required: false
-        default: "30"
+        default: 30
       project_master:
         description: "Número do Project Master."
         required: false
-        default: "16"
+        default: 16
       project_roadmap:
         description: "Número do Project Roadmap."
         required: false
-        default: "23"
+        default: 23
       field_start:
         description: "Campo de data inicial."
         required: false
@@ -50,9 +50,9 @@ jobs:
       issue_url: ${{ inputs.issue_url }}
       trimestre: ${{ inputs.trimestre }}
       organization: ${{ inputs.organization }}
-      project_languages: ${{ inputs.project_languages }}
-      project_master: ${{ inputs.project_master }}
-      project_roadmap: ${{ inputs.project_roadmap }}
+      project_languages: ${{ fromJSON(inputs.project_languages) }}
+      project_master: ${{ fromJSON(inputs.project_master) }}
+      project_roadmap: ${{ fromJSON(inputs.project_roadmap) }}
       field_start: ${{ inputs.field_start }}
       field_end: ${{ inputs.field_end }}
       field_trimestre: ${{ inputs.field_trimestre }}

@@ -10,7 +10,7 @@ on:
       project_number:
         description: "Número do Project v2 para leitura."
         required: false
-        default: "16"
+        default: 16
 
 permissions:
   contents: read
@@ -20,6 +20,6 @@ jobs:
     uses: ./.github/workflows/validade-tokens.yml
     with:
       organization: ${{ inputs.organization }}
-      project_number: ${{ inputs.project_number }}
+      project_number: ${{ fromJSON(inputs.project_number) }}
     secrets:
       projects_token: ${{ secrets.PROJECTS_TOKEN }}
