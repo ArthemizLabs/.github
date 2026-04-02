@@ -1,10 +1,10 @@
 # Summary
 
 <!-- 
-The title should have the conventions for 'feat:', 'fix:', 'chore:', etc.
-In here make a quick overview for the PR, describing the changes.
-Be short and descriptive following the [CONTRIBUTING rules](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md) 
--->
+The PR title should follow Conventional Commits (e.g. `feat(scope): short description`, `fix(api): ...`),
+but note that the workflow may prepend `Merge (#<n>) - ` automatically. Ensure the `<type>(<scope>): <short description>` pattern
+is present in the title, even if it is not the very first text, and keep it short and descriptive following the
+[CONTRIBUTING rules](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md).
 
 ## What was implemented?
 
