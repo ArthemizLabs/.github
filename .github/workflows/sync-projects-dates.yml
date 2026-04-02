@@ -1,4 +1,4 @@
-name: sync-quarter-dates
+name: sync-projects-dates
 
 on:
   schedule:
@@ -20,7 +20,7 @@ permissions:
 
 # Evita execuções sobrepostas: cancela a anterior se houver uma nova na fila.
 concurrency:
-  group: sync-quarter-dates
+  group: sync-projects-dates
   cancel-in-progress: true
 
 jobs:
@@ -56,5 +56,5 @@ jobs:
           ORGANIZATION: ${{ env.ORGANIZATION }}
           FULL_SCAN: ${{ inputs.full_scan || 'false' }}
         run: |
-          chmod +x scripts/sync-quarter-dates.sh
-          bash scripts/sync-quarter-dates.sh
+          chmod +x scripts/sync-projects-dates.sh
+          bash scripts/sync-projects-dates.sh
