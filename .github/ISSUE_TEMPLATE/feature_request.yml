@@ -1,5 +1,7 @@
 name: Feature Request
 description: Propose a new capability or improvement to an existing system.
+title: "[Feature]"
+type: "Feature"
 labels: ["enhancement", "triage"]
 body:
   - type: markdown
