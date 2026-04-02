@@ -6,7 +6,7 @@ on:
       artifact_path:
         description: "Caminho do diretório ou artefato a publicar."
         required: false
-        default: "./docs"
+        default: "./site"
         type: string
       build_command:
         description: "Comando de build opcional antes do deploy (ex.: npm run build)."
