@@ -134,25 +134,24 @@ The public-facing website is located in the [`docs/`](./docs/) directory. It con
 
 GitHub Pages is configured to deploy from the `docs/` directory on the `main` branch.
 
-### Workflows Reutilizáveis
+### Reusable Workflows
 
-Os workflows em `.github/workflows` estão prontos para reuso via `workflow_call`:
+The workflows in `.github/workflows` are ready for reuse via `workflow_call`:
 
-- `ci.yml`: detecção automática de Node.js, Go ou Python, rodando lint e testes no diretório informado.
-- `auto-assign.yml`: atribui responsáveis em issues e pull requests recebidos.
-- `pages.yml`: publica artefatos no GitHub Pages, com build opcional.
-- `validade-tokens.yml` e `validar-tokens-escrita.yml`: validam leitura e escrita em Projects v2 usando o secret `projects_token` (os wrappers locais mapeiam de `PROJECTS_TOKEN` para manter compatibilidade).
+- `ci.yml`: auto-detects Node.js, Go, or Python and runs lint/tests in the specified directory.
+- `auto-assign.yml`: assigns owners to incoming issues and pull requests.
+- `pages.yml`: publishes artifacts to GitHub Pages, with an optional build step.
+- `validade-tokens.yml` and `validar-tokens-escrita.yml`: validate read/write access to Projects v2 using the `projects_token` secret (local wrappers map from `PROJECTS_TOKEN` to keep compatibility).
 
-Exemplo de consumo (veja `examples/ci-consumer.yml`):
+Example usage (see `examples/ci-consumer.yml`):
 
 ```yaml
 name: CI
 on: { pull_request: { branches: [main] } }
 jobs:
   ci:
-    uses: ArthemizLabs/.github/.github/workflows/ci.yml@<tag-ou-sha>
-    # Ex.: ArthemizLabs/.github/.github/workflows/ci.yml@0123456789abcdef
-    secrets: inherit
+    uses: ArthemizLabs/.github/.github/workflows/ci.yml@<tag-or-sha>
+    # Example: ArthemizLabs/.github/.github/workflows/ci.yml@0123456789abcdef
 ```
 
 ---

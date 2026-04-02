@@ -103,7 +103,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ inputs['go-version'] }}
+          go-version-file: ${{ inputs.workdir }}/go.mod
           cache: true
+          cache-dependency-path: ${{ inputs.workdir }}/go.sum
 
       - name: Install Go dependencies
         if: steps.detect.outputs.runtime == 'go'
@@ -129,6 +131,9 @@ jobs:
         with:
           python-version: ${{ inputs['python-version'] }}
           cache: "pip"
+          cache-dependency-path: |
+            ${{ inputs.workdir }}/requirements*.txt
+            ${{ inputs.workdir }}/pyproject.toml
 
       - name: Install Python dependencies
         if: steps.detect.outputs.runtime == 'python'
