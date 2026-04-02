@@ -157,7 +157,7 @@ add_issue_to_project() {
   ' 2>&1); then
     echo "Added issue #$issue_number to project"
   else
-    if echo "$result" | grep -Eqi "already(.*)(added|exists)|duplicate"; then
+    if echo "$result" | grep -Eqi "already.*(added|exists)|duplicate"; then
       echo "Issue #$issue_number already in project, skipping"
     else
       echo "Error adding issue #$issue_number: $result" >&2
