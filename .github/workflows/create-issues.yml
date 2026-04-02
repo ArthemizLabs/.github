@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ "${GITHUB_ACTOR}" != "A4thu4" ]; then
+          if [ "${GITHUB_ACTOR}" != "${{ github.repository_owner }}" ]; then
             echo "ERRO: este workflow só pode ser executado pelo OWNER da ORGANIZATION. Ator atual: ${GITHUB_ACTOR}"
             exit 1
           fi
