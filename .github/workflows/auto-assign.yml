@@ -12,10 +12,6 @@ on:
         required: false
         default: 1
         type: number
-    secrets:
-      github_token:
-        description: "Token com permissão para escrever em issues e pull requests. Usa GITHUB_TOKEN por padrão."
-        required: false
 
 jobs:
   auto_assign:

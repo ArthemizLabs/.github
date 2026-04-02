@@ -18,10 +18,6 @@ on:
         required: false
         default: "."
         type: string
-    secrets:
-      github_token:
-        description: "Token utilizado para checkout. Usa GITHUB_TOKEN por padrão."
-        required: false
 
 permissions:
   contents: read
