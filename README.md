@@ -38,55 +38,6 @@ To design, build, and operate reliable, secure, and scalable SaaS platforms that
 
 ---
 
-## Tech Stack Strategy
-
-ArthemizLabs follows a pragmatic, production-proven technology strategy. Stack decisions prioritize operational maturity, ecosystem tooling, and long-term maintainability over novelty.
-
-**Backend:** Node.js (TypeScript), with service-specific use of Go for performance-critical workloads.
-
-**Frontend:** React (TypeScript) with a shared design system. Server-side rendering where SEO or performance demands it.
-
-**Data:** PostgreSQL as the primary relational store. Redis for caching and ephemeral state. Event sourcing patterns where audit trails are required (OpsLedger).
-
-**Infrastructure:** Containerized workloads on Kubernetes. Infrastructure-as-Code via Terraform. GitOps deployment model using ArgoCD.
-
-**Observability:** OpenTelemetry for distributed tracing. Prometheus and Grafana for metrics. Structured JSON logging across all services.
-
-**Security:** OAuth 2.0 / OIDC for authentication. Vault for secret management. SAST and dependency scanning integrated into every CI pipeline.
-
----
-
-## High-Level Roadmap (2026–2029)
-
-### 2026 — Foundation Consolidation
-- Standardize CI/CD pipelines and deployment tooling across all repositories.
-- Achieve 90%+ test coverage on all core domain services.
-- Complete API contract documentation for all external-facing endpoints.
-- Launch Sentinel v1 with centralized log ingestion and alerting.
-- Establish multi-region deployment capability for Arthemiz and OpsLedger.
-
-### 2027 — Platform Maturity
-- Introduce event-driven architecture for inter-service communication (NATS or Kafka).
-- Implement advanced anomaly detection in Sentinel using statistical baselines.
-- Launch Vendas3D API platform for third-party integrations.
-- Achieve SOC 2 Type I readiness across all production services.
-- Introduce automated chaos engineering drills for resilience validation.
-
-### 2028 — Ecosystem Expansion
-- Launch a developer portal with unified API documentation, SDK references, and sandbox environments.
-- Introduce ML-assisted anomaly detection in Sentinel.
-- Expand OpsLedger with multi-currency and multi-jurisdiction compliance support.
-- Achieve SOC 2 Type II certification.
-- Open Vendas3D marketplace to third-party 3D asset providers.
-
-### 2029 — Scale and Optimization
-- Global edge distribution for latency-sensitive services.
-- Formal SRE function with published SLOs and error budgets per service.
-- Self-service onboarding for new tenant provisioning across all platforms.
-- Cross-system data platform for operational analytics and reporting.
-
----
-
 ## Contribution Model
 
 ArthemizLabs follows a structured contribution model to maintain code quality and architectural consistency across all repositories.
@@ -103,14 +54,14 @@ Security vulnerabilities must be reported privately per the [Security Policy](./
 
 ## Project Management
 
-ArthemizLabs uses GitHub Projects v2 for tracking work across the organization. See [GitHub Projects Setup Guide](./documents/projects/GITHUB_PROJECTS_SETUP.md) for information on:
+ArthemizLabs uses GitHub Projects v2 for tracking work across the organization. See [GitHub Projects Setup Guide](./docs/projects/GITHUB_PROJECTS_SETUP.md) for information on:
 
 - Setting up organization-wide projects
 - Creating and managing issues from the project documentation
 - Configuring custom fields and views
 - Tracking progress across phases and epics
 
-The detailed roadmap and task breakdown is documented in [PROJECT_DOCUMENTATION.md](./PROJECT_DOCUMENTATION.md).
+The detailed roadmap and task breakdown is documented in [PROJECT_DOCUMENTATION.md](./docs/PROJECT_DOCUMENTATION.md).
 
 ## Repository Structure
 
