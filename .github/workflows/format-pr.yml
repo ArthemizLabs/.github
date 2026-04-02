@@ -1,0 +1,29 @@
+name: format-pr
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  format-title:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Update PR Title
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const number = context.payload.pull_request.number;
+            const prefix = `Merge (#${number}) - `;
+            
+            if (!title.startsWith(prefix)) {
+              github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: number,
+                title: `${prefix}${title.replace(/^Merge \(#\d+\) - /, '')}`
+              });
+            }
