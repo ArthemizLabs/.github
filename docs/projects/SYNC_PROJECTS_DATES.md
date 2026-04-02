@@ -2,7 +2,7 @@
 
 ## O que o workflow faz
 
-O workflow `sync-quarter-dates` varre automaticamente os **8 projects próprios** da organização `ArthemizLabs` e, para cada item que tiver o campo **Sprint/Trimestre** preenchido, calcula as datas de início e fim do trimestre e as sincroniza nos campos **Start** e **End** de três projects:
+O workflow `sync-projects-dates` varre automaticamente os **8 projects próprios** da organização `ArthemizLabs` e, para cada item que tiver o campo **Sprint/Trimestre** preenchido, calcula as datas de início e fim do trimestre e as sincroniza nos campos **Start** e **End** de três projects:
 
 1. O **project próprio** onde o campo foi definido
 2. O **Master** (Project #16)
@@ -81,7 +81,7 @@ Execute o workflow `validate-tokens` (já existente no repositório) para confir
 
 ## Como debugar via logs
 
-1. Acesse **Actions → sync-quarter-dates** no repositório
+1. Acesse **Actions → sync-projects-dates** no repositório
 2. Clique na execução desejada
 3. Expanda o step **Sincronizar Sprint/Trimestre → Start/End nos Projects v2**
 
@@ -112,5 +112,5 @@ Sincronização concluída.
 
 | Arquivo                                        | Descrição                                      |
 |------------------------------------------------|------------------------------------------------|
-| `.github/workflows/sync-quarter-dates.yml`     | Workflow que aciona o script                   |
-| `scripts/sync-quarter-dates.sh`                | Script principal de sincronização (bash + jq)  |
+| `.github/workflows/sync-projects-dates.yml`    | Workflow que aciona o script                   |
+| `scripts/sync-projects-dates.sh`               | Script principal de sincronização (bash + jq)  |
