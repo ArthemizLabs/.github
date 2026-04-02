@@ -1,43 +1,62 @@
-## Summary
+# Summary
 
-<!-- If the section is not used it can be erased, make a quick overview for the PR. The title should have the conventions for 'fix:', 'chore:', 'feature:', etc. and be short descriptive -->
-Follow the [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) and what is set in [CONTRIBUTING archive](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md)
+<!-- 
+The title should have the conventions for 'fix:', 'chore:', 'feature:', etc.
+In here make a quick overview for the PR, describing the changes.
+Be short and descriptive following the [CONTRIBUTING rules](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md) 
+-->
 
-### What was implemented?
+## What was implemented?
 
-<!-- Describe the changes introduced by this pull request. Be specific but quick. Theres no need to make it complex Reference the issue or ticket if applicable (e.g., Closes #123). -->
+<!-- Insert the changes introduced by this pull request. Theres no need to make it complex. -->
+
+Added: <!-- Can be removed if no files were added -->
+
+* `archive.md`
+
+Deleted: <!-- Can be removed if no files were deleted -->
+
+* `archive.md`
+
+Changed: <!-- Can be removed if no files were changed -->
+
+* `archive.md`
+
+Closes: <!-- Can be removed if not applicable  -->
+
+* [#issue/ticket number]
 
 ---
 
-## Security Impact
+### Security Impact <!-- Can be removed if no security related changes were executed -->
 
-<!-- Describe any security implications of this change. If none, state "No security impact." -->
+<!-- Describe any security implications of this change. -->
 <!-- Consider: authentication/authorization changes, data exposure, new external dependencies, input validation, secrets handling. -->
 
 ---
 
-## Breaking Changes
+### Breaking Changes <!-- Can be removed if no braking changes were executed -->
 
-<!-- List any breaking changes introduced by this pull request. If none, state "No breaking changes." -->
+<!-- List any breaking changes introduced by this pull request. -->
 <!-- Breaking changes include: API contract changes, database schema migrations requiring downtime, removed or renamed configuration keys. -->
 
 ---
 
-## Tests Added
+### Tests Added
 
 <!-- Describe the tests added or updated to cover this change. -->
-<!-- If no tests were added, provide a clear justification. -->
+<!-- If no tests were included, mark the last one. -->
 
-- [ ] Unit tests added / updated
-- [ ] Integration tests added / updated
-- [ ] No tests required — justification: <!-- explain here -->
+* [] Unit tests added / updated
+* [] Integration tests added / updated
+* [] No tests required
 
 ---
 
-## Checklist
+### Checklist
 
-- [ ] All existing tests pass locally
-- [ ] New tests have been added for changed functionality
-- [ ] Documentation has been updated (README, ADRs, API contracts, inline comments)
-- [ ] No secrets, credentials, or sensitive data are included in this PR
-- [ ] Dependent changes in other repositories are documented and tracked
+* [] All existing tests pass locally <!-- Can be removed if no tests were executed -->
+* [] New tests have been added for changed functionality <!-- Can be removed if no tests were executed -->
+* [] Documentation has been updated (README, ADRs, API contracts, inline comments) <!-- Can be removed if no documentation were updated or added -->
+* [] No secrets, credentials, or sensitive data are included in this PR <!-- OBRIGATORY -->
+* [] Dependent changes in other repositories are documented and tracked <!-- OBRIGATORY -->
