@@ -2,7 +2,7 @@
 # Script to add GitHub issues to Projects v2
 # Usage: ./add-issues.sh
 
-set -e
+set -euo pipefail
 
 # Configuration
 ORG="ArthemizLabs"
@@ -18,9 +18,10 @@ for cmd in gh jq; do
 done
 
 # Check if PROJECTS_TOKEN is set
-if [ -z "$PROJECTS_TOKEN" ]; then
-  echo "Error: PROJECTS_TOKEN environment variable is not set"
-  echo "Please set it with: export PROJECTS_TOKEN=your_token_here"
+if [ -z "${PROJECTS_TOKEN:-}" ]; then
+  echo "Error: PROJECTS_TOKEN environment variable is not set" >&2
+  echo "Please set it in your environment (do not hardcode tokens in files)." >&2
+  echo "Example: export PROJECTS_TOKEN='***'" >&2
   exit 1
 fi
 
@@ -156,7 +157,7 @@ add_issue_to_project() {
   ' 2>&1); then
     echo "Added issue #$issue_number to project"
   else
-    if echo "$result" | grep -qi "already\|exists\|duplicate"; then
+    if echo "$result" | grep -Eqi "already(.*)(added|exists)|duplicate"; then
       echo "Issue #$issue_number already in project, skipping"
     else
       echo "Error adding issue #$issue_number: $result" >&2
