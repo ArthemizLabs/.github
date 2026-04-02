@@ -12,7 +12,7 @@ When suggesting or generating commit messages, always follow the Conventional Co
 
 ## Pull Requests
 
-When generating a pull request title and description, use the repository's PR template in [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md) and keep the text concise and specific.
+When generating a pull request title and description, use the repository's PR template in [PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md), and keep the text concise and specific.
 
 - Title must follow this format: `<type>(<scope>): <short description>`.
 - Title type must be one of: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `revert`.
