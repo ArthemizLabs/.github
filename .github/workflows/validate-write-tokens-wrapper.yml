@@ -1,4 +1,4 @@
-name: validar-tokens-escrita (Wrapper)
+name: validate-write-tokens (Wrapper)
 
 on:
   workflow_dispatch:
