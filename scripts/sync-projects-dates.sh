@@ -33,8 +33,9 @@ readonly CAMPO_TRIMESTRE="Sprint/Trimestre"
 readonly NUMERO_MASTER=16
 readonly NUMERO_ROADMAP=23
 # 8 projects próprios: Languages, Certifications, Open Source, Vendas3D,
-#                      Arthemiz, Sentinel Agent, OpsLedger, System Health
-readonly PROJECTS_PROPRIOS=(30 31 26 19 29 25 28 27)
+#                      Arthemiz, Sentinel Agent, OpsLedger, System Health.
+#                      TechStack
+readonly PROJECTS_PROPRIOS=(30 31 26 19 29 25 28 27 32)
 
 # Quando FULL_SCAN=true, processa todos os itens independentemente de updatedAt.
 # Quando false (padrão), só processa itens atualizados nos últimos JANELA_MINUTOS.
