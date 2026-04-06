@@ -1,4 +1,4 @@
-name: validate-tokens-leitura (Wrapper)
+name: validate-read-tokens (Wrapper)
 
 on:
   workflow_dispatch:
