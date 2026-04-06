@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages (Wrapper)
+name: deploy-github-pages (Wrapper)
 
 on:
   push:
