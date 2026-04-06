@@ -1,4 +1,4 @@
-name: Auto Assign (Wrapper)
+name: auto-assign (Wrapper)
 
 on:
   issues:
