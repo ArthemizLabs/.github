@@ -1,4 +1,4 @@
-name: Create Issues
+name: create-issues
 
 on:
   workflow_dispatch:
