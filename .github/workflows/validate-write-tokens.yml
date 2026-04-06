@@ -1,4 +1,4 @@
-name: validar-tokens-escrita
+name: validate-write-tokens
 
 on:
   workflow_call:
