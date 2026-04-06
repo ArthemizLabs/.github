@@ -1,4 +1,4 @@
-name: Auto Assign
+name: auto-assign
 
 on:
   workflow_call:
