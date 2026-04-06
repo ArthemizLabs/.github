@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/pages.yml
+    uses: ./.github/workflows/deploy-pages.yml
     with:
       artifact_path: "./site"
       build_command: ""
