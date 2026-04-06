@@ -1,9 +1,6 @@
 name: sync-projects-dates
 
 on:
-  schedule:
-    # Executa a cada 15 minutos
-    - cron: "*/15 * * * *"
   workflow_dispatch:
     inputs:
       full_scan:
@@ -27,7 +24,6 @@ jobs:
   sincronizar_datas:
     name: Sincronizar Start/End com base em Sprint/Trimestre
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     env:
       ORGANIZATION: ArthemizLabs
 
