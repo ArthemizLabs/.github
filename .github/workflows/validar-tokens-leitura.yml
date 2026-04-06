@@ -1,4 +1,4 @@
-name: validate-tokens
+name: validate-tokens-leitura
 
 on:
   workflow_call:
