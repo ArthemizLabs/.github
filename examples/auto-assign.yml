@@ -1,19 +1,20 @@
 name: auto-assign
 
 on:
+  issues:
+    types: [opened]
   pull_request:
-    branches:
-      - main
+    types: [opened]
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
-  ci:
+  auto_assign:
     uses: ArthemizLabs/.github/.github/workflows/auto-assign.yml@<SHA>
     with:
-      workdir: "."
-      node-version: "20"
-      python-version: "3.12"
-      go-version: "1.22"
+      assignees: A4thu4
+      max_assignees: 1
     secrets: inherit
