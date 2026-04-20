@@ -1,0 +1,14 @@
+name: format-pr
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  format-titles:
+    uses: ArthemizLabs/.github/.github/workflows/format-pr.yml@<SHA>
+    secrets: inherit
