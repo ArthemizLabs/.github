@@ -1,10 +1,9 @@
----
-apply: manually
----
+name: `code-auditor`
 
 ---
-name: code-auditor
-description: "Audits project code quality, architecture, directory structure, naming conventions, clean code practices, and performance anti-patterns. Use this skill ALWAYS when the user asks to 'review my project structure', 'audit code quality', 'check my architecture', 'is my project well organized', 'review naming conventions', 'what is missing in my project', 'how can I improve my project', 'check clean code', 'review my folder structure', 'what should be in root', 'analyze my codebase', or any variation. Also triggers when the user shares a project and asks for general feedback, improvement suggestions, or says things like 'look at my project', 'what do you think of my code structure', or 'how can I upgrade this'. Supports Python/FastAPI, Java/Spring Boot, Node.js/Next.js, Vanilla HTML+CSS+JS, SQL schemas, and mixed/full-stack projects."
+
+"Audits project code quality, architecture, directory structure, naming conventions, clean code practices, and performance anti-patterns. Use this skill ALWAYS when the user asks to 'review my project structure', 'audit code quality', 'check my architecture', 'is my project well organized', 'review naming conventions', 'what is missing in my project', 'how can I improve my project', 'check clean code', 'review my folder structure', 'what should be in root', 'analyze my codebase', or any variation. Also triggers when the user shares a project and asks for general feedback, improvement suggestions, or says things like 'look at my project', 'what do you think of my code structure', or 'how can I upgrade this'. Supports Python/FastAPI, Java/Spring Boot, Node.js/Next.js, Vanilla HTML+CSS+JS, SQL schemas, and mixed/full-stack projects."
+
 ---
  
 # Code Auditor
