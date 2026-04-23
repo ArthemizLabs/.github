@@ -1,12 +1,11 @@
-# Summary
+# What was implemented? (Summary)
 
-<!-- 
-The title should follow the conventions for 'fix:', 'chore:', 'feat (api):', etc. Notice that there's a workflow who will prepend "Merge (#num) - " you should keep it for when making the merge request.
+<!-- The title should follow the conventions for 'fix:', 'chore:', 'feature(api):', etc. Notice that there's a workflow who will prepend "Merge (#num) - " you should keep it for when making the merge request. -->
+
+<!--
 In here make a quick overview for the PR, describing the changes.
 Be short and descriptive following the [CONTRIBUTING rules](https://github.com/ArthemizLabs/.github/blob/main/CONTRIBUTING.md) 
 -->
-
-## What was implemented?
 
 <!-- Insert the changes introduced by this pull request. There's no need to make it complex. -->
 
@@ -28,32 +27,32 @@ Closes: <!-- Can be removed if not applicable  -->
 
 ---
 
-### Security Impact <!-- Can be removed if no security related changes were executed -->
+## Security Impact <!-- Can be removed if no security related changes were executed -->
 
 <!-- Describe any security implications of this change. -->
 <!-- Consider: authentication/authorization changes, data exposure, new external dependencies, input validation, secrets handling. -->
 
 ---
 
-### Breaking Changes <!-- Can be removed if no breaking changes were executed -->
+## Breaking Changes <!-- Can be removed if no breaking changes were executed -->
 
 <!-- List any breaking changes introduced by this pull request. -->
 <!-- Breaking changes include: API contract changes, database schema migrations requiring downtime, removed or renamed configuration keys. -->
 
 ---
 
-### Tests Added
+## Tests Added
 
 <!-- Describe the tests added or updated to cover this change. -->
 <!-- If no tests were included, mark the last one. -->
 
-* [ ] Unit tests added / updated
-* [ ] Integration tests added / updated
-* [ ] No tests required
+* [ ] Unit tests added / updated <!-- Can be removed if no unit tests were maded -->
+* [ ] Integration tests added / updated <!-- Can be removed if no integration tests were maded -->
+* [ ] No tests required <!-- MANDATORY if no tests werer required or included-->
 
 ---
 
-### Checklist
+## Checklist
 
 * [ ] All existing tests pass locally <!-- Can be removed if no tests were executed -->
 * [ ] New tests have been added for changed functionality <!-- Can be removed if no tests were executed -->
