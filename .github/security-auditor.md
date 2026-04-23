@@ -1,10 +1,9 @@
----
-apply: manually
----
+name: `security-auditor`
 
 ---
-name: security-auditor
-description: "Audits project code for security vulnerabilities — API key leaks, SQL injection, authentication flaws, misconfigured CORS, exposed secrets, unprotected endpoints, insecure Docker configs, and more. Use this skill ALWAYS when the user asks to 'audit security', 'check for vulnerabilities', 'review the code for flaws', 'security review', 'check if the project is secure', 'check secrets', 'verify the .env', 'is my code safe?', or any variation. Also triggers when the user mentions 'leak', 'exposed', 'breach', 'flaw', 'CVE', 'data leak', or asks to 'review before deploy'. Supports Python/FastAPI, Java/Spring Boot, Node.js/Next.js, and generic projects."
+
+"Audits project code for security vulnerabilities — API key leaks, SQL injection, authentication flaws, misconfigured CORS, exposed secrets, unprotected endpoints, insecure Docker configs, and more. Use this skill ALWAYS when the user asks to 'audit security', 'check for vulnerabilities', 'review the code for flaws', 'security review', 'check if the project is secure', 'check secrets', 'verify the .env', 'is my code safe?', or any variation. Also triggers when the user mentions 'leak', 'exposed', 'breach', 'flaw', 'CVE', 'data leak', or asks to 'review before deploy'. Supports Python/FastAPI, Java/Spring Boot, Node.js/Next.js, and generic projects."
+
 ---
 
 # Security Auditor
