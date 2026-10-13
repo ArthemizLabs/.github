@@ -1,180 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Architecture - ArthemizLabs</title>
+  <title>Arquitetura · ArthemizLabs</title>
+  <meta name="description" content="Arquitetura real dos sistemas da ArthemizLabs em produção e o que está em estudo." />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:title" content="ArthemizLabs" />
+  <meta property="og:description" content="Sistemas reais em produção e projetos de estudo de arquitetura, segurança e cloud." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://site.arthemiz.com.br/architecture.html" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </a>
-      <nav class="site-nav">
+  <a class="skip" href="#conteudo"><span data-lang="pt">Pular para o conteúdo</span><span data-lang="en">Skip to content</span></a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><img src="assets/favicon.png" alt="" /><span>ArthemizLabs</span></a>
+      <nav class="nav" aria-label="Principal">
         <a href="index.html">Home</a>
-        <a href="architecture.html" class="active">Architecture</a>
+        <a href="architecture.html" aria-current="page"><span data-lang="pt">Arquitetura</span><span data-lang="en">Architecture</span></a>
         <a href="roadmap.html">Roadmap</a>
       </nav>
+      <span class="updated" title="Última atualização"><span data-lang="pt">Atualizado em 13/10/2026</span><span data-lang="en">Updated Oct 13, 2026</span></span>
+      <button class="lang-toggle" type="button" id="lang-toggle" aria-label="Mudar idioma / Change language">
+        <span class="lang-opt" data-opt="pt">PT</span><span class="lang-sep">/</span><span class="lang-opt" data-opt="en">EN</span>
+      </button>
     </div>
   </header>
 
-  <section class="page-hero">
-    <div class="container">
-      <h1>System Architecture</h1>
-      <p class="hero-sub">The evolution of ArthemizLabs from a single deployment unit to a distributed, microservices-oriented platform.</p>
-    </div>
-  </section>
+    <main id="conteudo">
+    <section class="page-hero">
+      <div class="wrap">
+        <p class="eyebrow"><span data-lang="pt">Arquitetura</span><span data-lang="en">Architecture</span></p>
+        <h1><span data-lang="pt">Como construímos hoje</span><span data-lang="en">How we build today</span></h1>
+        <p class="hero-sub">
+          <span data-lang="pt">A arquitetura real dos sistemas em produção, e o que estamos estudando para a próxima etapa. Sem microsserviços de enfeite: cada camada existe porque resolveu um problema concreto.</span>
+          <span data-lang="en">The real architecture of the systems in production, and what we are studying for the next stage. No decorative microservices: every layer exists because it solved a concrete problem.</span>
+        </p>
+      </div>
+    </section>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Architecture Evolution</h2>
-      <p class="section-intro">The ArthemizLabs platform has been designed to evolve through three distinct architectural phases. Each phase builds on the stability of the previous and introduces the complexity required to support the next stage of growth.</p>
+    <section class="section">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">01</p>
+          <h2><span data-lang="pt">Topologia padrão em produção</span><span data-lang="en">Standard production topology</span></h2>
+          <p class="section-sub">
+            <span data-lang="pt">Usada no Simulador PROMOVE (AWS EC2) e no cobranca-app (Oracle Cloud).</span>
+            <span data-lang="en">Used by the PROMOVE Simulator (AWS EC2) and cobranca-app (Oracle Cloud).</span>
+          </p>
+        </header>
 
-      <div class="arch-phases">
-        <div class="arch-phase">
-          <div class="phase-indicator">
-            <span class="phase-number">01</span>
-            <span class="phase-label">Monolith</span>
-          </div>
-          <div class="phase-content">
-            <h3>Monolithic Foundation</h3>
-            <p>The initial platform is built as a single deployable application. This approach enables rapid development, shared in-process state, and simplified deployment pipelines while the domain model is still being validated.</p>
-            <ul class="detail-list">
-              <li>Single database, single process</li>
-              <li>In-process authentication with JWT validation middleware</li>
-              <li>Flat RBAC model enforced at the controller layer</li>
-              <li>Docker Compose for local development and initial production deployment</li>
-              <li>Nginx as a reverse proxy for TLS termination and routing</li>
-              <li>GitHub Actions CI pipeline for automated test and build</li>
-            </ul>
-            <div class="arch-diagram">
-              <div class="diagram-box client-box">Client</div>
-              <div class="diagram-arrow">--&gt;</div>
-              <div class="diagram-box nginx-box">Nginx</div>
-              <div class="diagram-arrow">--&gt;</div>
-              <div class="diagram-box app-box">Application<br/>(Monolith)</div>
-              <div class="diagram-arrow">--&gt;</div>
-              <div class="diagram-box db-box">PostgreSQL</div>
-            </div>
-          </div>
+        <div class="flow" role="img" aria-label="Cliente, Cloudflare, Nginx, aplicação FastAPI e PostgreSQL">
+          <div class="flow-node"><strong><span data-lang="pt">Cliente</span><span data-lang="en">Client</span></strong><span>Next.js / React</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node n-edge"><strong>Cloudflare</strong><span><span data-lang="pt">DNS, proxy e TLS de borda</span><span data-lang="en">DNS, proxy and edge TLS</span></span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node n-proxy"><strong>Nginx</strong><span><span data-lang="pt">Proxy reverso, certificado de origem por zona</span><span data-lang="en">Reverse proxy, per-zone origin cert</span></span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node n-app"><strong>FastAPI</strong><span><span data-lang="pt">JWT, RBAC, regra de negócio</span><span data-lang="en">JWT, RBAC, business rules</span></span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node n-db"><strong>PostgreSQL</strong><span><span data-lang="pt">Container com volume, migrations Alembic</span><span data-lang="en">Container with volume, Alembic migrations</span></span></div>
         </div>
+        <p class="flow-caption">
+          <span data-lang="pt">Tudo orquestrado com Docker Compose. No cobranca-app, uma segunda VM roda a Evolution API (WhatsApp) isolada da aplicação.</span>
+          <span data-lang="en">Everything is orchestrated with Docker Compose. In cobranca-app, a second VM runs the Evolution API (WhatsApp) isolated from the app.</span>
+        </p>
+      </div>
+    </section>
 
-        <div class="arch-phase">
-          <div class="phase-indicator">
-            <span class="phase-number">02</span>
-            <span class="phase-label">Modular</span>
-          </div>
-          <div class="phase-content">
-            <h3>Modular Decomposition</h3>
-            <p>As the platform grows, the monolith is organized into clearly bounded modules with enforced internal APIs. Modules are deployed as discrete containers but remain coordinated through a shared orchestration layer.</p>
+    <section class="section section-alt">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">02</p>
+          <h2><span data-lang="pt">Decisões que já tomamos</span><span data-lang="en">Decisions already made</span></h2>
+        </header>
+        <div class="grid-2">
+          <div class="card">
+            <h3><span data-lang="pt">Segurança</span><span data-lang="en">Security</span></h3>
             <ul class="detail-list">
-              <li>Bounded modules: identity, commerce, operations, monitoring</li>
-              <li>Centralized JWT issuance via Arthemiz identity service</li>
-              <li>RBAC policies extracted to a dedicated authorization module</li>
-              <li>Redis introduced for distributed session caching and pub/sub</li>
-              <li>RabbitMQ for asynchronous inter-module messaging</li>
-              <li>Docker with named service networks isolating module communication</li>
-              <li>Nginx routing by path prefix to appropriate module containers</li>
-              <li>CI/CD pipeline extended with per-module build and test stages</li>
+              <li><span data-lang="pt">Autenticação JWT e RBAC por perfil, checados no backend</span><span data-lang="en">JWT auth and role-based RBAC enforced in the backend</span></li>
+              <li><span data-lang="pt">Segredos só por variável de ambiente, nunca no repositório</span><span data-lang="en">Secrets only via environment variables, never in the repo</span></li>
+              <li><span data-lang="pt">Documentação da API protegida por perfil admin em produção</span><span data-lang="en">API docs protected behind the admin role in production</span></li>
+              <li><span data-lang="pt">Upload com limite por streaming e rate limit em endpoints públicos</span><span data-lang="en">Streaming upload caps and rate limits on public endpoints</span></li>
+              <li><span data-lang="pt">Auditoria de toda mutação feita pelo painel de plataforma</span><span data-lang="en">Every platform-admin mutation is audited</span></li>
             </ul>
-            <div class="arch-diagram modular-diagram">
-              <div class="diagram-row">
-                <div class="diagram-box client-box">Client</div>
-                <div class="diagram-arrow">--&gt;</div>
-                <div class="diagram-box nginx-box">Nginx<br/>Gateway</div>
-              </div>
-              <div class="diagram-row modules-row">
-                <div class="diagram-box mod-box">Identity<br/>(Arthemiz)</div>
-                <div class="diagram-box mod-box">Commerce<br/>(Vendas3D)</div>
-                <div class="diagram-box mod-box">Operations<br/>(OpsLedger)</div>
-                <div class="diagram-box mod-box">Monitoring<br/>(SystemHealth)</div>
-              </div>
-              <div class="diagram-row infra-row">
-                <div class="diagram-box db-box">PostgreSQL</div>
-                <div class="diagram-box cache-box">Redis</div>
-                <div class="diagram-box mq-box">RabbitMQ</div>
-              </div>
-            </div>
           </div>
-        </div>
-
-        <div class="arch-phase">
-          <div class="phase-indicator">
-            <span class="phase-number">03</span>
-            <span class="phase-label">Microservices</span>
-          </div>
-          <div class="phase-content">
-            <h3>Microservices Distribution</h3>
-            <p>Modules that have demonstrated clear ownership, independent release cycles, and high load requirements are promoted to independent microservices. Each service is owned by a team, versioned independently, and communicates through well-defined contracts.</p>
+          <div class="card">
+            <h3><span data-lang="pt">Entrega</span><span data-lang="en">Delivery</span></h3>
             <ul class="detail-list">
-              <li>Independent services: each with its own repository, database, and CI pipeline</li>
-              <li>API Gateway handles authentication via JWT verification and routes to services</li>
-              <li>RBAC enforced at the gateway and re-validated at service boundaries</li>
-              <li>RabbitMQ as the central event bus for cross-service events</li>
-              <li>Redis per-service for local caching, preventing cross-service cache coupling</li>
-              <li>Nginx as the external load balancer with upstream health checks</li>
-              <li>Docker images published to a private registry and deployed via CI/CD</li>
-              <li>Distributed tracing for end-to-end request visibility across service hops</li>
-              <li>Service mesh (future) for mTLS, circuit breaking, and traffic policies</li>
+              <li><span data-lang="pt">Migrations rodam antes da aplicação subir, no próprio compose</span><span data-lang="en">Migrations run before the app starts, inside the compose file</span></li>
+              <li><span data-lang="pt">Deploy automatizado com GitHub Actions</span><span data-lang="en">Automated deploys with GitHub Actions</span></li>
+              <li><span data-lang="pt">Runbooks de deploy e troubleshooting versionados no repositório</span><span data-lang="en">Deploy and troubleshooting runbooks versioned in the repo</span></li>
+              <li><span data-lang="pt">Dev Containers para o ambiente ser igual em qualquer máquina</span><span data-lang="en">Dev Containers so the environment is identical on any machine</span></li>
+              <li><span data-lang="pt">Lint (ruff) e testes (pytest) no CI antes do merge</span><span data-lang="en">Lint (ruff) and tests (pytest) in CI before merging</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><span data-lang="pt">Dados</span><span data-lang="en">Data</span></h3>
+            <ul class="detail-list">
+              <li><span data-lang="pt">Multi-tenant por coluna de organização, escopo aplicado em toda consulta</span><span data-lang="en">Multi-tenancy by organization column, scope applied on every query</span></li>
+              <li><span data-lang="pt">Soft delete e colunas de auditoria padronizadas</span><span data-lang="en">Standardized soft delete and audit columns</span></li>
+              <li><span data-lang="pt">Saída de LLM sempre em JSON validado antes de chegar à regra de negócio</span><span data-lang="en">LLM output is always validated JSON before it reaches business logic</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><span data-lang="pt">Automação desktop</span><span data-lang="en">Desktop automation</span></h3>
+            <ul class="detail-list">
+              <li><span data-lang="pt">Serviços como plugins que se registram no menu</span><span data-lang="en">Services as plugins that register themselves in the menu</span></li>
+              <li><span data-lang="pt">Credenciais só em memória, TLS sempre verificado</span><span data-lang="en">Credentials kept only in memory, TLS always verified</span></li>
+              <li><span data-lang="pt">Distribuição de versões com checagem SHA-256</span><span data-lang="en">Version distribution with SHA-256 checks</span></li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Core Infrastructure Components</h2>
-      <div class="infra-grid">
-        <div class="infra-item">
-          <h3>JWT Authentication</h3>
-          <p>JSON Web Tokens are issued by the Arthemiz identity service and validated at every service entry point. Tokens carry a minimal claim set (subject, roles, tenant) and are short-lived with refresh token rotation. Private key signing ensures token integrity across service boundaries.</p>
-        </div>
-        <div class="infra-item">
-          <h3>RBAC Authorization</h3>
-          <p>Role-Based Access Control governs all resource access across the platform. Roles are defined per-tenant and scoped to resource types. The authorization engine resolves permissions from JWT claims at the gateway and enforces them in each service, ensuring consistent policy application.</p>
-        </div>
-        <div class="infra-item">
-          <h3>Docker and Containerization</h3>
-          <p>All services run as Docker containers. Compose files define local development environments. Production deployments use isolated container networks, health checks, and restart policies. Container images are versioned and pinned for reproducible deployments.</p>
-        </div>
-        <div class="infra-item">
-          <h3>Nginx</h3>
-          <p>Nginx serves as the edge layer for TLS termination, HTTP/2 support, and reverse proxy routing. Configuration is versioned alongside application code. Rate limiting and request filtering are applied at this layer before traffic reaches application services.</p>
-        </div>
-        <div class="infra-item">
-          <h3>RabbitMQ</h3>
-          <p>RabbitMQ enables reliable asynchronous communication between services through topic exchanges and durable queues. Events such as user provisioning, order state changes, and audit entries are published and consumed by interested services without direct coupling.</p>
-        </div>
-        <div class="infra-item">
-          <h3>Redis</h3>
-          <p>Redis provides sub-millisecond caching for session tokens, rate limit counters, and frequently read configuration data. It also supports pub/sub patterns for real-time event notifications within a service boundary. Persistence is enabled for critical state.</p>
-        </div>
-        <div class="infra-item">
-          <h3>CI/CD</h3>
-          <p>GitHub Actions runs automated pipelines on every pull request and push to main. Pipelines include linting, unit and integration tests, container builds, vulnerability scans, and deployment to staging. Production deployments require a passing pipeline and manual approval gate.</p>
+    <section class="section">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">03</p>
+          <h2><span data-lang="pt">Próxima etapa (em estudo)</span><span data-lang="en">Next stage (studying)</span></h2>
+          <p class="section-sub">
+            <span data-lang="pt">O que estamos aprendendo para usar quando houver necessidade real. Cada item tem um projeto de estudo associado.</span>
+            <span data-lang="en">What we are learning to use once there is a real need. Each item has a study project attached.</span>
+          </p>
+        </header>
+        <div class="grid-4">
+          <div class="card card-study"><span class="badge badge-study" style="align-self:flex-start">OpsLedger</span><h3><span data-lang="pt">Mensageria</span><span data-lang="en">Messaging</span></h3><p><span data-lang="pt">RabbitMQ para processamento assíncrono e Redis para cache.</span><span data-lang="en">RabbitMQ for async processing and Redis for caching.</span></p></div>
+          <div class="card card-study"><span class="badge badge-study" style="align-self:flex-start">SystemHealth</span><h3><span data-lang="pt">Observabilidade</span><span data-lang="en">Observability</span></h3><p><span data-lang="pt">Métricas com Prometheus, painéis no Grafana e logs estruturados.</span><span data-lang="en">Prometheus metrics, Grafana dashboards and structured logs.</span></p></div>
+          <div class="card card-study"><span class="badge badge-study" style="align-self:flex-start">Sentinel Agent</span><h3><span data-lang="pt">Host e segurança</span><span data-lang="en">Host and security</span></h3><p><span data-lang="pt">Telemetria de baixo nível em C e detecção de anomalias.</span><span data-lang="en">Low-level telemetry in C and anomaly detection.</span></p></div>
+          <div class="card card-study"><span class="badge badge-study" style="align-self:flex-start">Vendas3D</span><h3><span data-lang="pt">Orquestração</span><span data-lang="en">Orchestration</span></h3><p><span data-lang="pt">Kubernetes quando um único host deixar de ser suficiente.</span><span data-lang="en">Kubernetes once a single host is no longer enough.</span></p></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </a>
-      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
-      <nav class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="roadmap.html">Roadmap</a>
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 ArthemizLabs · Arthur Mamedes Borges · <span class="updated-foot"><span data-lang="pt">Atualizado em 13/10/2026</span><span data-lang="en">Updated Oct 13, 2026</span></span></span>
+      <nav class="footer-links" aria-label="Links">
+        <a href="https://github.com/ArthemizLabs">GitHub</a>
+        <a href="https://portfolio.arthemiz.com.br"><span data-lang="pt">Portfólio</span><span data-lang="en">Portfolio</span></a>
+        <a href="https://linkedin.com/in/arthurmamedes">LinkedIn</a>
+        <a href="mailto:arthurmamedesborges@gmail.com">Email</a>
       </nav>
     </div>
   </footer>
+  <script src="assets/i18n.js"></script>
 </body>
 </html>

@@ -1,248 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Roadmap - ArthemizLabs</title>
+  <title>Roadmap · ArthemizLabs</title>
+  <meta name="description" content="Roadmap 2026-2029 da ArthemizLabs: entregas em produção e projetos de estudo." />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:title" content="ArthemizLabs" />
+  <meta property="og:description" content="Sistemas reais em produção e projetos de estudo de arquitetura, segurança e cloud." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://site.arthemiz.com.br/roadmap.html" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </a>
-      <nav class="site-nav">
+  <a class="skip" href="#conteudo"><span data-lang="pt">Pular para o conteúdo</span><span data-lang="en">Skip to content</span></a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><img src="assets/favicon.png" alt="" /><span>ArthemizLabs</span></a>
+      <nav class="nav" aria-label="Principal">
         <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="roadmap.html" class="active">Roadmap</a>
+        <a href="architecture.html"><span data-lang="pt">Arquitetura</span><span data-lang="en">Architecture</span></a>
+        <a href="roadmap.html" aria-current="page">Roadmap</a>
       </nav>
+      <span class="updated" title="Última atualização"><span data-lang="pt">Atualizado em 13/10/2026</span><span data-lang="en">Updated Oct 13, 2026</span></span>
+      <button class="lang-toggle" type="button" id="lang-toggle" aria-label="Mudar idioma / Change language">
+        <span class="lang-opt" data-opt="pt">PT</span><span class="lang-sep">/</span><span class="lang-opt" data-opt="en">EN</span>
+      </button>
     </div>
   </header>
 
-  <section class="page-hero">
-    <div class="container">
-      <h1>Engineering Roadmap 2026-2029</h1>
-      <p class="hero-sub">A four-year technical progression focused on platform maturity, operational reliability, and ecosystem expansion.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <p class="section-intro">Each phase of the roadmap is grounded in engineering outcomes rather than features. The goal is to build infrastructure and capabilities that compound—each year's work providing a more stable and capable foundation for the next.</p>
-
-      <div class="roadmap-full">
-
-        <div class="roadmap-year-block">
-          <div class="year-header">
-            <span class="year-label">2026</span>
-            <h2>Foundation and Stability</h2>
-          </div>
-          <div class="year-body">
-            <p class="year-summary">Establish production-grade infrastructure, standardize development workflows, and deliver the first stable versions of the core ecosystem services. Focus is on reliability, security fundamentals, and continuous delivery discipline.</p>
-            <div class="milestones">
-              <div class="milestone-group">
-                <h4>Infrastructure</h4>
-                <ul>
-                  <li>Production Docker environments with defined health checks and restart policies</li>
-                  <li>Nginx configuration standardized across all services with TLS and rate limiting</li>
-                  <li>Centralized logging pipeline with structured JSON output</li>
-                  <li>Secrets management using environment-based injection, no hardcoded credentials</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Security</h4>
-                <ul>
-                  <li>JWT issuance and validation across all service entry points</li>
-                  <li>RBAC model defined and enforced for all resource types</li>
-                  <li>Automated dependency vulnerability scanning in CI</li>
-                  <li>TLS certificates managed and renewed automatically</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Delivery</h4>
-                <ul>
-                  <li>GitHub Actions CI pipeline for all active repositories</li>
-                  <li>Automated test coverage requirements before merge</li>
-                  <li>Staging environment that mirrors production topology</li>
-                  <li>Deployment runbooks documented for each service</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Product</h4>
-                <ul>
-                  <li>OpsLedger v1 deployed to production</li>
-                  <li>Arthemiz identity service with multi-tenant support</li>
-                  <li>SystemHealth dashboard operational with alerting</li>
-                  <li>Sentinel v1 with access pattern monitoring</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+    <main id="conteudo">
+    <section class="page-hero">
+      <div class="wrap">
+        <p class="eyebrow">2026 → 2029</p>
+        <h1>Roadmap</h1>
+        <p class="hero-sub">
+          <span data-lang="pt">Um plano de quatro anos que mistura entrega em produção com estudo deliberado. Cada ano tem um tema, e os projetos de estudo entram quando o tema pede.</span>
+          <span data-lang="en">A four-year plan mixing production delivery with deliberate study. Each year has a theme, and study projects come in when the theme calls for them.</span>
+        </p>
+        <div class="legend">
+          <span><span class="st st-done">✓</span> <span data-lang="pt">feito</span><span data-lang="en">done</span></span>
+          <span><span class="st st-doing">◐</span> <span data-lang="pt">em andamento</span><span data-lang="en">in progress</span></span>
+          <span><span class="st st-plan">○</span> <span data-lang="pt">planejado</span><span data-lang="en">planned</span></span>
         </div>
-
-        <div class="roadmap-year-block">
-          <div class="year-header">
-            <span class="year-label">2027</span>
-            <h2>Scale and Modularity</h2>
-          </div>
-          <div class="year-body">
-            <p class="year-summary">Transition from a single-deployment monolith to well-defined modules with isolated concerns. Introduce messaging infrastructure, multi-tenancy, and the first public-facing product release. Engineering velocity should increase as modules become independently releasable.</p>
-            <div class="milestones">
-              <div class="milestone-group">
-                <h4>Architecture</h4>
-                <ul>
-                  <li>Bounded module boundaries enforced with internal APIs</li>
-                  <li>RabbitMQ deployed as the async messaging layer</li>
-                  <li>Redis cache layer introduced for session and config data</li>
-                  <li>Inter-module communication via events, not direct database access</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Multi-Tenancy</h4>
-                <ul>
-                  <li>Tenant isolation at the data and routing layer</li>
-                  <li>Per-tenant RBAC configuration and role inheritance</li>
-                  <li>Tenant provisioning workflow automated end-to-end</li>
-                  <li>Billing and usage tracking integrated into OpsLedger</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Delivery</h4>
-                <ul>
-                  <li>Per-module CI pipelines with independent versioning</li>
-                  <li>Blue/green deployment capability on the staging environment</li>
-                  <li>Post-deployment smoke tests automated per release</li>
-                  <li>Rollback procedures tested quarterly</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Product</h4>
-                <ul>
-                  <li>Vendas3D v1 public release with REST API</li>
-                  <li>Developer documentation for all public APIs</li>
-                  <li>Arthemiz OAuth 2.0 authorization server</li>
-                  <li>SystemHealth extended with queue depth and cache metrics</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="roadmap-year-block">
-          <div class="year-header">
-            <span class="year-label">2028</span>
-            <h2>Microservices and Distribution</h2>
-          </div>
-          <div class="year-body">
-            <p class="year-summary">Services with independent release cadence and high load requirements are extracted into fully autonomous microservices. Distributed tracing and advanced observability provide the visibility needed to operate a multi-service platform safely.</p>
-            <div class="milestones">
-              <div class="milestone-group">
-                <h4>Architecture</h4>
-                <ul>
-                  <li>High-traffic modules promoted to independent microservices</li>
-                  <li>API Gateway handling authentication and routing centrally</li>
-                  <li>Per-service databases enforcing data ownership boundaries</li>
-                  <li>gRPC for synchronous internal communication where latency is critical</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Observability</h4>
-                <ul>
-                  <li>Distributed tracing with trace context propagated across all hops</li>
-                  <li>Grafana dashboards per service with SLI/SLO definitions</li>
-                  <li>Error budget tracking for all production services</li>
-                  <li>Incident response runbooks integrated with alerting</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Resilience</h4>
-                <ul>
-                  <li>Circuit breakers on all cross-service calls</li>
-                  <li>Retry policies and dead-letter queues for all RabbitMQ consumers</li>
-                  <li>Chaos engineering experiments run against staging monthly</li>
-                  <li>Data backup and point-in-time recovery tested per service</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Platform</h4>
-                <ul>
-                  <li>Private container registry with signed and scanned images</li>
-                  <li>Infrastructure-as-code for all environment provisioning</li>
-                  <li>Developer portal with API catalog and self-service access</li>
-                  <li>Automated scaling policies based on queue depth and CPU metrics</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="roadmap-year-block">
-          <div class="year-header">
-            <span class="year-label">2029</span>
-            <h2>Platform Maturity</h2>
-          </div>
-          <div class="year-body">
-            <p class="year-summary">The platform reaches full operational maturity: self-service developer tooling, enterprise SLA capabilities, partner integrations, and a stable API surface that external systems can depend on. Engineering focus shifts toward platform efficiency, cost optimization, and maintainability.</p>
-            <div class="milestones">
-              <div class="milestone-group">
-                <h4>Platform API</h4>
-                <ul>
-                  <li>Public platform API with versioning and long-term stability guarantees</li>
-                  <li>SDK libraries for primary integration languages</li>
-                  <li>Webhook delivery for all platform events with retry guarantees</li>
-                  <li>API usage analytics and quota management for all consumers</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Enterprise Capabilities</h4>
-                <ul>
-                  <li>SLA-backed uptime commitments for production services</li>
-                  <li>Enterprise SSO integration (SAML, OIDC)</li>
-                  <li>Data residency and compliance configuration per tenant</li>
-                  <li>Dedicated support channels with defined response SLOs</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Developer Experience</h4>
-                <ul>
-                  <li>Self-service provisioning for new tenants and environments</li>
-                  <li>Internal developer platform for service scaffolding and deployment</li>
-                  <li>Onboarding documentation with runnable code examples</li>
-                  <li>Sandbox environments available for integration testing</li>
-                </ul>
-              </div>
-              <div class="milestone-group">
-                <h4>Efficiency</h4>
-                <ul>
-                  <li>Cost attribution per service, tenant, and feature area</li>
-                  <li>Automated resource right-sizing recommendations</li>
-                  <li>Dependency audit and reduction of third-party surface area</li>
-                  <li>Platform carbon footprint reporting for sustainability compliance</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </a>
-      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
-      <nav class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="roadmap.html">Roadmap</a>
+    <section class="section">
+      <div class="wrap">
+        <div class="year">
+          <div class="year-side">
+            <span class="tl-year">2026</span>
+            <h2>Foundation</h2>
+            <span class="badge badge-live"><span data-lang="pt">Atual</span><span data-lang="en">Current</span></span>
+          </div>
+          <div class="year-body">
+            <p><span data-lang="pt">Colocar sistemas reais no ar e criar os padrões que todos os repositórios seguem.</span><span data-lang="en">Ship real systems and set the standards every repository follows.</span></p>
+            <div class="milestones">
+              <div class="milestone">
+                <h3><span data-lang="pt">Produto</span><span data-lang="en">Product</span></h3>
+                <ul>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Simulador PROMOVE em produção na AWS</span><span data-lang="en">PROMOVE Simulator in production on AWS</span></span></li>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">cobranca-app em produção na Oracle Cloud</span><span data-lang="en">cobranca-app in production on Oracle Cloud</span></span></li>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Portal Serviços Goiás validado no SEI real</span><span data-lang="en">Portal Serviços Goiás validated on the real SEI</span></span></li>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Comparador SEAD em uso na Secretaria</span><span data-lang="en">SEAD Comparator in daily use</span></span></li>
+                </ul>
+              </div>
+              <div class="milestone">
+                <h3><span data-lang="pt">Engenharia</span><span data-lang="en">Engineering</span></h3>
+                <ul>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Workflows reutilizáveis de CI e templates de PR/issue</span><span data-lang="en">Reusable CI workflows and PR/issue templates</span></span></li>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Dev Containers em todos os projetos</span><span data-lang="en">Dev Containers in every project</span></span></li>
+                  <li><span class="st st-done">✓</span><span><span data-lang="pt">Deploy com Docker, Nginx e Cloudflare em AWS, Oracle e Azure</span><span data-lang="en">Deploys with Docker, Nginx and Cloudflare on AWS, Oracle and Azure</span></span></li>
+                  <li><span class="st st-doing">◐</span><span><span data-lang="pt">Varredura de dependências vulneráveis no CI</span><span data-lang="en">Vulnerable dependency scanning in CI</span></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="year">
+          <div class="year-side">
+            <span class="tl-year">2027</span>
+            <h2>Expansion</h2>
+            <span class="badge badge-muted"><span data-lang="pt">Planejado</span><span data-lang="en">Planned</span></span>
+          </div>
+          <div class="year-body">
+            <p><span data-lang="pt">Sair do request-response síncrono e validar o conhecimento de nuvem com certificação.</span><span data-lang="en">Move beyond synchronous request-response and validate cloud knowledge with certification.</span></p>
+            <div class="milestones">
+              <div class="milestone">
+                <h3><span data-lang="pt">Estudo</span><span data-lang="en">Study</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">OpsLedger: filas com RabbitMQ e cache com Redis</span><span data-lang="en">OpsLedger: RabbitMQ queues and Redis caching</span></span></li>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Certificações AWS e Azure</span><span data-lang="en">AWS and Azure certifications</span></span></li>
+                </ul>
+              </div>
+              <div class="milestone">
+                <h3><span data-lang="pt">Produto</span><span data-lang="en">Product</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Novos serviços no Portal Serviços Goiás</span><span data-lang="en">New services in Portal Serviços Goiás</span></span></li>
+                  <li><span class="st st-plan">○</span><span>TCC</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="year">
+          <div class="year-side">
+            <span class="tl-year">2028</span>
+            <h2>Quality &amp; Security</h2>
+            <span class="badge badge-muted"><span data-lang="pt">Planejado</span><span data-lang="en">Planned</span></span>
+          </div>
+          <div class="year-body">
+            <p><span data-lang="pt">Enxergar o que acontece em produção e tratar segurança como disciplina própria.</span><span data-lang="en">See what happens in production and treat security as its own discipline.</span></p>
+            <div class="milestones">
+              <div class="milestone">
+                <h3><span data-lang="pt">Estudo</span><span data-lang="en">Study</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">SystemHealth: Prometheus, Grafana e alertas</span><span data-lang="en">SystemHealth: Prometheus, Grafana and alerting</span></span></li>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Sentinel Agent: telemetria de host em C</span><span data-lang="en">Sentinel Agent: host telemetry in C</span></span></li>
+                </ul>
+              </div>
+              <div class="milestone">
+                <h3><span data-lang="pt">Engenharia</span><span data-lang="en">Engineering</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">OWASP Top 10 revisado em todos os sistemas</span><span data-lang="en">OWASP Top 10 review across all systems</span></span></li>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Cobertura de testes como requisito de merge</span><span data-lang="en">Test coverage as a merge requirement</span></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="year">
+          <div class="year-side">
+            <span class="tl-year">2029</span>
+            <h2>Mastery</h2>
+            <span class="badge badge-muted"><span data-lang="pt">Planejado</span><span data-lang="en">Planned</span></span>
+          </div>
+          <div class="year-body">
+            <p><span data-lang="pt">Orquestração em escala e o projeto mais ambicioso da lista.</span><span data-lang="en">Orchestration at scale and the most ambitious project on the list.</span></p>
+            <div class="milestones">
+              <div class="milestone">
+                <h3><span data-lang="pt">Estudo</span><span data-lang="en">Study</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Kubernetes em produção</span><span data-lang="en">Kubernetes in production</span></span></li>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Vendas3D: loja com produtos em 3D</span><span data-lang="en">Vendas3D: storefront with 3D products</span></span></li>
+                </ul>
+              </div>
+              <div class="milestone">
+                <h3><span data-lang="pt">Formação</span><span data-lang="en">Education</span></h3>
+                <ul>
+                  <li><span class="st st-plan">○</span><span><span data-lang="pt">Formatura em Ciência da Computação</span><span data-lang="en">Computer Science degree</span></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 ArthemizLabs · Arthur Mamedes Borges · <span class="updated-foot"><span data-lang="pt">Atualizado em 13/10/2026</span><span data-lang="en">Updated Oct 13, 2026</span></span></span>
+      <nav class="footer-links" aria-label="Links">
+        <a href="https://github.com/ArthemizLabs">GitHub</a>
+        <a href="https://portfolio.arthemiz.com.br"><span data-lang="pt">Portfólio</span><span data-lang="en">Portfolio</span></a>
+        <a href="https://linkedin.com/in/arthurmamedes">LinkedIn</a>
+        <a href="mailto:arthurmamedesborges@gmail.com">Email</a>
       </nav>
     </div>
   </footer>
+  <script src="assets/i18n.js"></script>
 </body>
 </html>
