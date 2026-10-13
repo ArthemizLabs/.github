@@ -1,110 +1,70 @@
-# ArthemizLabs
+# ArthemizLabs · `.github`
 
-ArthemizLabs is an engineering-driven organization building production-grade SaaS systems across operations management, 3D commerce, security intelligence, and infrastructure observability.
+Repositório de governança da organização **ArthemizLabs**. Guarda os padrões que valem para todos os repositórios: templates, workflows reutilizáveis, políticas, o perfil público da org e o site [site.arthemiz.com.br](https://site.arthemiz.com.br).
 
----
-
-## Mission
-
-To design, build, and operate reliable, secure, and scalable SaaS platforms that solve real operational problems for businesses — with engineering rigor, architectural discipline, and a relentless focus on production quality.
+> 🇺🇸 *Governance repository for the ArthemizLabs organization: shared templates, reusable workflows, policies, the public org profile and the website. An English summary is at the end of this file.*
 
 ---
 
-## Engineering Principles
+## O que tem aqui
 
-**Reliability first.** Systems must be designed to fail gracefully. Every service has defined SLOs, circuit breakers, and documented recovery procedures.
+| Caminho | Conteúdo |
+| --- | --- |
+| [`profile/README.md`](./profile/README.md) | Perfil público exibido em [github.com/ArthemizLabs](https://github.com/ArthemizLabs) |
+| [`site/`](./site/) | Site estático da org (HTML/CSS puro, bilíngue PT/EN), publicado no GitHub Pages |
+| [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE/) | Templates de bug, feature, discussão de arquitetura e segurança |
+| [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) | Template padrão de PR |
+| [`.github/workflows/`](./.github/workflows/) | Workflows reutilizáveis e automações da org |
+| [`docs/`](./docs/) | Documentação de GitHub Projects e planejamento |
+| [`examples/`](./examples/) | Exemplos de uso dos workflows em outros repositórios |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`SECURITY.md`](./SECURITY.md) · [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) | Políticas da organização |
 
-**Security by default.** Security is not an afterthought. Threat modeling, secret management, and least-privilege access are requirements at the architecture stage.
+## Projetos da organização
 
-**Documentation-driven development.** Architectural decisions are recorded as ADRs. APIs are contract-first. Onboarding must never depend on tribal knowledge.
+**Em produção e em uso:** Simulador PROMOVE, cobranca-app, Portal Serviços Goiás, Comparador SEAD. **Em desenvolvimento:** Sistema de Teletrabalho. **Públicos:** [biblio-system](https://github.com/ArthemizLabs/biblio-system), [jornada-dev](https://github.com/ArthemizLabs/jornada-dev).
 
-**Clean Architecture.** Domain logic is decoupled from infrastructure. Dependencies point inward. Each bounded context owns its own data.
+**Projetos de estudo (futuros, ainda sem produção):** OpsLedger, Sentinel Agent, SystemHealth e Vendas3D. Cada um existe para aprender uma tecnologia específica e está no [roadmap](https://site.arthemiz.com.br/roadmap.html).
 
-**Semantic Versioning.** All services and libraries follow [SemVer 2.0.0](https://semver.org/). Breaking changes are never shipped silently.
+Detalhes no [perfil da org](./profile/README.md).
 
-**Automation over manual process.** CI/CD pipelines are the only path to production. No human shall push directly to `main` in a production repository.
+## Workflows reutilizáveis
 
----
+Chamados de outros repositórios via `workflow_call`. Fixe sempre uma tag ou SHA.
 
-## Ecosystem Overview
+| Workflow | O que faz |
+| --- | --- |
+| [`ci.yml`](./.github/workflows/ci.yml) | Detecta Node.js, Go ou Python e roda lint e testes no diretório informado |
+| [`auto-assign.yml`](./.github/workflows/auto-assign.yml) | Atribui responsáveis a issues e PRs novos |
+| [`deploy-pages.yml`](./.github/workflows/deploy-pages.yml) | Publica um diretório no GitHub Pages, com build opcional |
+| [`validate-read-tokens.yml`](./.github/workflows/validate-read-tokens.yml) | Valida leitura do Projects v2 com o secret `projects_token` |
+| [`validate-write-tokens.yml`](./.github/workflows/validate-write-tokens.yml) | Valida escrita no Projects v2 com o secret `projects_token` |
 
-| System | Description | Status |
-|---|---|---|
-| **OpsLedger** | Financial operations and audit ledger platform for SMBs. Double-entry accounting, reconciliation, and compliance reporting. | In Development |
-| **Arthemiz** | Core identity, billing, and tenant management layer shared across the ecosystem. Multi-tenant SaaS foundation. | Active |
-| **Vendas3D** | 3D product commerce platform. Enables merchants to publish interactive 3D product experiences and manage digital storefronts. | In Development |
-| **Sentinel** | Security intelligence and threat monitoring service. Centralized log ingestion, anomaly detection, and alerting. | Not Started |
-| **SystemHealth** | Infrastructure observability and health dashboard. Aggregates uptime, latency, error rates, and deployment health across all services. | Not Started |
+Os arquivos `*-wrapper.yml` usam esses workflows dentro deste próprio repositório (o `deploy-pages-wrapper.yml` publica o `site/` a cada push na `main`). Automações manuais (`workflow_dispatch`): `setup-projects.yml`, `create-issues.yml` e `sync-projects-dates.yml`.
 
----
-
-## Contribution Model
-
-ArthemizLabs follows a structured contribution model to maintain code quality and architectural consistency across all repositories.
-
-**Internal contributors** follow the branching strategy and commit conventions defined in [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-**External contributors** are welcome to open issues and submit pull requests. All contributions are reviewed against the engineering principles and architectural standards of the affected system.
-
-All contributors are expected to adhere to the [Code of Conduct](./CODE_OF_CONDUCT.md).
-
-Security vulnerabilities must be reported privately per the [Security Policy](./SECURITY.md). Do not open public issues for security concerns.
-
----
-
-## Project Management
-
-ArthemizLabs uses GitHub Projects v2 for tracking work across the organization. See [GitHub Projects Setup Guide](./docs/projects/GITHUB_PROJECTS_SETUP.md) for information on:
-
-- Setting up organization-wide projects
-- Creating and managing issues from the project documentation
-- Configuring custom fields and views
-- Tracking progress across phases and epics
-
-The detailed roadmap and task breakdown is documented in [PROJECT_DOCUMENTATION.md](./docs/PROJECT_DOCUMENTATION.md).
-
-## Repository Structure
-
-This repository (`.github`) serves as the engineering governance layer for the ArthemizLabs organization. It contains:
-
-- Organization-wide GitHub defaults (issue templates, PR templates, CI workflows)
-- Engineering policies (contributing guidelines, security policy, code of conduct)
-- The organization profile (this file)
-- GitHub Projects setup automation and documentation
-
-Repository-specific documentation, architecture decision records, and runbooks live in their respective repositories.
-
-### Public Site
-
-The public-facing website is located in the [`site/`](./site/) directory. It contains:
-
-- `site/index.html` — Home page
-- `site/architecture.html` — System architecture overview
-- `site/roadmap.html` — Engineering roadmap (2026–2029)
-- `site/assets/` — Stylesheets and static assets
-
-GitHub Pages is configured to deploy from the `site/` directory on the `main` branch.
-
-### Reusable Workflows
-
-The workflows in `.github/workflows` are ready for reuse via `workflow_call`:
-
-- `ci.yml`: auto-detects Node.js, Go, or Python and runs lint/tests in the specified directory.
-- `auto-assign.yml`: assigns owners to incoming issues and pull requests.
-- `pages.yml`: publishes artifacts to GitHub Pages, with an optional build step.
-- `validade-tokens.yml` and `validar-tokens-escrita.yml`: validate read/write access to Projects v2 using the `projects_token` secret (local wrappers map from `PROJECTS_TOKEN` to keep compatibility).
-
-Example usage (see `examples/ci-consumer.yml`):
+Exemplo (ver [`examples/ci-consumer.yml`](./examples/ci-consumer.yml)):
 
 ```yaml
 name: CI
 on: { pull_request: { branches: [main] } }
 jobs:
   ci:
-    uses: ArthemizLabs/.github/.github/workflows/ci.yml@<tag-or-sha>
-    # Example: ArthemizLabs/.github/.github/workflows/ci.yml@0123456789abcdef
+    uses: ArthemizLabs/.github/.github/workflows/ci.yml@<tag-ou-sha>
 ```
+
+## Padrões
+
+- **Commits:** [Conventional Commits 1.0.0](https://www.conventionalcommits.org/pt-br/v1.0.0/).
+- **Branches:** `<tipo>/<descricao-em-kebab-case>`, nome que descreve a mudança.
+- **PRs:** título `<tipo>(<escopo>): <descrição>` e seções Summary, Security Impact, Breaking Changes e Tests Added.
+- **Versionamento:** [SemVer 2.0.0](https://semver.org/lang/pt-BR/).
+- **Segurança:** vulnerabilidades são reportadas em privado, conforme o [SECURITY.md](./SECURITY.md). Nunca em issue pública.
+
+Gestão de trabalho com GitHub Projects v2: veja o [guia de setup](./docs/projects/GITHUB_PROJECTS_SETUP.md).
 
 ---
 
-*ArthemizLabs — Engineering-driven SaaS.*
+## English summary
+
+This repository holds the ArthemizLabs organization defaults: issue and PR templates, reusable GitHub Actions workflows (`ci.yml`, `auto-assign.yml`, `deploy-pages.yml`, token validators), contribution/security/conduct policies, the public org profile (`profile/README.md`) and the static bilingual website in `site/`, deployed to GitHub Pages on every push to `main`.
+
+Projects in production or in use: PROMOVE Simulator, cobranca-app, Portal Serviços Goiás and SEAD Comparator. OpsLedger, Sentinel Agent, SystemHealth and Vendas3D are **study projects**, planned for 2027-2029 and not in production.

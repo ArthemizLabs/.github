@@ -1,238 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ArthemizLabs - SaaS Engineering Ecosystem</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <title>ArthemizLabs · Engenharia de software</title>
+  <meta name="description" content="ArthemizLabs: organização onde Arthur Mamedes Borges constrói e opera sistemas reais em produção e projetos de estudo de arquitetura, segurança e cloud." />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:title" content="ArthemizLabs" />
+  <meta property="og:description" content="Sistemas reais em produção e projetos de estudo de arquitetura, segurança e cloud." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://site.arthemiz.com.br/" />
   <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <span class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </span>
-      <nav class="site-nav">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
+  <a class="skip" href="#conteudo"><span data-lang="pt">Pular para o conteúdo</span><span data-lang="en">Skip to content</span></a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><img src="assets/favicon.png" alt="" /><span>ArthemizLabs</span></a>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="architecture.html"><span data-lang="pt">Arquitetura</span><span data-lang="en">Architecture</span></a>
         <a href="roadmap.html">Roadmap</a>
       </nav>
+      <button class="lang-toggle" type="button" id="lang-toggle" aria-label="Mudar idioma / Change language">
+        <span class="lang-opt" data-opt="pt">PT</span><span class="lang-sep">/</span><span class="lang-opt" data-opt="en">EN</span>
+      </button>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container">
-      <h1>Engineering-First SaaS Ecosystem</h1>
-      <p class="hero-sub">Scalable infrastructure, modular design, and production-grade systems built for long-term growth.</p>
-      <div class="hero-actions">
-        <a href="architecture.html" class="btn btn-primary">System Architecture</a>
-        <a href="roadmap.html" class="btn btn-outline">2026-2029 Roadmap</a>
+  <main id="conteudo">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Backend · <span data-lang="pt">Dados</span><span data-lang="en">Data</span> · Cloud · <span data-lang="pt">Segurança</span><span data-lang="en">Security</span></p>
+        <h1>
+          <span data-lang="pt">Software que <span class="grad">roda em produção</span>, construído com método.</span>
+          <span data-lang="en">Software that <span class="grad">runs in production</span>, built with method.</span>
+        </h1>
+        <p class="hero-sub">
+          <span data-lang="pt">A ArthemizLabs é a organização onde construo e opero meus sistemas: aplicações reais usadas pelo setor público e por clientes, e projetos de estudo para aprofundar arquitetura, segurança e cloud.</span>
+          <span data-lang="en">ArthemizLabs is the organization where I build and run my systems: real applications used by the public sector and clients, plus study projects to go deeper into architecture, security and cloud.</span>
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#producao"><span data-lang="pt">Ver projetos</span><span data-lang="en">See projects</span></a>
+          <a class="btn btn-outline" href="architecture.html"><span data-lang="pt">Como construímos</span><span data-lang="en">How we build</span></a>
+          <a class="btn btn-outline" href="https://portfolio.arthemiz.com.br"><span data-lang="pt">Portfólio do Arthur</span><span data-lang="en">Arthur's portfolio</span></a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="mission" class="section">
-    <div class="container">
-      <h2 class="section-title">Mission</h2>
-      <div class="section-body">
-        <p>ArthemizLabs is a SaaS engineering organization dedicated to designing and operating reliable, scalable software systems. Our work is grounded in sound architectural principles, continuous delivery practices, and a long-term product vision that prioritizes operational excellence over short-term iteration.</p>
-        <p>We build internal platforms, developer tooling, and domain-specific applications that function as an integrated ecosystem—sharing infrastructure, identity, and observability layers to reduce duplication and increase system coherence.</p>
-      </div>
-    </div>
-  </section>
+    <!-- PRODUÇÃO -->
+    <section class="section" id="producao">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">01</p>
+          <h2><span data-lang="pt">Em produção e em uso</span><span data-lang="en">In production and in use</span></h2>
+          <p class="section-sub">
+            <span data-lang="pt">Sistemas com usuários reais. O código da maioria é privado (cliente ou setor público).</span>
+            <span data-lang="en">Systems with real users. Most source code is private (client or public sector work).</span>
+          </p>
+        </header>
 
-  <section id="engineering" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Engineering Focus</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Infrastructure Reliability</h3>
-          <p>Containerized workloads, reverse proxy configuration, and health monitoring designed for zero-downtime deployments in multi-service environments.</p>
+        <div class="grid-2">
+          <article class="card card-feature">
+            <div class="card-top"><span class="badge badge-live"><span data-lang="pt">Produção</span><span data-lang="en">Production</span></span><span class="badge badge-muted"><span data-lang="pt">Privado</span><span data-lang="en">Private</span></span></div>
+            <h3>Simulador PROMOVE</h3>
+            <p><span data-lang="pt">Simula a evolução funcional de servidores públicos de Goiás, com análise em lote via planilha e leitura de processos do SEI em PDF com LLM.</span><span data-lang="en">Simulates career progression for Goiás state public servants, with spreadsheet batch analysis and LLM-based reading of SEI case files (PDF).</span></p>
+            <ul class="tags"><li>FastAPI</li><li>PostgreSQL</li><li>Next.js</li><li>Docker</li><li>AWS EC2</li></ul>
+            <a class="card-link" href="https://simulador-promove.arthemiz.com.br">simulador-promove.arthemiz.com.br ↗</a>
+          </article>
+          <article class="card card-feature">
+            <div class="card-top"><span class="badge badge-live"><span data-lang="pt">Produção</span><span data-lang="en">Production</span></span><span class="badge badge-muted"><span data-lang="pt">Privado</span><span data-lang="en">Private</span></span></div>
+            <h3>cobranca-app</h3>
+            <p><span data-lang="pt">SaaS multi-tenant de cobrança via WhatsApp com CRM, white-label por domínio e painel de plataforma auditado. Backend reescrito do zero.</span><span data-lang="en">Multi-tenant SaaS for collections over WhatsApp with CRM, domain-based white-label and an audited platform admin. Backend rewritten from scratch.</span></p>
+            <ul class="tags"><li>FastAPI</li><li>PostgreSQL</li><li>React</li><li>Nginx</li><li>Oracle Cloud</li></ul>
+            <a class="card-link" href="https://cobranca-app.arthemiz.com.br">cobranca-app.arthemiz.com.br ↗</a>
+          </article>
         </div>
-        <div class="card">
-          <h3>Distributed Systems</h3>
-          <p>Message-driven architectures using RabbitMQ and Redis enable asynchronous processing, event sourcing, and decoupled service communication.</p>
-        </div>
-        <div class="card">
-          <h3>Identity and Access</h3>
-          <p>Centralized authentication via JWT with role-based access control (RBAC) enforced at service boundaries, supporting fine-grained permission models.</p>
-        </div>
-        <div class="card">
-          <h3>Observability</h3>
-          <p>Structured logging, system health dashboards, and alerting pipelines give operations teams full visibility into platform behavior under load.</p>
-        </div>
-        <div class="card">
-          <h3>CI/CD Pipelines</h3>
-          <p>Automated build, test, and deployment workflows reduce release risk and ensure that every change to production has been validated through a consistent pipeline.</p>
-        </div>
-        <div class="card">
-          <h3>API Design</h3>
-          <p>RESTful and event-driven interfaces designed with versioning, rate limiting, and contract-first documentation to support stable integrations across services.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="ecosystem" class="section">
-    <div class="container">
-      <h2 class="section-title">Ecosystem Projects</h2>
-      <div class="project-list">
-        <div class="project-item">
-          <div class="project-header">
-            <span class="project-name">OpsLedger</span>
-            <span class="badge badge-development">In Development</span>
-          </div>
-          <p>Internal operations ledger for tracking service-level events, cost attribution, and change history across the platform. Provides an audit trail for compliance and incident retrospectives.</p>
-        </div>
-        <div class="project-item">
-          <div class="project-header">
-            <span class="project-name">Arthemiz</span>
-            <span class="badge badge-active">Active</span>
-          </div>
-          <p>Core identity and configuration management service. Handles authentication, tenant configuration, feature flags, and centralized settings propagated across dependent services.</p>
-        </div>
-        <div class="project-item">
-          <div class="project-header">
-            <span class="project-name">Vendas3D</span>
-            <span class="badge badge-development">In Development</span>
-          </div>
-          <p>3D commerce and product visualization platform. Enables vendors to present configurable products with real-time rendering, quote generation, and order management workflows.</p>
-        </div>
-        <div class="project-item">
-          <div class="project-header">
-            <span class="project-name">Sentinel</span>
-            <span class="badge badge-development">In Development</span>
-          </div>
-          <p>Security monitoring and threat detection service. Monitors API access patterns, flags anomalous behavior, and enforces rate limiting and policy rules at the gateway layer.</p>
-        </div>
-        <div class="project-item">
-          <div class="project-header">
-            <span class="project-name">SystemHealth</span>
-            <span class="badge badge-development">In Development</span>
-          </div>
-          <p>Platform-wide health monitoring dashboard. Aggregates uptime metrics, dependency status, queue depths, and latency indicators into a unified operational view for on-call engineers.</p>
+        <div class="grid-3" style="margin-top:20px">
+          <article class="card">
+            <div class="card-top"><span class="badge badge-live"><span data-lang="pt">Em uso</span><span data-lang="en">In use</span></span></div>
+            <h3>Portal Serviços Goiás</h3>
+            <p><span data-lang="pt">App desktop com serviços plugáveis que automatizam conferências e despachos em massa no SEI.</span><span data-lang="en">Desktop app with pluggable services that automate checks and bulk dispatches in SEI.</span></p>
+            <ul class="tags"><li>Python</li><li>Selenium</li><li>PyInstaller</li></ul>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="badge badge-live"><span data-lang="pt">Em uso</span><span data-lang="en">In use</span></span></div>
+            <h3>Comparador SEAD</h3>
+            <p><span data-lang="pt">Compara textos, PDFs, DOCX e planilhas lado a lado e exporta o diff em PDF ou XLSX.</span><span data-lang="en">Compares text, PDF, DOCX and spreadsheets side by side and exports the diff as PDF or XLSX.</span></p>
+            <ul class="tags"><li>Java 21</li><li>Spring Boot</li><li>Thymeleaf</li></ul>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="badge badge-dev"><span data-lang="pt">Em desenvolvimento</span><span data-lang="en">In development</span></span></div>
+            <h3><span data-lang="pt">Sistema de Teletrabalho</span><span data-lang="en">Remote Work System</span></h3>
+            <p><span data-lang="pt">Planos de trabalho, metas, jornada e avaliação de servidores, com RBAC de 5 perfis e auditoria em todas as tabelas.</span><span data-lang="en">Work plans, goals, hours and reviews for public servants, with 5-role RBAC and auditing on every table.</span></p>
+            <ul class="tags"><li>PHP</li><li>MySQL</li><li>Docker</li></ul>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="badge badge-done"><span data-lang="pt">Entregue</span><span data-lang="en">Delivered</span></span></div>
+            <h3><span data-lang="pt">Agendamento de Abate</span><span data-lang="en">Cattle Scheduling</span></h3>
+            <p><span data-lang="pt">Agendamento e recebimento de gado para um frigorífico, com capacidade diária e score de corretores.</span><span data-lang="en">Cattle scheduling and intake for a meat-packing plant, with daily capacity and broker scoring.</span></p>
+            <ul class="tags"><li>FastAPI</li><li>React</li><li>PostgreSQL</li></ul>
+          </article>
+          <a class="card" href="https://github.com/ArthemizLabs/biblio-system">
+            <div class="card-top"><span class="badge badge-done"><span data-lang="pt">Público</span><span data-lang="en">Public</span></span></div>
+            <h3>BiblioSystem ↗</h3>
+            <p><span data-lang="pt">Gestão de biblioteca com empréstimos, reservas e perfis. Projeto da faculdade (PUC Goiás).</span><span data-lang="en">Library management with loans, reservations and roles. University project (PUC Goiás).</span></p>
+            <ul class="tags"><li>Java</li><li>Swing</li><li>MySQL</li></ul>
+          </a>
+          <a class="card" href="https://github.com/ArthemizLabs/jornada-dev">
+            <div class="card-top"><span class="badge badge-done"><span data-lang="pt">Público</span><span data-lang="en">Public</span></span></div>
+            <h3>Jornada Dev ↗</h3>
+            <p><span data-lang="pt">Plataforma de estudos gamificada com tema de RPG e 20 trilhas de carreira.</span><span data-lang="en">Gamified, RPG-themed learning platform with 20 career tracks.</span></p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>Tailwind</li></ul>
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="tech-stack" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Tech Stack</h2>
-      <div class="stack-grid">
-        <div class="stack-category">
-          <h3>Runtime and Services</h3>
-          <ul>
-            <li>Java</li>
-            <li>Node.js</li>
-            <li>Python</li>
-            <li>Go</li>
-            <li>REST / gRPC</li>
-          </ul>
-        </div>
-        <div class="stack-category">
-          <h3>Infrastructure</h3>
-          <ul>
-            <li>Docker / Kubernetes</li>
-            <li>Nginx (reverse proxy)</li>
-            <li>Linux (Ubuntu Server)</li>
-            <li>GitHub Actions (CI/CD)</li>
-          </ul>
-        </div>
-        <div class="stack-category">
-          <h3>Data and Messaging</h3>
-          <ul>
-            <li>Oracle</li>
-            <li>PostgreSQL</li>
-            <li>Redis</li>
-            <li>RabbitMQ</li>
-          </ul>
-        </div>
-        <div class="stack-category">
-          <h3>Security and Identity</h3>
-          <ul>
-            <li>JWT (JSON Web Tokens)</li>
-            <li>RBAC (Role-Based Access Control)</li>
-            <li>TLS/HTTPS everywhere</li>
-            <li>OAuth 2.0</li>
-          </ul>
-        </div>
-        <div class="stack-category">
-          <h3>Observability</h3>
-          <ul>
-            <li>Prometheus</li>
-            <li>Grafana</li>
-            <li>Structured JSON logging</li>
-            <li>Alerting pipelines</li>
-          </ul>
-        </div>
-        <div class="stack-category">
-          <h3>Frontend</h3>
-          <ul>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>REST API clients</li>
-            <li>Static site generation</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- ESTUDO -->
+    <section class="section section-alt" id="estudo">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">02</p>
+          <h2><span data-lang="pt">Projetos de estudo</span><span data-lang="en">Study projects</span></h2>
+          <p class="section-sub">
+            <span data-lang="pt">Projetos futuros que existem para aprender algo específico. Cada um tem um objetivo de aprendizado claro e entra no roadmap no ano em que faz sentido.</span>
+            <span data-lang="en">Future projects that exist to learn something specific. Each one has a clear learning goal and lands on the roadmap in the year it makes sense.</span>
+          </p>
+        </header>
 
-  <section id="roadmap-preview" class="section">
-    <div class="container">
-      <h2 class="section-title">Roadmap 2026-2029</h2>
-      <div class="roadmap-timeline">
-        <div class="timeline-item">
-          <div class="timeline-year">2026</div>
-          <div class="timeline-content">
-            <h3>Foundation and Stability</h3>
-            <p>Establish production-ready infrastructure, standardize CI/CD pipelines, complete core service integrations, and deploy Sentinel and OpsLedger to production.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">2027</div>
-          <div class="timeline-content">
-            <h3>Scale and Modularity</h3>
-            <p>Transition to modular service boundaries, implement multi-tenant support across the ecosystem, and complete Vendas3D public release with full API coverage.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">2028</div>
-          <div class="timeline-content">
-            <h3>Microservices and Distribution</h3>
-            <p>Decompose core monoliths into independently deployable services, introduce service mesh capabilities, and expand observability with distributed tracing.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">2029</div>
-          <div class="timeline-content">
-            <h3>Platform Maturity</h3>
-            <p>Full platform API, partner integrations, self-service developer tooling, automated scaling policies, and enterprise SLA support across all active products.</p>
-          </div>
+        <div class="grid-4">
+          <article class="card card-study">
+            <div class="card-top"><span class="badge badge-study"><span data-lang="pt">Estudo · 2027</span><span data-lang="en">Study · 2027</span></span></div>
+            <h3>OpsLedger</h3>
+            <p><span data-lang="pt">Livro-razão de operações com trilha de auditoria imutável.</span><span data-lang="en">Operations ledger with an immutable audit trail.</span></p>
+            <p class="learn"><strong><span data-lang="pt">Para aprender:</span><span data-lang="en">To learn:</span></strong> <span data-lang="pt">modelagem transacional, filas com RabbitMQ, cache com Redis.</span><span data-lang="en">transactional modeling, RabbitMQ queues, Redis caching.</span></p>
+          </article>
+          <article class="card card-study">
+            <div class="card-top"><span class="badge badge-study"><span data-lang="pt">Estudo · 2028</span><span data-lang="en">Study · 2028</span></span></div>
+            <h3>Sentinel Agent</h3>
+            <p><span data-lang="pt">Agente leve em C que coleta métricas do host.</span><span data-lang="en">Lightweight C agent that collects host metrics.</span></p>
+            <p class="learn"><strong><span data-lang="pt">Para aprender:</span><span data-lang="en">To learn:</span></strong> <span data-lang="pt">C de sistemas, Linux por dentro, segurança de baixo nível.</span><span data-lang="en">systems C, Linux internals, low-level security.</span></p>
+          </article>
+          <article class="card card-study">
+            <div class="card-top"><span class="badge badge-study"><span data-lang="pt">Estudo · 2028</span><span data-lang="en">Study · 2028</span></span></div>
+            <h3>SystemHealth</h3>
+            <p><span data-lang="pt">Painel de saúde dos containers e serviços da própria ArthemizLabs.</span><span data-lang="en">Health dashboard for ArthemizLabs' own containers and services.</span></p>
+            <p class="learn"><strong><span data-lang="pt">Para aprender:</span><span data-lang="en">To learn:</span></strong> <span data-lang="pt">observabilidade com Prometheus, Grafana e alertas.</span><span data-lang="en">observability with Prometheus, Grafana and alerting.</span></p>
+          </article>
+          <article class="card card-study">
+            <div class="card-top"><span class="badge badge-study"><span data-lang="pt">Estudo · 2029</span><span data-lang="en">Study · 2029</span></span></div>
+            <h3>Vendas3D</h3>
+            <p><span data-lang="pt">Loja com produtos visualizados em 3D.</span><span data-lang="en">Storefront with products shown in 3D.</span></p>
+            <p class="learn"><strong><span data-lang="pt">Para aprender:</span><span data-lang="en">To learn:</span></strong> <span data-lang="pt">modelagem 3D, renderização na web e Kubernetes.</span><span data-lang="en">3D modeling, web rendering and Kubernetes.</span></p>
+          </article>
         </div>
       </div>
-      <div class="section-footer">
-        <a href="roadmap.html" class="btn btn-outline">View Full Roadmap</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span class="logo">
-        <img src="assets/favicon.png" alt="ArthemizLabs logo" class="logo-mark" />
-        ArthemizLabs
-      </span>
-      <p class="footer-tagline">SaaS Engineering Ecosystem</p>
-      <nav class="footer-nav">
-        <a href="index.html">Home</a>
-        <a href="architecture.html">Architecture</a>
-        <a href="roadmap.html">Roadmap</a>
+    <!-- PRINCÍPIOS -->
+    <section class="section" id="principios">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">03</p>
+          <h2><span data-lang="pt">Como trabalhamos</span><span data-lang="en">How we work</span></h2>
+          <p class="section-sub">
+            <span data-lang="pt">Regras aplicadas hoje nos repositórios, não promessas.</span>
+            <span data-lang="en">Rules applied in the repositories today, not promises.</span>
+          </p>
+        </header>
+        <div class="grid-3">
+          <div class="principle">
+            <h3><span data-lang="pt">Segurança desde o início</span><span data-lang="en">Security from day one</span></h3>
+            <p><span data-lang="pt">JWT com RBAC, segredos só por variável de ambiente, TLS verificado e auditoria de segurança antes de cada PR.</span><span data-lang="en">JWT with RBAC, secrets only via environment variables, verified TLS and a security audit before every PR.</span></p>
+          </div>
+          <div class="principle">
+            <h3><span data-lang="pt">Decisões registradas</span><span data-lang="en">Recorded decisions</span></h3>
+            <p><span data-lang="pt">Toda decisão técnica relevante vira registro com contexto, alternativas e reversibilidade.</span><span data-lang="en">Every relevant technical decision is recorded with context, alternatives and reversibility.</span></p>
+          </div>
+          <div class="principle">
+            <h3><span data-lang="pt">Ambientes reproduzíveis</span><span data-lang="en">Reproducible environments</span></h3>
+            <p><span data-lang="pt">Docker Compose e Dev Containers do desenvolvimento à produção. Migrations versionadas com Alembic ou SQL numerado.</span><span data-lang="en">Docker Compose and Dev Containers from development to production. Versioned migrations with Alembic or numbered SQL.</span></p>
+          </div>
+          <div class="principle">
+            <h3><span data-lang="pt">CI como porta de entrada</span><span data-lang="en">CI as the gate</span></h3>
+            <p><span data-lang="pt">Workflows reutilizáveis de lint e testes neste próprio repositório de governança.</span><span data-lang="en">Reusable lint and test workflows living in this governance repository.</span></p>
+          </div>
+          <div class="principle">
+            <h3><span data-lang="pt">Histórico legível</span><span data-lang="en">Readable history</span></h3>
+            <p><span data-lang="pt">Conventional Commits, branches com nome descritivo e PRs com resumo, impacto de segurança e testes.</span><span data-lang="en">Conventional Commits, descriptively named branches and PRs with summary, security impact and tests.</span></p>
+          </div>
+          <div class="principle">
+            <h3><span data-lang="pt">Simples antes de distribuído</span><span data-lang="en">Simple before distributed</span></h3>
+            <p><span data-lang="pt">Monólito bem dividido primeiro. Microsserviços só quando houver motivo medido.</span><span data-lang="en">A well-structured monolith first. Microservices only when there is a measured reason.</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="section section-alt" id="stack">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">04</p>
+          <h2>Stack</h2>
+        </header>
+        <div class="grid-4">
+          <div class="stack-col"><h3>Backend</h3><ul><li>Python · FastAPI</li><li>Java · Spring Boot</li><li>PHP (MVC)</li><li>SQLAlchemy · Alembic</li></ul></div>
+          <div class="stack-col"><h3><span data-lang="pt">Dados</span><span data-lang="en">Data</span></h3><ul><li>PostgreSQL</li><li>MySQL</li><li>Oracle</li><li>Pandas</li></ul></div>
+          <div class="stack-col"><h3><span data-lang="pt">Infra e Cloud</span><span data-lang="en">Infra and Cloud</span></h3><ul><li>Docker · Compose</li><li>Nginx · Cloudflare</li><li>AWS · Oracle Cloud · Azure</li><li>GitHub Actions</li></ul></div>
+          <div class="stack-col"><h3>Frontend</h3><ul><li>React · Next.js</li><li>TypeScript</li><li>Tailwind CSS</li><li>Thymeleaf · Bootstrap</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="section" id="roadmap">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">05</p>
+          <h2>Roadmap 2026-2029</h2>
+        </header>
+        <ol class="timeline">
+          <li class="is-now"><span class="tl-year">2026 · <span data-lang="pt">agora</span><span data-lang="en">now</span></span><h3>Foundation</h3><p><span data-lang="pt">Primeiros sistemas em produção, deploy em 3 nuvens, CI e padrões de repositório.</span><span data-lang="en">First systems in production, deploys on 3 clouds, CI and repository standards.</span></p></li>
+          <li><span class="tl-year">2027</span><h3>Expansion</h3><p><span data-lang="pt">Mensageria, cache e certificações de nuvem. OpsLedger como laboratório.</span><span data-lang="en">Messaging, caching and cloud certifications. OpsLedger as the lab.</span></p></li>
+          <li><span class="tl-year">2028</span><h3>Quality &amp; Security</h3><p><span data-lang="pt">Observabilidade e segurança aplicada. Sentinel Agent e SystemHealth.</span><span data-lang="en">Observability and applied security. Sentinel Agent and SystemHealth.</span></p></li>
+          <li><span class="tl-year">2029</span><h3>Mastery</h3><p><span data-lang="pt">Orquestração com Kubernetes e Vendas3D.</span><span data-lang="en">Kubernetes orchestration and Vendas3D.</span></p></li>
+        </ol>
+        <div class="section-footer"><a class="btn btn-outline" href="roadmap.html"><span data-lang="pt">Roadmap completo</span><span data-lang="en">Full roadmap</span></a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 ArthemizLabs · Arthur Mamedes Borges</span>
+      <nav class="footer-links" aria-label="Links">
+        <a href="https://github.com/ArthemizLabs">GitHub</a>
+        <a href="https://portfolio.arthemiz.com.br"><span data-lang="pt">Portfólio</span><span data-lang="en">Portfolio</span></a>
+        <a href="https://linkedin.com/in/arthurmamedes">LinkedIn</a>
+        <a href="mailto:arthurmamedesborges@gmail.com">Email</a>
       </nav>
     </div>
   </footer>
+  <script src="assets/i18n.js"></script>
 </body>
 </html>
