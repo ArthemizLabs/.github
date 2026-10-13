@@ -10,7 +10,7 @@ Backend · Dados · Cloud · Segurança
 [![Site](https://img.shields.io/badge/site-site.arthemiz.com.br-4f8cff?style=for-the-badge&logo=googlechrome&logoColor=white)](https://site.arthemiz.com.br)
 [![Portfólio](https://img.shields.io/badge/portf%C3%B3lio-Arthur%20Borges-22d3ee?style=for-the-badge&logo=github&logoColor=white)](https://portfolio.arthemiz.com.br)
 
-<sub>🇧🇷 Português · <a href="#-english">🇺🇸 English below</a></sub>
+<sub>🇧🇷 Português · <a href="#-english">🇺🇸 English below</a> · Atualizado em 13/10/2026</sub>
 
 </div>
 
