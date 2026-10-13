@@ -21,7 +21,7 @@ Repositório de governança da organização **ArthemizLabs**. Guarda os padrõe
 
 ## Projetos da organização
 
-**Em produção e em uso:** Simulador PROMOVE, cobranca-app, Portal Serviços Goiás, Comparador SEAD. **Em desenvolvimento:** Sistema de Teletrabalho. **Públicos:** [biblio-system](https://github.com/ArthemizLabs/biblio-system), [jornada-dev](https://github.com/ArthemizLabs/jornada-dev).
+**Em produção e em uso:** Simulador PROMOVE, cobranca-app, Portal Serviços Goiás, Comparador SEAD. **Públicos:** [biblio-system](https://github.com/ArthemizLabs/biblio-system), [jornada-dev](https://github.com/ArthemizLabs/jornada-dev).
 
 **Projetos de estudo (futuros, ainda sem produção):** OpsLedger, Sentinel Agent, SystemHealth e Vendas3D. Cada um existe para aprender uma tecnologia específica e está no [roadmap](https://site.arthemiz.com.br/roadmap.html).
 

@@ -26,7 +26,6 @@ A **ArthemizLabs** é a organização onde [Arthur Mamedes Borges](https://githu
 | **[cobranca-app](https://cobranca-app.arthemiz.com.br)** | SaaS multi-tenant de cobrança via WhatsApp com CRM e white-label por domínio | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Produção |
 | **Portal Serviços Goiás** | App desktop com serviços plugáveis que automatizam rotinas no SEI | Python · Selenium · PyInstaller | 🟢 Em uso |
 | **Comparador SEAD** | Compara textos, PDFs e planilhas e exporta o diff | Java 21 · Spring Boot · Thymeleaf | 🟢 Em uso |
-| **Sistema de Teletrabalho** | Planos de trabalho, metas e avaliação de servidores, RBAC de 5 perfis | PHP (MVC) · MySQL · Docker | 🟡 Em desenvolvimento |
 | **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)** | Gestão de biblioteca (projeto da faculdade) | Java · Swing · MySQL | ✅ Público |
 | **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)** | Plataforma de estudos gamificada com 20 trilhas | React · TypeScript · Tailwind | ✅ Público |
 
@@ -53,7 +52,7 @@ Projetos que existem para aprender algo específico. Ainda não estão em produ�
 
 ## Stack
 
-[![Stack](https://skillicons.dev/icons?i=python,fastapi,java,spring,php,postgres,mysql,docker,nginx,aws,azure,cloudflare,githubactions,react,nextjs,ts,tailwind&perline=9)](https://skillicons.dev)
+[![Stack](https://skillicons.dev/icons?i=python,fastapi,java,spring,postgres,mysql,docker,nginx,aws,azure,cloudflare,githubactions,react,nextjs,ts,tailwind&perline=9)](https://skillicons.dev)
 
 ---
 
@@ -72,7 +71,6 @@ Projetos que existem para aprender algo específico. Ainda não estão em produ�
 | **[cobranca-app](https://cobranca-app.arthemiz.com.br)** | Multi-tenant SaaS for collections over WhatsApp with CRM and domain-based white-label | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Production |
 | **Portal Serviços Goiás** | Desktop app with pluggable services that automate routines in SEI (government case system) | Python · Selenium · PyInstaller | 🟢 In use |
 | **SEAD Comparator** | Compares text, PDFs and spreadsheets and exports the diff | Java 21 · Spring Boot · Thymeleaf | 🟢 In use |
-| **Remote Work System** | Work plans, goals and reviews for public servants, 5-role RBAC | PHP (MVC) · MySQL · Docker | 🟡 In development |
 | **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)** | Library management (university project) | Java · Swing · MySQL | ✅ Public |
 | **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)** | Gamified learning platform with 20 tracks | React · TypeScript · Tailwind | ✅ Public |
 
