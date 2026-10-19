@@ -20,14 +20,14 @@ A **ArthemizLabs** é a organização onde [Arthur Mamedes Borges](https://githu
 
 ## 🟢 Em produção e em uso
 
-| Projeto | O que faz | Stack | Status |
-| --- | --- | --- | --- |
-| **[Simulador PROMOVE](https://simulador-promove.arthemiz.com.br)** | Simula a evolução funcional de servidores públicos de Goiás, com análise em lote e leitura de processos do SEI via LLM | FastAPI · PostgreSQL · Next.js · Docker · AWS | 🟢 Produção |
-| **[cobranca-app](https://cobranca-app.arthemiz.com.br)** | SaaS multi-tenant de cobrança via WhatsApp com CRM e white-label por domínio | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Produção |
-| **Portal Serviços Goiás** | App desktop com serviços plugáveis que automatizam rotinas no SEI | Python · Selenium · PyInstaller | 🟢 Em uso |
-| **Comparador SEAD** | Compara textos, PDFs e planilhas e exporta o diff | Java 21 · Spring Boot · Thymeleaf | 🟢 Em uso |
-| **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)** | Gestão de biblioteca (projeto da faculdade) | Java · Swing · MySQL | ✅ Público |
-| **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)** | Plataforma de estudos gamificada com 20 trilhas | React · TypeScript · Tailwind | ✅ Público |
+| Projeto                                                            | O que faz                                                                                                              | Stack                                               | Status      |
+|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|-------------|
+| **[Simulador Promove](https://simulador-promove.arthemiz.com.br)** | Simula a evolução funcional de servidores públicos de Goiás, com análise em lote e leitura de processos do SEI via LLM | FastAPI · PostgreSQL · Next.js · Docker · AWS       | 🟢 Produção |
+| **[Cobrança App](https://cobranca-app.arthemiz.com.br)**           | SaaS multi-tenant de cobrança via WhatsApp com CRM e white-label por domínio                                           | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Produção |
+| **Portal Serviços Goiás**                                          | App desktop com serviços plugáveis que automatizam rotinas no SEI                                                      | Python · Selenium · PyInstaller                     | 🟢 Em uso   |
+| **Comparador SEAD**                                                | Compara textos, PDFs e planilhas e exporta o diff                                                                      | Java 21 · Spring Boot · Thymeleaf                   | 🟢 Em uso   |
+| **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)**  | Gestão de biblioteca (projeto da faculdade)                                                                            | Java · Swing · MySQL                                | ✅ Público   |
+| **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)**     | Plataforma de estudos gamificada com 20 trilhas                                                                        | React · TypeScript · Tailwind                       | ✅ Público   |
 
 > Código privado na maioria dos casos (cliente ou de onde trabalho). A arquitetura real está em [site.arthemiz.com.br/architecture](https://site.arthemiz.com.br/architecture.html).
 
@@ -35,12 +35,12 @@ A **ArthemizLabs** é a organização onde [Arthur Mamedes Borges](https://githu
 
 Projetos que existem para aprender algo específico. Ainda não estão em produção e entram no [roadmap](https://site.arthemiz.com.br/roadmap.html) no ano em que fazem sentido.
 
-| Projeto | Ideia | Para aprender | Previsão |
-| --- | --- | --- | --- |
-| **OpsLedger** | Livro-razão de operações com trilha de auditoria | Modelagem transacional, RabbitMQ, Redis | 2027 |
-| **Sentinel Agent** | Agente leve em C que coleta métricas do host | C de sistemas, Linux, segurança de baixo nível | 2028 |
-| **SystemHealth** | Painel de saúde dos containers da própria org | Prometheus, Grafana, alertas | 2028 |
-| **Vendas3D** | Loja com produtos visualizados em 3D | Modelagem 3D, renderização web, Kubernetes | 2029 |
+| Projeto            | Ideia                                            | Para aprender                                  | Previsão |
+|--------------------|--------------------------------------------------|------------------------------------------------|----------|
+| **OpsLedger**      | Livro-razão de operações com trilha de auditoria | Modelagem transacional, RabbitMQ, Redis        | 2027     |
+| **Sentinel Agent** | Agente leve em C que coleta métricas do host     | C de sistemas, Linux, segurança de baixo nível | 2028     |
+| **SystemHealth**   | Painel de saúde dos containers da própria org    | Prometheus, Grafana, alertas                   | 2028     |
+| **Vendas3D**       | Loja com produtos visualizados em 3D             | Modelagem 3D, renderização web, Kubernetes     | 2029     |
 
 ## Como trabalhamos
 
@@ -65,23 +65,23 @@ Projetos que existem para aprender algo específico. Ainda não estão em produ�
 
 ### In production and in use
 
-| Project | What it does | Stack | Status |
-| --- | --- | --- | --- |
-| **[PROMOVE Simulator](https://simulador-promove.arthemiz.com.br)** | Simulates career progression for Goiás state public servants, with batch analysis and LLM-based reading of case files | FastAPI · PostgreSQL · Next.js · Docker · AWS | 🟢 Production |
-| **[cobranca-app](https://cobranca-app.arthemiz.com.br)** | Multi-tenant SaaS for collections over WhatsApp with CRM and domain-based white-label | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Production |
-| **Portal Serviços Goiás** | Desktop app with pluggable services that automate routines in SEI (government case system) | Python · Selenium · PyInstaller | 🟢 In use |
-| **SEAD Comparator** | Compares text, PDFs and spreadsheets and exports the diff | Java 21 · Spring Boot · Thymeleaf | 🟢 In use |
-| **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)** | Library management (university project) | Java · Swing · MySQL | ✅ Public |
-| **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)** | Gamified learning platform with 20 tracks | React · TypeScript · Tailwind | ✅ Public |
+| Project                                                            | What it does                                                                                                          | Stack                                               | Status        |
+|--------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|---------------|
+| **[Promove Simulator](https://simulador-promove.arthemiz.com.br)** | Simulates career progression for Goiás state public servants, with batch analysis and LLM-based reading of case files | FastAPI · PostgreSQL · Next.js · Docker · AWS       | 🟢 Production |
+| **[Cobrança App](https://cobranca-app.arthemiz.com.br)**           | Multi-tenant SaaS for collections over WhatsApp with CRM and domain-based white-label                                 | FastAPI · PostgreSQL · React · Nginx · Oracle Cloud | 🟢 Production |
+| **Portal Serviços Goiás**                                          | Desktop app with pluggable services that automate routines in SEI (government case system)                            | Python · Selenium · PyInstaller                     | 🟢 In use     |
+| **SEAD Comparator**                                                | Compares text, PDFs and spreadsheets and exports the diff                                                             | Java 21 · Spring Boot · Thymeleaf                   | 🟢 In use     |
+| **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)**  | Library management (university project)                                                                               | Java · Swing · MySQL                                | ✅ Public      |
+| **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)**     | Gamified learning platform with 20 tracks                                                                             | React · TypeScript · Tailwind                       | ✅ Public      |
 
 ### Study projects (future)
 
-| Project | Idea | To learn | Target |
-| --- | --- | --- | --- |
-| **OpsLedger** | Operations ledger with an audit trail | Transactional modeling, RabbitMQ, Redis | 2027 |
-| **Sentinel Agent** | Lightweight C agent for host metrics | Systems C, Linux, low-level security | 2028 |
-| **SystemHealth** | Health dashboard for the org's own containers | Prometheus, Grafana, alerting | 2028 |
-| **Vendas3D** | Storefront with 3D product views | 3D modeling, web rendering, Kubernetes | 2029 |
+| Project            | Idea                                          | To learn                                | Target |
+|--------------------|-----------------------------------------------|-----------------------------------------|--------|
+| **OpsLedger**      | Operations ledger with an audit trail         | Transactional modeling, RabbitMQ, Redis | 2027   |
+| **Sentinel Agent** | Lightweight C agent for host metrics          | Systems C, Linux, low-level security    | 2028   |
+| **SystemHealth**   | Health dashboard for the org's own containers | Prometheus, Grafana, alerting           | 2028   |
+| **Vendas3D**       | Storefront with 3D product views              | 3D modeling, web rendering, Kubernetes  | 2029   |
 
 These are not in production yet. They are planned learning projects, listed openly as such.
 
