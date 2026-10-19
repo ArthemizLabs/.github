@@ -10,7 +10,7 @@ Backend · Dados · Cloud · Segurança
 [![Site](https://img.shields.io/badge/site-site.arthemiz.com.br-4f8cff?style=for-the-badge&logo=googlechrome&logoColor=white)](https://site.arthemiz.com.br)
 [![Portfólio](https://img.shields.io/badge/portf%C3%B3lio-Arthur%20Borges-22d3ee?style=for-the-badge&logo=github&logoColor=white)](https://portfolio.arthemiz.com.br)
 
-<sub>🇧🇷 Português · <a href="#-english">🇺🇸 English below</a> · Atualizado em 13/10/2026</sub>
+<sub>🇧🇷 Português · <a href="#-english">🇺🇸 English below</a> · Atualizado em 19/10/2026</sub>
 
 </div>
 
@@ -29,7 +29,7 @@ A **ArthemizLabs** é a organização onde [Arthur Mamedes Borges](https://githu
 | **[BiblioSystem](https://github.com/ArthemizLabs/biblio-system)** | Gestão de biblioteca (projeto da faculdade) | Java · Swing · MySQL | ✅ Público |
 | **[Jornada Dev](https://github.com/ArthemizLabs/jornada-dev)** | Plataforma de estudos gamificada com 20 trilhas | React · TypeScript · Tailwind | ✅ Público |
 
-> Código privado na maioria dos casos (cliente ou setor público). A arquitetura real está em [site.arthemiz.com.br/architecture](https://site.arthemiz.com.br/architecture.html).
+> Código privado na maioria dos casos (cliente ou de onde trabalho). A arquitetura real está em [site.arthemiz.com.br/architecture](https://site.arthemiz.com.br/architecture.html).
 
 ## 🧪 Projetos de estudo (futuros)
 
