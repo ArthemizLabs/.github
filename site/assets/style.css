@@ -250,6 +250,7 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--accen
 .year-side .badge { display: inline-block; margin-top: 12px; }
 .year-body > p { color: var(--muted); margin-bottom: 18px; }
 .milestones { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.milestone:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .milestone { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
 .milestone h3 { font-size: 0.95rem; margin-bottom: 10px; }
 .milestone li { display: flex; gap: 10px; font-size: 0.9rem; padding: 4px 0; }

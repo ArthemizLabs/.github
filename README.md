@@ -8,20 +8,20 @@ Repositório de governança da organização **ArthemizLabs**. Guarda os padrõe
 
 ## O que tem aqui
 
-| Caminho | Conteúdo |
-| --- | --- |
-| [`profile/README.md`](./profile/README.md) | Perfil público exibido em [github.com/ArthemizLabs](https://github.com/ArthemizLabs) |
-| [`site/`](./site/) | Site estático da org (HTML/CSS puro, bilíngue PT/EN), publicado no GitHub Pages |
-| [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE/) | Templates de bug, feature, discussão de arquitetura e segurança |
-| [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) | Template padrão de PR |
-| [`.github/workflows/`](./.github/workflows/) | Workflows reutilizáveis e automações da org |
-| [`docs/`](./docs/) | Documentação de GitHub Projects e planejamento |
-| [`examples/`](./examples/) | Exemplos de uso dos workflows em outros repositórios |
-| [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`SECURITY.md`](./SECURITY.md) · [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) | Políticas da organização |
+| Caminho                                                                                                                | Conteúdo                                                                             |
+|------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| [`profile/README.md`](./profile/README.md)                                                                             | Perfil público exibido em [github.com/ArthemizLabs](https://github.com/ArthemizLabs) |
+| [`site/`](./site/)                                                                                                     | Site estático da org (HTML/CSS puro, bilíngue PT/EN), publicado no GitHub Pages      |
+| [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE/)                                                                 | Templates de bug, feature, discussão de arquitetura e segurança                      |
+| [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md)                                               | Template padrão de PR                                                                |
+| [`.github/workflows/`](./.github/workflows/)                                                                           | Workflows reutilizáveis e automações da org                                          |
+| [`docs/`](./docs/)                                                                                                     | Documentação de GitHub Projects e planejamento                                       |
+| [`examples/`](./examples/)                                                                                             | Exemplos de uso dos workflows em outros repositórios                                 |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`SECURITY.md`](./SECURITY.md) · [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) | Políticas da organização                                                             |
 
 ## Projetos da organização
 
-**Em produção e em uso:** Simulador PROMOVE, cobranca-app, Portal Serviços Goiás, Comparador SEAD. **Públicos:** [biblio-system](https://github.com/ArthemizLabs/biblio-system), [jornada-dev](https://github.com/ArthemizLabs/jornada-dev).
+**Em produção e em uso:** Simulador Promove, Cobrança App, Portal Serviços Goiás, Comparador SEAD. **Públicos:** [biblio-system](https://github.com/ArthemizLabs/biblio-system), [jornada-dev](https://github.com/ArthemizLabs/jornada-dev).
 
 **Projetos de estudo (futuros, ainda sem produção):** OpsLedger, Sentinel Agent, SystemHealth e Vendas3D. Cada um existe para aprender uma tecnologia específica e está no [roadmap](https://site.arthemiz.com.br/roadmap.html).
 
@@ -31,13 +31,12 @@ Detalhes no [perfil da org](./profile/README.md).
 
 Chamados de outros repositórios via `workflow_call`. Fixe sempre uma tag ou SHA.
 
-| Workflow | O que faz |
-| --- | --- |
-| [`ci.yml`](./.github/workflows/ci.yml) | Detecta Node.js, Go ou Python e roda lint e testes no diretório informado |
-| [`auto-assign.yml`](./.github/workflows/auto-assign.yml) | Atribui responsáveis a issues e PRs novos |
-| [`deploy-pages.yml`](./.github/workflows/deploy-pages.yml) | Publica um diretório no GitHub Pages, com build opcional |
-| [`validate-read-tokens.yml`](./.github/workflows/validate-read-tokens.yml) | Valida leitura do Projects v2 com o secret `projects_token` |
-| [`validate-write-tokens.yml`](./.github/workflows/validate-write-tokens.yml) | Valida escrita no Projects v2 com o secret `projects_token` |
+| Workflow                                                                     | O que faz                                                                 |
+|------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| [`ci.yml`](./.github/workflows/ci.yml)                                       | Detecta Node.js, Go ou Python e roda lint e testes no diretório informado |
+| [`deploy-pages.yml`](./.github/workflows/deploy-pages.yml)                   | Publica um diretório no GitHub Pages, com build opcional                  |
+| [`validate-read-tokens.yml`](./.github/workflows/validate-read-tokens.yml)   | Valida leitura do Projects v2 com o secret `projects_token`               |
+| [`validate-write-tokens.yml`](./.github/workflows/validate-write-tokens.yml) | Valida escrita no Projects v2 com o secret `projects_token`               |
 
 Os arquivos `*-wrapper.yml` usam esses workflows dentro deste próprio repositório (o `deploy-pages-wrapper.yml` publica o `site/` a cada push na `main`). Automações manuais (`workflow_dispatch`): `setup-projects.yml`, `create-issues.yml` e `sync-projects-dates.yml`.
 
@@ -65,6 +64,6 @@ Gestão de trabalho com GitHub Projects v2: veja o [guia de setup](./docs/projec
 
 ## English summary
 
-This repository holds the ArthemizLabs organization defaults: issue and PR templates, reusable GitHub Actions workflows (`ci.yml`, `auto-assign.yml`, `deploy-pages.yml`, token validators), contribution/security/conduct policies, the public org profile (`profile/README.md`) and the static bilingual website in `site/`, deployed to GitHub Pages on every push to `main`.
+This repository holds the ArthemizLabs organization defaults: issue and PR templates, reusable GitHub Actions workflows (`ci.yml`, `deploy-pages.yml`, token validators), contribution/security/conduct policies, the public org profile (`profile/README.md`) and the static bilingual website in `site/`, deployed to GitHub Pages on every push to `main`.
 
 Projects in production or in use: PROMOVE Simulator, cobranca-app, Portal Serviços Goiás and SEAD Comparator. OpsLedger, Sentinel Agent, SystemHealth and Vendas3D are **study projects**, planned for 2027-2029 and not in production.
