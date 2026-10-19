@@ -34,7 +34,6 @@ Chamados de outros repositórios via `workflow_call`. Fixe sempre uma tag ou SHA
 | Workflow | O que faz |
 | --- | --- |
 | [`ci.yml`](./.github/workflows/ci.yml) | Detecta Node.js, Go ou Python e roda lint e testes no diretório informado |
-| [`auto-assign.yml`](./.github/workflows/auto-assign.yml) | Atribui responsáveis a issues e PRs novos |
 | [`deploy-pages.yml`](./.github/workflows/deploy-pages.yml) | Publica um diretório no GitHub Pages, com build opcional |
 | [`validate-read-tokens.yml`](./.github/workflows/validate-read-tokens.yml) | Valida leitura do Projects v2 com o secret `projects_token` |
 | [`validate-write-tokens.yml`](./.github/workflows/validate-write-tokens.yml) | Valida escrita no Projects v2 com o secret `projects_token` |
@@ -65,6 +64,6 @@ Gestão de trabalho com GitHub Projects v2: veja o [guia de setup](./docs/projec
 
 ## English summary
 
-This repository holds the ArthemizLabs organization defaults: issue and PR templates, reusable GitHub Actions workflows (`ci.yml`, `auto-assign.yml`, `deploy-pages.yml`, token validators), contribution/security/conduct policies, the public org profile (`profile/README.md`) and the static bilingual website in `site/`, deployed to GitHub Pages on every push to `main`.
+This repository holds the ArthemizLabs organization defaults: issue and PR templates, reusable GitHub Actions workflows (`ci.yml`, `deploy-pages.yml`, token validators), contribution/security/conduct policies, the public org profile (`profile/README.md`) and the static bilingual website in `site/`, deployed to GitHub Pages on every push to `main`.
 
 Projects in production or in use: PROMOVE Simulator, cobranca-app, Portal Serviços Goiás and SEAD Comparator. OpsLedger, Sentinel Agent, SystemHealth and Vendas3D are **study projects**, planned for 2027-2029 and not in production.
